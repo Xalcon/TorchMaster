@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "torch": "torchmaster:blocks/mega_torch",
+      "torch_top": "torchmaster:blocks/mega_torch_top"
+    }
+  },
+  "variants": {
+    "normal": {
+      "model": "torchmaster:mega_torch"
+    },
+    "inventory": {
+      "model": "torchmaster:mega_torch"
+    }
+  }
+}
