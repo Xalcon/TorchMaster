@@ -75,7 +75,7 @@ public class TorchRegistry
 		int dim = world.provider.getDimension();
 		for(TorchLocation torch : torches)
 		{
-			if(torch.DimensionId != dim) return false;
+			if(torch.DimensionId != dim) continue;
 			double dx = torch.Position.getX() + 0.5 - pos.getX();
 			double dy = torch.Position.getY() + 0.5 - pos.getY();
 			double dz = torch.Position.getZ() + 0.5 - pos.getZ();
