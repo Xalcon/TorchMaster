@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "1.0.1"
 group= "net.xalcon.torchmaster" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "torchmaster"
+archivesBaseName = "torchmaster-mc1.11"
 
 sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
 compileJava {
