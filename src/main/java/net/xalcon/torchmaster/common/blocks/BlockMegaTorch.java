@@ -35,12 +35,6 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
 		return new TileEntityMegaTorch();
 	}
 
-	@Override
-	public boolean isVisuallyOpaque()
-	{
-		return false;
-	}
-
 	public boolean isOpaqueCube(IBlockState state)
 {
 	return false;
