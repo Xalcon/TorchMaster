@@ -7,7 +7,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.ItemStack;
 import net.xalcon.torchmaster.client.gui.SlotTerrainLighter;
-import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
 
 public class ContainerTerrainLighter extends Container
 {
@@ -47,13 +46,13 @@ public class ContainerTerrainLighter extends Container
 			ItemStack current = slot.getStack();
 			previous = current.copy();
 
-			if (fromSlot < 9) {
+			if (fromSlot < 10) {
 				// From TE Inventory to Player Inventory
-				if (!this.mergeItemStack(current, 9, 45, true))
+				if (!this.mergeItemStack(current, 10, 46, true))
 					return null;
 			} else {
 				// From Player Inventory to TE Inventory
-				if (!this.mergeItemStack(current, 0, 9, false))
+				if (!this.mergeItemStack(current, 0, 10, false))
 					return null;
 			}
 			if (current.stackSize == 0)

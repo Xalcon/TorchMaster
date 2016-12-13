@@ -1,13 +1,8 @@
 package net.xalcon.torchmaster.client.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.Language;
-import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.container.ContainerTerrainLighter;

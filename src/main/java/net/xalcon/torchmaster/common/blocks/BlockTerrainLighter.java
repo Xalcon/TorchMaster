@@ -4,8 +4,10 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +22,9 @@ public class BlockTerrainLighter extends BlockBase implements ITileEntityProvide
 {
 	public BlockTerrainLighter()
 	{
-		super(Material.ROCK, "terrain_lighter");
+		super(Material.WOOD, "terrain_lighter");
+		this.setHardness(1.0f);
+		this.setResistance(3f);
 	}
 
 	@Override
@@ -37,5 +41,18 @@ public class BlockTerrainLighter extends BlockBase implements ITileEntityProvide
 			playerIn.openGui(TorchMasterMod.instance, ModGuiHandler.GuiType.TERRAIN_LIGHTER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
+	}
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	{
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+
+		if (tileentity instanceof TileEntityTerrainLighter)
+		{
+			InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityTerrainLighter)tileentity);
+		}
+
+		super.breakBlock(worldIn, pos, state);
 	}
 }
