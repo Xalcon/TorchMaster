@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.ItemStack;
 import net.xalcon.torchmaster.client.gui.SlotTerrainLighter;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
@@ -17,9 +18,11 @@ public class ContainerTerrainLighter extends Container
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				this.addSlotToContainer(new SlotTerrainLighter(tile, j + i * 3, 62 + j * 18, 17 + i * 18));
+				this.addSlotToContainer(new SlotTerrainLighter(tile, j + i * 3, 73 + j * 18, 17 + i * 18));
 			}
 		}
+
+		this.addSlotToContainer(new SlotFurnaceFuel(tile, 9, 49, 35));
 
 		for (int k = 0; k < 3; ++k)
 		{

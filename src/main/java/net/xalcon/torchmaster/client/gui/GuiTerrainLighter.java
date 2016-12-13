@@ -7,13 +7,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.Language;
 import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
+import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.container.ContainerTerrainLighter;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
 
 public class GuiTerrainLighter extends GuiContainer
 {
-	private static final ResourceLocation GUI_TEXTURES = new ResourceLocation("textures/gui/container/dispenser.png");
+	private static final ResourceLocation GUI_TEXTURES = new ResourceLocation(TorchMasterMod.MODID + ":textures/gui/container/terrain_lighter.png");
 	private TileEntityTerrainLighter tile;
 	private IInventory playerInv;
 
@@ -56,5 +58,14 @@ public class GuiTerrainLighter extends GuiContainer
 		int i = (this.width - this.xSize) / 2;
 		int j = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
+
+		if (tile.isBurningFuel())
+		{
+			int k = tile.getBurnLeftScaled(14);
+			this.drawTexturedModalRect(i + 49, j + 18 + 14 - k, 176, 14 - k, 14, k);
+		}
+
+		int l = tile.getProgressScaled(52);
+		this.drawTexturedModalRect(i + 162, j + 17 + (52 - l), 176, 14, 6, l);
 	}
 }

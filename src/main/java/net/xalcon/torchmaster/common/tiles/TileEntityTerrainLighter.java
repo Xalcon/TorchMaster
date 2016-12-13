@@ -7,7 +7,10 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -19,7 +22,12 @@ import javax.annotation.Nullable;
 
 public class TileEntityTerrainLighter extends TileEntity implements IInventory, ITickable
 {
-	private ItemStack[] stacks = new ItemStack[9];
+	private ItemStack[] stacks = new ItemStack[10];
+	private int burnTime;
+	private int totalBurnTime;
+	private int index;
+	private int tick;
+	private boolean done = false;
 
 	/**
 	 * Returns the number of slots in the inventory.
@@ -27,7 +35,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	@Override
 	public int getSizeInventory()
 	{
-		return 9;
+		return 10;
 	}
 
 	/**
@@ -103,6 +111,28 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		}
 
 		this.index = compound.getInteger("Index");
+		this.burnTime = compound.getInteger("BurnTime");
+		this.totalBurnTime = compound.getInteger("TotalBurnTime");
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	{
+		super.onDataPacket(net, pkt);
+		readFromNBT(pkt.getNbtCompound());
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag()
+	{
+		return writeToNBT(super.getUpdateTag());
+	}
+
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		return new SPacketUpdateTileEntity(this.pos, 0, this.getUpdateTag());
 	}
 
 	@Override
@@ -124,6 +154,8 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		}
 
 		compound.setInteger("Index", this.index);
+		compound.setInteger("BurnTime", this.burnTime);
+		compound.setInteger("TotalBurnTime", this.totalBurnTime);
 		compound.setTag("Items", nbttaglist);
 
 		return compound;
@@ -167,7 +199,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return isItemAllowed(stack);
+		return index == 9 ? TileEntityFurnace.isItemFuel(stack) : isItemAllowed(stack);
 	}
 
 	@Override
@@ -206,21 +238,32 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		return false;
 	}
 
-	private int index;
-
-	int tick;
-	boolean done = false;
-
 	@Override
 	public void update()
 	{
+		if (this.isBurningFuel())
+			this.burnTime--;
+
 		if(this.getWorld().isRemote) return;
 		if(done) return;
 		if(tick++ % 5 != 0) return;
 		if(!this.worldObj.isBlockPowered(this.pos)) return;
 
+		boolean updated = false;
+		ItemStack fuelStack = this.getStackInSlot(9);
+		if(this.burnTime <= 0 && fuelStack != null && fuelStack.stackSize > 0)
+		{
+			int burnTime = TileEntityFurnace.getItemBurnTime(this.stacks[9]);
+			if(burnTime > 0)
+			{
+				this.burnTime = this.totalBurnTime = burnTime;
+				decrStackSize(9, 1);
+				updated = true;
+			}
+		}
+
 		int torchSlot = getTorchSlot();
-		if (torchSlot >= 0)
+		if (torchSlot >= 0 && this.burnTime > 0)
 		{
 			IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.stacks[torchSlot]);
 			if(torchBlockState == null) return;
@@ -241,6 +284,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 					{
 						worldObj.setBlockState(checkPos.up(), torchBlockState);
 						this.decrStackSize(torchSlot, 1);
+						updated = true;
 						break;
 					}
 				}
@@ -249,6 +293,13 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 			index++;
 			if(index >= (ConfigHandler.TerrainLighterTorchCount * 2 + 1) * (ConfigHandler.TerrainLighterTorchCount * 2 + 1))
 				done = true;
+		}
+
+		if(updated)
+		{
+			this.markDirty();
+			IBlockState meState = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, meState, meState, 3);
 		}
 	}
 
@@ -267,7 +318,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 
 	private int getTorchSlot()
 	{
-		for(int i = 0; i < this.stacks.length; i++)
+		for(int i = 0; i < 9; i++)
 		{
 			if(this.stacks[i] != null && this.stacks[i].stackSize > 0)
 				return i;
@@ -278,5 +329,22 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	public static boolean isItemAllowed(ItemStack stack)
 	{
 		return ConfigHandler.TerrainLighterTorches.contains(stack.getItem().getRegistryName().toString());
+	}
+
+	public boolean isBurningFuel()
+	{
+		return this.burnTime > 0;
+	}
+
+	public int getBurnLeftScaled(int pixel)
+	{
+		float p = (float)this.burnTime / this.totalBurnTime;
+		return (int) (pixel * p);
+	}
+
+	public int getProgressScaled(int pixel)
+	{
+		float p = (float)this.index / ((ConfigHandler.TerrainLighterTorchCount * 2 + 1) * (ConfigHandler.TerrainLighterTorchCount * 2 + 1));
+		return (int) (pixel * p);
 	}
 }
