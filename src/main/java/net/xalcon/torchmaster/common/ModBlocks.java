@@ -5,14 +5,17 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.xalcon.torchmaster.common.blocks.BlockBase;
 import net.xalcon.torchmaster.common.blocks.BlockMegaTorch;
+import net.xalcon.torchmaster.common.blocks.BlockTerrainLighter;
 
 public class ModBlocks
 {
 	public static BlockMegaTorch MegaTorch;
+	public static BlockTerrainLighter TerrainLighter;
 
 	public static void init()
 	{
 		MegaTorch = Register(new BlockMegaTorch());
+		TerrainLighter = Register(new BlockTerrainLighter());
 	}
 
 	private static <T extends BlockBase> T Register(T block, ItemBlock itemBlock) {
