@@ -2,7 +2,6 @@ package net.xalcon.torchmaster.common.tiles;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -13,6 +12,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.xalcon.torchmaster.common.ConfigHandler;
+import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nullable;
 
@@ -101,8 +102,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 			}
 		}
 
-		this.x = compound.getInteger("x");
-		this.z = compound.getInteger("z");
+		this.index = compound.getInteger("Index");
 	}
 
 	@Override
@@ -123,9 +123,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 			}
 		}
 
-		compound.setInteger("x", this.x);
-		compound.setInteger("z", this.z);
-
+		compound.setInteger("Index", this.index);
 		compound.setTag("Items", nbttaglist);
 
 		return compound;
@@ -169,7 +167,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
-		return true;
+		return isItemAllowed(stack);
 	}
 
 	@Override
@@ -208,16 +206,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		return false;
 	}
 
-	private int x;
-	private int z;
-
-	@Override
-	public void onLoad()
-	{
-		super.onLoad();
-		this.x = this.pos.getX() - 32;
-		this.z = this.pos.getZ() - 32;
-	}
+	private int index;
 
 	int tick;
 	boolean done = false;
@@ -228,39 +217,55 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		if(this.getWorld().isRemote) return;
 		if(done) return;
 		if(tick++ % 5 != 0) return;
+		if(!this.worldObj.isBlockPowered(this.pos)) return;
 
 		int torchSlot = getTorchSlot();
 		if (torchSlot >= 0)
 		{
-			int height = worldObj.getHeight(new BlockPos(x, worldObj.getActualHeight(), z)).getY();
-			int maxY =  this.pos.getY() + 16;
-			int minY = this.pos.getY() - 16;
-			if(height < maxY && height > minY)
+			IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.stacks[torchSlot]);
+			if(torchBlockState == null) return;
+			BlockPos gridPos = getPosFromIndex(index);
+
+			int height = worldObj.getHeight(new BlockPos(gridPos.getX(), worldObj.getActualHeight(), gridPos.getZ())).getY();
+			int maxY =  this.pos.getY() + 8;
+			int minY = this.pos.getY() - 8;
+			if(height > minY)
 			{
+				if(height > maxY) height = maxY;
 				for(int y = height + 1; y > minY; y--)
 				{
-					BlockPos checkPos = new BlockPos(x, y, z);
+					BlockPos checkPos = new BlockPos(gridPos.getX(), y, gridPos.getZ());
 					IBlockState blockState = worldObj.getBlockState(checkPos);
 					IBlockState upState = worldObj.getBlockState(checkPos.up());
-					if(Blocks.TORCH.canPlaceTorchOnTop(blockState, worldObj, checkPos) && upState.getMaterial().isReplaceable() && !upState.getMaterial().isLiquid())
+					if(blockState.getBlock().canPlaceTorchOnTop(blockState, worldObj, checkPos) && upState.getMaterial().isReplaceable() && !upState.getMaterial().isLiquid())
 					{
-						worldObj.setBlockState(checkPos.up(), Blocks.TORCH.getDefaultState());
+						worldObj.setBlockState(checkPos.up(), torchBlockState);
+						this.decrStackSize(torchSlot, 1);
 						break;
 					}
 				}
 			}
-			x += 5;
-			if(x >= this.getPos().getX() + 32)
-			{
-				x = this.getPos().getX() - 32;
-				z += 5;
-				if(z >= this.getPos().getZ() + 32)
-					done = true;
-			}
+
+			index++;
+			if(index >= (ConfigHandler.TerrainLighterTorchCount * 2 + 1) * (ConfigHandler.TerrainLighterTorchCount * 2 + 1))
+				done = true;
 		}
 	}
 
-	public int getTorchSlot()
+	private BlockPos getPosFromIndex(int index)
+	{
+		int rad = ConfigHandler.TerrainLighterTorchCount * ConfigHandler.TerrainLighterSpacing;
+		int minX = this.getPos().getX() - rad;
+		int minZ = this.getPos().getZ() - rad;
+		int cells = ConfigHandler.TerrainLighterTorchCount * 2 + 1;
+		int cx = index % cells;
+		int cz = index / cells;
+		int x = cx * ConfigHandler.TerrainLighterSpacing;
+		int z = cz * ConfigHandler.TerrainLighterSpacing;
+		return new BlockPos(x + minX, 0, z + minZ);
+	}
+
+	private int getTorchSlot()
 	{
 		for(int i = 0; i < this.stacks.length; i++)
 		{
@@ -268,5 +273,10 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 				return i;
 		}
 		return -1;
+	}
+
+	public static boolean isItemAllowed(ItemStack stack)
+	{
+		return ConfigHandler.TerrainLighterTorches.contains(stack.getItem().getRegistryName().toString());
 	}
 }
