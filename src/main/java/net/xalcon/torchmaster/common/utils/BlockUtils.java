@@ -20,6 +20,8 @@ public class BlockUtils
 		int[] array = new int[((radius + radius + 1) * (radius + radius + 1)) * 2];
 		for (int i = 0; i < array.length; i += 2)
 		{
+			array[i] = x;
+			array[i+1] = y;
 			switch(arm)
 			{
 				case 0: ++x; if(x == layer) ++arm; break;
@@ -27,8 +29,6 @@ public class BlockUtils
 				case 2: --x; if(-x == layer) ++arm; break;
 				case 3: --y; if(-y == layer) {++layer; arm = 0;} break;
 			}
-			array[i] = x;
-			array[i+1] = y;
 		}
 		return array;
 	}

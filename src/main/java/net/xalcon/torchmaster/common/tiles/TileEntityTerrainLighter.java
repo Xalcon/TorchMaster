@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityTerrainLighter extends TileEntity implements IInventory, ITickable
 {
+	private static final int FUEL_SLOT = 9;
 	private int[] spiralMap;
 
 	private ItemStack[] stacks = new ItemStack[10];
@@ -257,14 +258,17 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		if(!this.worldObj.isBlockPowered(this.pos)) return;
 
 		boolean updated = false;
-		ItemStack fuelStack = this.getStackInSlot(9);
-		if(this.burnTime <= 0 && fuelStack != null && fuelStack.stackSize > 0)
+		if(this.burnTime <= 0 && this.stacks[FUEL_SLOT] != null && this.stacks[FUEL_SLOT].stackSize > 0)
 		{
 			int burnTime = TileEntityFurnace.getItemBurnTime(this.stacks[9]);
 			if(burnTime > 0)
 			{
 				this.burnTime = this.totalBurnTime = burnTime;
-				decrStackSize(9, 1);
+				this.stacks[FUEL_SLOT].stackSize--;
+				if (this.stacks[FUEL_SLOT].stackSize == 0)
+				{
+					this.stacks[FUEL_SLOT] = this.stacks[FUEL_SLOT].getItem().getContainerItem(this.stacks[FUEL_SLOT]);
+				}
 				updated = true;
 			}
 		}
