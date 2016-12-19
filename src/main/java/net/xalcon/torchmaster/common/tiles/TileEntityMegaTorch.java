@@ -9,23 +9,23 @@ public class TileEntityMegaTorch extends TileEntity
 	public void onLoad()
 	{
 		super.onLoad();
-		if(!this.world.isRemote)
-			TorchRegistry.INSTANCE.registerTorch(this.world, this.pos);
+		if(!this.worldObj.isRemote)
+			TorchRegistry.INSTANCE.registerTorch(this.getWorld(), this.getPos());
 	}
 
 	@Override
 	public void invalidate()
 	{
 		super.invalidate();
-		if(!world.isRemote)
-			TorchRegistry.INSTANCE.unregisterTorch(this.world, this.pos);
+		if(!worldObj.isRemote)
+			TorchRegistry.INSTANCE.unregisterTorch(this.getWorld(), this.getPos());
 	}
 
 	@Override
 	public void onChunkUnload()
 	{
 		super.onChunkUnload();
-		if(!world.isRemote)
-			TorchRegistry.INSTANCE.unregisterTorch(this.world, this.pos);
+		if(!worldObj.isRemote)
+			TorchRegistry.INSTANCE.unregisterTorch(this.getWorld(), this.getPos());
 	}
 }
