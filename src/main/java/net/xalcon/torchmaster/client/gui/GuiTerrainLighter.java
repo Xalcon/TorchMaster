@@ -8,6 +8,9 @@ import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.container.ContainerTerrainLighter;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GuiTerrainLighter extends GuiContainer
 {
 	private static final ResourceLocation GUI_TEXTURES = new ResourceLocation(TorchMasterMod.MODID + ":textures/gui/container/terrain_lighter.png");
@@ -43,6 +46,20 @@ public class GuiTerrainLighter extends GuiContainer
 		String s = this.tile.getDisplayName().getUnformattedText();
 		this.fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
 		this.fontRendererObj.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+
+		int i = (this.width - this.xSize) / 2; //X asis on GUI
+		int j = (this.height - this.ySize) / 2; //Y asis on GUI
+		if (mouseX > (i + 162) && mouseX < (i + 162) + 6) //Basically checking if mouse is in the correct area
+		{
+			if (mouseY > (j + 17) && mouseY < (j + 17) + 52)
+			{
+				int value = tile.getTorchesPlaced();
+				int max = tile.getTorchPlacedMax();
+				List list = new ArrayList();
+				list.add(value + " / " + max);
+				this.drawHoveringText(list, (int)mouseX - i, (int)mouseY - j, this.fontRendererObj);
+			}
+		}
 	}
 
 	@Override

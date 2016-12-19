@@ -22,12 +22,19 @@ import javax.annotation.Nullable;
 
 public class TileEntityTerrainLighter extends TileEntity implements IInventory, ITickable
 {
+	private int[] spiralMap;
+
 	private ItemStack[] stacks = new ItemStack[10];
 	private int burnTime;
 	private int totalBurnTime;
 	private int index;
 	private int tick;
 	private boolean done = false;
+
+	public TileEntityTerrainLighter()
+	{
+		spiralMap = BlockUtils.createSpiralMap(ConfigHandler.TerrainLighterTorchCount);
+	}
 
 	/**
 	 * Returns the number of slots in the inventory.
@@ -291,7 +298,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 			}
 
 			index++;
-			if(index >= (ConfigHandler.TerrainLighterTorchCount * 2 + 1) * (ConfigHandler.TerrainLighterTorchCount * 2 + 1))
+			if(index >= getTorchPlacedMax())
 				done = true;
 		}
 
@@ -305,7 +312,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 
 	private BlockPos getPosFromIndex(int index)
 	{
-		int rad = ConfigHandler.TerrainLighterTorchCount * ConfigHandler.TerrainLighterSpacing;
+		/*int rad = ConfigHandler.TerrainLighterTorchCount * ConfigHandler.TerrainLighterSpacing;
 		int minX = this.getPos().getX() - rad;
 		int minZ = this.getPos().getZ() - rad;
 		int cells = ConfigHandler.TerrainLighterTorchCount * 2 + 1;
@@ -313,7 +320,10 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		int cz = index / cells;
 		int x = cx * ConfigHandler.TerrainLighterSpacing;
 		int z = cz * ConfigHandler.TerrainLighterSpacing;
-		return new BlockPos(x + minX, 0, z + minZ);
+		return new BlockPos(x + minX, 0, z + minZ);*/
+		int x = this.spiralMap[index * 2] * ConfigHandler.TerrainLighterSpacing + this.getPos().getX();
+		int z = this.spiralMap[index * 2 + 1] * ConfigHandler.TerrainLighterSpacing + this.getPos().getZ();
+		return new BlockPos(x, 0, z);
 	}
 
 	private int getTorchSlot()
@@ -334,6 +344,16 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	public boolean isBurningFuel()
 	{
 		return this.burnTime > 0;
+	}
+
+	public int getTorchesPlaced()
+	{
+		return this.index;
+	}
+
+	public int getTorchPlacedMax()
+	{
+		return (ConfigHandler.TerrainLighterTorchCount * 2 + 1) * (ConfigHandler.TerrainLighterTorchCount * 2 + 1);
 	}
 
 	public int getBurnLeftScaled(int pixel)
