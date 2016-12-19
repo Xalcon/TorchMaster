@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "up": "torchmaster:blocks/terrain_lighter_top",
+      "down": "torchmaster:blocks/terrain_lighter_bottom",
+      "south": "torchmaster:blocks/terrain_lighter_side",
+      "north": "#south",
+      "west": "#south",
+      "east": "#south",
+      "particle": "#south"
+    }
+  },
+  "variants": {
+    "normal": {
+      "model": "cube"
+    },
+    "inventory": {
+      "model": "cube"
+    }
+  }
+}

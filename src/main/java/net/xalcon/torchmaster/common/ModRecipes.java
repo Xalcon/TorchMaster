@@ -6,9 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-/**
- * Created by xalcon on 27.11.2016.
- */
 public class ModRecipes
 {
 	public static void init()
@@ -17,7 +14,17 @@ public class ModRecipes
 				new ItemStack(ModBlocks.MegaTorch),
 				"TTT", "DLD", "GLG",
 				'T', Blocks.TORCH,
-				'D', Items.DIAMOND,
-				'G', Blocks.GOLD_BLOCK, 'L', "logWood"));
+				'D', "gemDiamond",
+				'G', "blockGold", 'L', "logWood"));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(
+				new ItemStack(ModBlocks.TerrainLighter),
+				"STS", "LCL", "sss",
+				'S', "stickWood",
+				'T', Blocks.TORCH,
+				'C', Blocks.CHEST,
+				'L', "logWood",
+				's', "stone"
+		));
 	}
 }
