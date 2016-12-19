@@ -1,3 +1,4 @@
 tile.mega_torch.name=Mega Torch
 tile.terrain_lighter.name=Terrain Lighter
 container.terrain_lighter=Terrain Lighter
+state.no_signal=No Redstone Signal
