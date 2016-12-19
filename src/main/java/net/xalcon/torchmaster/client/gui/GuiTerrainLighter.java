@@ -4,6 +4,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.container.ContainerTerrainLighter;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
@@ -55,9 +56,12 @@ public class GuiTerrainLighter extends GuiContainer
 			{
 				int value = tile.getTorchesPlaced();
 				int max = tile.getTorchPlacedMax();
-				List list = new ArrayList();
+				List<String> list = new ArrayList<>();
+
 				list.add(value + " / " + max);
-				this.drawHoveringText(list, (int)mouseX - i, (int)mouseY - j, this.fontRendererObj);
+				if(tile.getWorld().isBlockIndirectlyGettingPowered(tile.getPos()) == 0)
+					list.add(new TextComponentTranslation("state.no_signal").getFormattedText());
+				this.drawHoveringText(list, mouseX - i, mouseY - j, this.fontRendererObj);
 			}
 		}
 	}
