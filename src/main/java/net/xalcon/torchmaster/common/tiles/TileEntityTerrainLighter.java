@@ -121,6 +121,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		this.index = compound.getInteger("Index");
 		this.burnTime = compound.getInteger("BurnTime");
 		this.totalBurnTime = compound.getInteger("TotalBurnTime");
+		this.done = this.index >= this.getTorchPlacedMax();
 	}
 
 	@Override
