@@ -30,9 +30,8 @@ public class TorchMasterMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        Configuration = new ConfigHandler();
-        Configuration.init(event.getSuggestedConfigurationFile());
-        TorchRegistry.INSTANCE.setTorchRange(Configuration.MegaTorchRange);
+        Configuration = new ConfigHandler(event.getSuggestedConfigurationFile());
+        TorchRegistry.INSTANCE.setTorchRange(Configuration.getMegaTorchRange());
 
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
         ModBlocks.init();
