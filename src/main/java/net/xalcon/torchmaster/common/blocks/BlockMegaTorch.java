@@ -1,23 +1,13 @@
 package net.xalcon.torchmaster.common.blocks;
 
-import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -26,13 +16,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.ConfigHandler;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
-import net.xalcon.torchmaster.common.utils.NbtUtils;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.Random;
 
 public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
@@ -96,7 +83,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
 					}
 				}
 				long diff = System.nanoTime() - startTime;
-				System.out.println("Scan took " + diff + "ns");
+				TorchMasterMod.Log.info("MegaTorch placed down @ "+pos+" (DIM: "+worldIn.provider.getDimension()+"); MobSpawner scan took " + diff + "ns");
 			}
 		}
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);

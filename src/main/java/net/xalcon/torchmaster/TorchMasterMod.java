@@ -10,10 +10,14 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.xalcon.torchmaster.common.*;
 import net.xalcon.torchmaster.server.EventHandlerServer;
 import net.xalcon.torchmaster.server.TorchRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = TorchMasterMod.MODID, version = TorchMasterMod.VERSION)
 public class TorchMasterMod
 {
+    public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
+
     public static final String MODID = "torchmaster";
     public static final String VERSION = "1.0";
     public static ConfigHandler Configuration;
