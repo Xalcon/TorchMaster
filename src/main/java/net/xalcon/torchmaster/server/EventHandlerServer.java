@@ -17,7 +17,7 @@ public class EventHandlerServer
 		if(event.getEntityLiving().isCreatureType(EnumCreatureType.MONSTER, false)
 				&& TorchRegistry.INSTANCE.isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 		{
-			if(event.getEntity().getTags().contains("IsSpawnerMob"))
+			if(!event.getEntity().getTags().contains("IsSpawnerMob"))
 				event.setResult(Event.Result.DENY);
 		}
 	}
