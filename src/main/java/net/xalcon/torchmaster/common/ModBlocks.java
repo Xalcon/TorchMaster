@@ -3,19 +3,21 @@ package net.xalcon.torchmaster.common;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.xalcon.torchmaster.common.blocks.BlockBase;
-import net.xalcon.torchmaster.common.blocks.BlockMegaTorch;
-import net.xalcon.torchmaster.common.blocks.BlockTerrainLighter;
+import net.xalcon.torchmaster.common.blocks.*;
 
 public class ModBlocks
 {
 	public static BlockMegaTorch MegaTorch;
 	public static BlockTerrainLighter TerrainLighter;
+	public static BlockDreadLamp DreadLamp;
+	public static BlockInvisibleLight InvisibleLight;
 
 	public static void init()
 	{
 		MegaTorch = Register(new BlockMegaTorch());
 		TerrainLighter = Register(new BlockTerrainLighter());
+		DreadLamp = Register(new BlockDreadLamp());
+		InvisibleLight = Register(new BlockInvisibleLight());
 	}
 
 	private static <T extends BlockBase> T Register(T block, ItemBlock itemBlock) {
