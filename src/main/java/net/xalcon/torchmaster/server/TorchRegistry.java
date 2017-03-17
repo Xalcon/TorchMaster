@@ -77,7 +77,7 @@ public class TorchRegistry
 		{
 			if(torch.DimensionId != dim) continue;
 			double dx = torch.Position.getX() + 0.5 - pos.getX();
-			double dy = torch.Position.getY() + 0.5 - pos.getY();
+			double dy = Math.abs(torch.Position.getY() + 0.5 - pos.getY());
 			double dz = torch.Position.getZ() + 0.5 - pos.getZ();
 			if((dx * dx + dz * dz) <= (this.torchRangeSq) && dy <= this.torchRange)
 				return true;
