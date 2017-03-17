@@ -16,8 +16,8 @@ public class ModBlocks
 	{
 		MegaTorch = Register(new BlockMegaTorch());
 		TerrainLighter = Register(new BlockTerrainLighter());
-		DreadLamp = Register(new BlockDreadLamp());
-		InvisibleLight = Register(new BlockInvisibleLight());
+		//DreadLamp = Register(new BlockDreadLamp());
+		//InvisibleLight = Register(new BlockInvisibleLight());
 	}
 
 	private static <T extends BlockBase> T Register(T block, ItemBlock itemBlock) {
