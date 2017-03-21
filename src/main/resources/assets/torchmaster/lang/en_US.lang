@@ -1,4 +1,6 @@
 tile.mega_torch.name=Mega Torch
 tile.terrain_lighter.name=Terrain Lighter
+tile.dread_lamp.name=Dread Lamp
 container.terrain_lighter=Terrain Lighter
 state.no_signal=No Redstone Signal
+itemGroup.torchmaster=TorchMaster

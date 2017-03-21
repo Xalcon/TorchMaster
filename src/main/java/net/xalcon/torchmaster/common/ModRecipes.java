@@ -18,6 +18,14 @@ public class ModRecipes
 				'G', "blockGold", 'L', "logWood"));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(
+				new ItemStack(ModBlocks.DreadLamp),
+				"OOO", "PGP", "OIO",
+				'O', Blocks.OBSIDIAN,
+				'P', "paneGlass",
+				'G', "glowstone",
+				'I', "dyeBlack"));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(
 				new ItemStack(ModBlocks.TerrainLighter),
 				"STS", "LCL", "sss",
 				'S', "stickWood",
