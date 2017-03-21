@@ -4,20 +4,19 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.xalcon.torchmaster.common.blocks.*;
+import net.xalcon.torchmaster.common.creativetabs.CreativeTabTorchMaster;
 
 public class ModBlocks
 {
 	public static BlockMegaTorch MegaTorch;
 	public static BlockTerrainLighter TerrainLighter;
 	public static BlockDreadLamp DreadLamp;
-	public static BlockInvisibleLight InvisibleLight;
 
 	public static void init()
 	{
 		MegaTorch = Register(new BlockMegaTorch());
 		TerrainLighter = Register(new BlockTerrainLighter());
-		//DreadLamp = Register(new BlockDreadLamp());
-		//InvisibleLight = Register(new BlockInvisibleLight());
+		DreadLamp = Register(new BlockDreadLamp());
 	}
 
 	private static <T extends BlockBase> T Register(T block, ItemBlock itemBlock) {
@@ -32,7 +31,7 @@ public class ModBlocks
 	private static <T extends BlockBase> T Register(T block) {
 		ItemBlock itemBlock = new ItemBlock(block);
 		itemBlock.setRegistryName(block.getRegistryName());
-		block.setCreativeTab(CreativeTabs.DECORATIONS);
+		block.setCreativeTab(CreativeTabTorchMaster.INSTANCE);
 		return Register(block, itemBlock);
 	}
 }

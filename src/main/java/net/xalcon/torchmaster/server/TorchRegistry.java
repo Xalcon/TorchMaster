@@ -41,11 +41,16 @@ public class TorchRegistry
 		}
 	}
 
-	public static TorchRegistry INSTANCE;
+	private static TorchRegistry megaTorchRegistry;
+	private static TorchRegistry dreadLampRegistry;
+
+	public static TorchRegistry getMegaTorchRegistry() { return megaTorchRegistry; }
+	public static TorchRegistry getDreadLampRegistry() { return dreadLampRegistry; }
 
 	static
 	{
-		INSTANCE = new TorchRegistry();
+		megaTorchRegistry = new TorchRegistry();
+		dreadLampRegistry = new TorchRegistry();
 	}
 
 	private List<TorchLocation> torches = new ArrayList<TorchLocation>();

@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -15,11 +16,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.tiles.TileEntityDreadLamp;
+import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
+import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import java.util.Random;
 
-public class BlockDreadLamp extends BlockBase
+public class BlockDreadLamp extends BlockBase implements ITileEntityProvider
 {
 	public BlockDreadLamp()
 	{
@@ -52,31 +57,31 @@ public class BlockDreadLamp extends BlockBase
 	}
 
 	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta)
+	{
+		return new TileEntityDreadLamp();
+	}
+
+	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		int xS = pos.getX() - 7;
-		int xE = pos.getX() + 7;
-		int yS = MathHelper.clamp_int(pos.getY() - 7, 1, worldIn.getHeight() - 1);
-		int yE = MathHelper.clamp_int(pos.getY() + 7, 1, worldIn.getHeight() - 1);
-		int zS = pos.getZ() - 7;
-		int zE = pos.getZ() + 7;
-
-		IBlockState light = ModBlocks.InvisibleLight.getBlockState().getBaseState();
-
-		for(int x = xS; x <= xE; x++)
+		if (!worldIn.isRemote)
 		{
-			for(int y = yS; y <= yE; y++)
+			if(TorchMasterMod.Configuration.isVanillaSpawnerEnabled())
 			{
-				for(int z = zS; z <= zE; z++)
+				long startTime = System.nanoTime();
+				for (TileEntity te : worldIn.tickableTileEntities)
 				{
-					BlockPos lightPos = new BlockPos(x, y, z);
-					if(x == pos.getX() && y == pos.getY() && z == pos.getZ()) continue;
-					if(worldIn.getBlockState(lightPos).getBlock() == Blocks.AIR)
-						worldIn.setBlockState(lightPos, light);
+					if (te instanceof TileEntityMobSpawner)
+					{
+						BlockUtils.addTagToSpawner("IsSpawnerMob", (TileEntityMobSpawner) te);
+					}
 				}
+				long diff = System.nanoTime() - startTime;
+				TorchMasterMod.Log.info("DreadLamp placed down @ "+pos+" (DIM: "+worldIn.provider.getDimension()+"); MobSpawner scan took " + diff + "ns");
 			}
 		}
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
 
 	@SideOnly(Side.CLIENT)
