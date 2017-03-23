@@ -56,11 +56,12 @@ public class GuiTerrainLighter extends GuiContainer
 			{
 				int value = tile.getTorchesPlaced();
 				int max = tile.getTorchPlacedMax();
-				List list = new ArrayList();
+				List<String> list = new ArrayList<>();
+
 				list.add(value + " / " + max);
 				if(tile.getWorld().isBlockIndirectlyGettingPowered(tile.getPos()) == 0)
 					list.add(new TextComponentTranslation("state.no_signal").getFormattedText());
-				this.drawHoveringText(list, (int)mouseX - i, (int)mouseY - j, this.fontRendererObj);
+				this.drawHoveringText(list, mouseX - i, mouseY - j, this.fontRendererObj);
 			}
 		}
 	}

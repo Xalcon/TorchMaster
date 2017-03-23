@@ -10,10 +10,10 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 
 public class BlockUtils
 {
+	@SuppressWarnings("deprecation")
 	public static IBlockState getBlockStateFromItemStack(ItemStack itemStack)
 	{
 		Block block = Block.getBlockFromItem(itemStack.getItem());
-		if (block == null) return null;
 		return block.getStateFromMeta(itemStack.getMetadata());
 	}
 

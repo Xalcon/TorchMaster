@@ -19,6 +19,7 @@ import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -40,28 +41,35 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
 		return new TileEntityMegaTorch();
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos)
 	{
 		return NULL_AABB;
 	}
 
+	@SuppressWarnings("deprecation")
+	@Nonnull
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
 		return STANDING_AABB;
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Nonnull
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;

@@ -8,6 +8,8 @@ import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.ItemStack;
 import net.xalcon.torchmaster.client.gui.SlotTerrainLighter;
 
+import javax.annotation.Nonnull;
+
 public class ContainerTerrainLighter extends Container
 {
 
@@ -38,6 +40,7 @@ public class ContainerTerrainLighter extends Container
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int fromSlot) {
 		ItemStack previous = null;
 		Slot slot = this.inventorySlots.get(fromSlot);
@@ -49,26 +52,26 @@ public class ContainerTerrainLighter extends Container
 			if (fromSlot < 10) {
 				// From TE Inventory to Player Inventory
 				if (!this.mergeItemStack(current, 10, 46, true))
-					return null;
+					return ItemStack.EMPTY;
 			} else {
 				// From Player Inventory to TE Inventory
 				if (!this.mergeItemStack(current, 0, 10, false))
-					return null;
+					return ItemStack.EMPTY;
 			}
-			if (current.stackSize == 0)
-				slot.putStack(null);
+			if (current.getCount() == 0)
+				slot.putStack(ItemStack.EMPTY);
 			else
 				slot.onSlotChanged();
 
-			if (current.stackSize == previous.stackSize)
-				return null;
-			slot.onPickupFromSlot(playerIn, current);
+			if (current.getCount() == previous.getCount())
+				return ItemStack.EMPTY;
+			slot.onTake(playerIn, current);
 		}
-		return previous;
+		return previous != null ? previous : ItemStack.EMPTY;
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer player)
+	public boolean canInteractWith(@Nonnull EntityPlayer player)
 	{
 		return true;
 	}
