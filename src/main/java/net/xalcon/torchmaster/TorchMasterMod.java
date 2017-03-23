@@ -13,14 +13,14 @@ import net.xalcon.torchmaster.server.TorchRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = TorchMasterMod.MODID, version = TorchMasterMod.VERSION)
+@Mod(modid = TorchMasterMod.MODID, version = TorchMasterMod.VERSION, guiFactory = "net.xalcon.torchmaster.client.gui.config.TorchMasterGuiFactory")
 public class TorchMasterMod
 {
     public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
 
     public static final String MODID = "torchmaster";
     public static final String VERSION = "1.0";
-    public static ConfigHandler Configuration;
+    public static ConfigHandler ConfigHandler;
 
 	private EventHandlerServer eventHandlerServer;
 	private ModGuiHandler guiHandler;
@@ -34,9 +34,7 @@ public class TorchMasterMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        Configuration = new ConfigHandler(event.getSuggestedConfigurationFile());
-        TorchRegistry.getMegaTorchRegistry().setTorchRange(Configuration.getMegaTorchRange());
-        TorchRegistry.getDreadLampRegistry().setTorchRange(Configuration.getMegaTorchRange());
+        ConfigHandler = new ConfigHandler(event.getSuggestedConfigurationFile());
 
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
         ModBlocks.init();

@@ -72,7 +72,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
 	{
 		if (!worldIn.isRemote)
 		{
-			if(TorchMasterMod.Configuration.isVanillaSpawnerEnabled())
+			if(TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
 			{
 				long startTime = System.nanoTime();
 				for (TileEntity te : worldIn.tickableTileEntities)

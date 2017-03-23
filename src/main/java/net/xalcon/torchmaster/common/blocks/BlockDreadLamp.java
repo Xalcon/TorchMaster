@@ -5,21 +5,17 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.tiles.TileEntityDreadLamp;
-import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import java.util.Random;
@@ -67,7 +63,7 @@ public class BlockDreadLamp extends BlockBase implements ITileEntityProvider
 	{
 		if (!worldIn.isRemote)
 		{
-			if(TorchMasterMod.Configuration.isVanillaSpawnerEnabled())
+			if(TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
 			{
 				long startTime = System.nanoTime();
 				for (TileEntity te : worldIn.tickableTileEntities)
