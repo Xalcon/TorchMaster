@@ -4,26 +4,29 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.ItemStack;
-import net.xalcon.torchmaster.client.gui.SlotTerrainLighter;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
 
 import javax.annotation.Nonnull;
 
 public class ContainerTerrainLighter extends Container
 {
 
-	public ContainerTerrainLighter(IInventory playerInv, IInventory tile)
+	public ContainerTerrainLighter(IInventory playerInv, TileEntityTerrainLighter terrainLighter)
 	{
+		IItemHandler itemHandler = terrainLighter.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+
 		for (int i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				this.addSlotToContainer(new SlotTerrainLighter(tile, j + i * 3, 73 + j * 18, 17 + i * 18));
+				this.addSlotToContainer(new SlotTerrainLighter(itemHandler, j + i * 3, 73 + j * 18, 17 + i * 18));
 			}
 		}
 
-		this.addSlotToContainer(new SlotFurnaceFuel(tile, 9, 49, 35));
+		this.addSlotToContainer(new SlotItemHandlerFurnaceFuel(itemHandler, 9, 49, 35));
 
 		for (int k = 0; k < 3; ++k)
 		{

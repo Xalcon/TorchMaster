@@ -2,6 +2,7 @@ package net.xalcon.torchmaster.common.tiles;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
@@ -12,11 +13,15 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
@@ -25,12 +30,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityTerrainLighter extends TileEntity implements IInventory, ITickable
+public class TileEntityTerrainLighter extends TileEntity implements ITickable
 {
 	private static final int FUEL_SLOT = 9;
 	private int[] spiralMap;
 
-	private List<ItemStack> stacks;
+	private ItemStackHandler inventory;
+
 	private int burnTime;
 	private int totalBurnTime;
 	private int index;
@@ -39,81 +45,8 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 
 	public TileEntityTerrainLighter()
 	{
-		spiralMap = BlockUtils.createSpiralMap(TorchMasterMod.ConfigHandler.getTerrainLighterTorchCount());
-		stacks = new ArrayList<>(this.getSizeInventory());
-		for(int i = 0; i < this.getSizeInventory(); i++)
-			stacks.add(ItemStack.EMPTY);
-	}
-
-	/**
-	 * Returns the number of slots in the inventory.
-	 */
-	@Override
-	public int getSizeInventory()
-	{
-		return 10;
-	}
-
-	@Override
-	public boolean isEmpty()
-	{
-		for (ItemStack itemstack : this.stacks)
-		{
-			if (!itemstack.isEmpty())
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Returns the stack in the given slot.
-	 */
-	@Override
-	@Nonnull
-	public ItemStack getStackInSlot(int index)
-	{
-		return this.stacks.get(index);
-	}
-
-	/**
-	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
-	 */
-	@Override
-	@Nonnull
-	public ItemStack decrStackSize(int index, int count)
-	{
-		ItemStack itemstack = ItemStackHelper.getAndSplit(this.stacks, index, count);
-		this.markDirty();
-		return itemstack;
-	}
-
-	/**
-	 * Removes a stack from the given slot and returns it.
-	 */
-	@Override
-	@Nonnull
-	public ItemStack removeStackFromSlot(int index)
-	{
-		return ItemStackHelper.getAndRemove(this.stacks, index);
-	}
-
-	/**
-	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-	 */
-	@Override
-	public void setInventorySlotContents(int index, @Nonnull ItemStack stack)
-	{
-		this.stacks.set(index, stack);
-
-		if (stack.getCount() > this.getInventoryStackLimit())
-		{
-			stack.setCount(this.getInventoryStackLimit());
-		}
-
-		this.markDirty();
+		this.spiralMap = BlockUtils.createSpiralMap(TorchMasterMod.ConfigHandler.getTerrainLighterTorchCount());
+		this.inventory = new ItemStackHandler(10);
 	}
 
 	@Override
@@ -121,18 +54,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	{
 		super.readFromNBT(compound);
 
-		NBTTagList nbttaglist = compound.getTagList("Items", 10);
-
-		for (int i = 0; i < nbttaglist.tagCount(); ++i)
-		{
-			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-			int j = nbttagcompound.getByte("Slot") & 255;
-
-			if (j >= 0 && j < this.stacks.size())
-			{
-				this.stacks.set(j, new ItemStack(nbttagcompound));
-			}
-		}
+		this.inventory.deserializeNBT(compound.getCompoundTag("Items"));
 
 		this.index = compound.getInteger("Index");
 		this.burnTime = compound.getInteger("BurnTime");
@@ -167,24 +89,10 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	{
 		super.writeToNBT(compound);
 
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < this.stacks.size(); ++i)
-		{
-			ItemStack stack = this.stacks.get(i);
-			if (stack != null && !stack.isEmpty())
-			{
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				nbttagcompound.setByte("Slot", (byte) i);
-				stack.writeToNBT(nbttagcompound);
-				nbttaglist.appendTag(nbttagcompound);
-			}
-		}
-
 		compound.setInteger("Index", this.index);
 		compound.setInteger("BurnTime", this.burnTime);
 		compound.setInteger("TotalBurnTime", this.totalBurnTime);
-		compound.setTag("Items", nbttaglist);
+		compound.setTag("Items", this.inventory.serializeNBT());
 
 		return compound;
 	}
@@ -193,74 +101,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	@Nonnull
 	public ITextComponent getDisplayName()
 	{
-		return new TextComponentTranslation(this.getName());
-	}
-
-	/**
-	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended.
-	 */
-	@Override
-	public int getInventoryStackLimit()
-	{
-		return 64;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(@Nonnull EntityPlayer player)
-	{
-		return false;
-	}
-
-	@Override
-	public void openInventory(@Nonnull EntityPlayer player) { }
-
-	@Override
-	public void closeInventory(@Nonnull EntityPlayer player) { }
-
-	/**
-	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot. For
-	 * guis use Slot.isItemValid
-	 */
-	@Override
-	public boolean isItemValidForSlot(int index, @Nonnull ItemStack stack)
-	{
-		return index == 9 ? TileEntityFurnace.isItemFuel(stack) : isItemAllowed(stack);
-	}
-
-	@Override
-	public int getField(int id)
-	{
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) { }
-
-	@Override
-	public int getFieldCount()
-	{
-		return 0;
-	}
-
-	@Override
-	public void clear()
-	{
-		for (int i = 0; i < this.stacks.size(); ++i)
-		{
-			this.stacks.set(i, ItemStack.EMPTY);
-		}
-	}
-
-	@Override
-	public String getName()
-	{
-		return "container.terrain_lighter";
-	}
-
-	@Override
-	public boolean hasCustomName()
-	{
-		return false;
+		return new TextComponentTranslation("container.terrain_lighter");
 	}
 
 	@Override
@@ -277,28 +118,32 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		if (!this.getWorld().isBlockPowered(this.pos)) return;
 
 		boolean updated = false;
-		ItemStack fuelStack = this.stacks.get(FUEL_SLOT);
-		if (this.burnTime <= 0 && fuelStack != null && fuelStack.getCount() > 0)
+		if(this.burnTime <= 0)
 		{
-			int burnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
-			if (burnTime > 0)
+			ItemStack fuelStack = this.inventory.extractItem(FUEL_SLOT, 1, true);
+			if (!fuelStack.isEmpty())
 			{
-				this.burnTime = this.totalBurnTime = burnTime;
-				Item fuelItem = fuelStack.getItem();
-				fuelStack.shrink(1);
-				if (fuelStack.isEmpty())
+				int burnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
+				if (burnTime > 0)
 				{
-					this.stacks.set(FUEL_SLOT, fuelItem.getContainerItem(fuelStack));
+					this.inventory.extractItem(FUEL_SLOT, 1, false);
+					this.burnTime = this.totalBurnTime = burnTime;
+					Item fuelItem = fuelStack.getItem();
+					if (!fuelStack.isEmpty() && fuelItem.hasContainerItem(fuelStack))
+					{
+						ItemStack containerItemStack = fuelItem.getContainerItem(fuelStack);
+						this.inventory.setStackInSlot(FUEL_SLOT, containerItemStack);
+					}
+					updated = true;
 				}
-				updated = true;
 			}
 		}
 
 		int torchSlot = getTorchSlot();
 		if (torchSlot >= 0 && this.burnTime > 0)
 		{
-			IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.stacks.get(torchSlot));
-			if (torchBlockState == null) return;
+			IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.inventory.getStackInSlot(torchSlot));
+			if (torchBlockState.getBlock() == Blocks.AIR) return;
 			BlockPos gridPos = getPosFromIndex(index);
 
 			int height = world.getHeight(new BlockPos(gridPos.getX(), world.getActualHeight(), gridPos.getZ())).getY();
@@ -314,8 +159,10 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 					IBlockState upState = world.getBlockState(checkPos.up());
 					if (blockState.getBlock().canPlaceTorchOnTop(blockState, world, checkPos) && upState.getMaterial().isReplaceable() && !upState.getMaterial().isLiquid())
 					{
-						world.setBlockState(checkPos.up(), torchBlockState);
-						this.decrStackSize(torchSlot, 1);
+						ItemStack stack = this.inventory.extractItem(torchSlot, 1, false);
+						if(!stack.isEmpty())
+							world.setBlockState(checkPos.up(), torchBlockState);
+
 						updated = true;
 						break;
 					}
@@ -347,7 +194,8 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			if (this.stacks.get(i) != null && this.stacks.get(i).getCount() > 0)
+			ItemStack stack = this.inventory.getStackInSlot(i);
+			if (!stack.isEmpty() && isItemAllowed(stack))
 				return i;
 		}
 		return -1;
@@ -384,5 +232,20 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	{
 		float p = (float)this.index / getTorchPlacedMax();
 		return (int) (pixel * p);
+	}
+
+	@Override
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
+	{
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Nullable
+	@Override
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
+	{
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+				? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(this.inventory)
+				: super.getCapability(capability, facing);
 	}
 }

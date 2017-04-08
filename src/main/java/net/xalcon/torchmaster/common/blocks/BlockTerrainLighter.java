@@ -12,6 +12,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModGuiHandler;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
@@ -50,7 +52,10 @@ public class BlockTerrainLighter extends BlockBase implements ITileEntityProvide
 
 		if (tileentity instanceof TileEntityTerrainLighter)
 		{
-			InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityTerrainLighter)tileentity);
+			IItemHandler itemHandler = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			if(itemHandler != null)
+				for(int i = 0; i < itemHandler.getSlots(); i++)
+					InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
 		}
 
 		super.breakBlock(worldIn, pos, state);
