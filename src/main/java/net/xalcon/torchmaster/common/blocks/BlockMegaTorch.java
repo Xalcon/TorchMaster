@@ -21,6 +21,7 @@ import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Random;
 
 public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
@@ -80,7 +81,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
 	{
 		if (!worldIn.isRemote)
 		{
-			if(TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
+			if (TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
 			{
 				long startTime = System.nanoTime();
 				for (TileEntity te : worldIn.tickableTileEntities)
@@ -89,9 +90,13 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
 					{
 						BlockUtils.addTagToSpawner("IsSpawnerMob", (TileEntityMobSpawner) te);
 					}
+					else if (Objects.equals(te.getBlockType().getRegistryName().toString(), "extrautils2:supermobspawner"))
+					{
+						BlockUtils.addTagToXU2Spawner("IsSpawnerMob", te);
+					}
 				}
 				long diff = System.nanoTime() - startTime;
-				TorchMasterMod.Log.info("MegaTorch placed down @ "+pos+" (DIM: "+worldIn.provider.getDimension()+"); MobSpawner scan took " + diff + "ns");
+				TorchMasterMod.Log.info("MegaTorch placed down @ " + pos + " (DIM: " + worldIn.provider.getDimension() + "); MobSpawner scan took " + diff + "ns");
 			}
 		}
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
