@@ -6,7 +6,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.client.gui.config.TorchMasterConfigGui;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class BlockUtils
 {
@@ -49,6 +56,24 @@ public class BlockUtils
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		spawner.getSpawnerBaseLogic().writeToNBT(nbt);
+		patchSpawnNbt(tag, nbt);
+		// force the tileEntity to read back the modified nbt
+		spawner.getSpawnerBaseLogic().readFromNBT(nbt);
+	}
+
+	public static void addTagToXU2Spawner(String tag, TileEntity spawner)
+	{
+		NBTTagCompound compound = new NBTTagCompound();
+		spawner.writeToNBT(compound);
+		// Extra Utilities 2 saves its spawner data inside the "spawner" NBTTagCompound
+		NBTTagCompound spawnerNbt = compound.getCompoundTag("spawner");
+		if(spawnerNbt.hasNoTags()) return;
+		patchSpawnNbt(tag, spawnerNbt);
+		spawner.readFromNBT(compound);
+	}
+
+	private static void patchSpawnNbt(String tag, NBTTagCompound nbt)
+	{
 		// Modify SpawnData
 		NBTTagCompound spawnDataNbt = nbt.getCompoundTag("SpawnData");
 		addTagToEntity(tag, spawnDataNbt);
@@ -63,9 +88,6 @@ public class BlockUtils
 			NBTTagCompound entityTag = weightEntry.getCompoundTag("Entity");
 			addTagToEntity(tag, entityTag);
 		}
-
-		// force the tileEntity to read back the modified nbt
-		spawner.getSpawnerBaseLogic().readFromNBT(nbt);
 	}
 
 	private static NBTTagCompound addTagToEntity(String tag, NBTTagCompound entity)
