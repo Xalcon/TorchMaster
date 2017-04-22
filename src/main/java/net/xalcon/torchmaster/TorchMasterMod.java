@@ -8,8 +8,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.xalcon.torchmaster.common.*;
-import net.xalcon.torchmaster.server.EventHandlerServer;
-import net.xalcon.torchmaster.server.TorchRegistry;
+import net.xalcon.torchmaster.common.EventHandlerServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +27,8 @@ public class TorchMasterMod
     @Mod.Instance
     public static TorchMasterMod instance;
 
-    @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.server.ServerProxy")
-    public static Proxy Proxy;
+    @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.server.CommonProxy")
+    public static CommonProxy Proxy;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -38,7 +37,6 @@ public class TorchMasterMod
 
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
         ModBlocks.init();
-        ModTileEntities.init();
         ModRecipes.init();
     }
 

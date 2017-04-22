@@ -1,6 +1,5 @@
-package net.xalcon.torchmaster.server;
+package net.xalcon.torchmaster.common;
 
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

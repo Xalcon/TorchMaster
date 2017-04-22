@@ -16,11 +16,12 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModGuiHandler;
+import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
 
 import javax.annotation.Nullable;
 
-public class BlockTerrainLighter extends BlockBase implements ITileEntityProvider
+public class BlockTerrainLighter extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
 {
 	public BlockTerrainLighter()
 	{
@@ -33,6 +34,18 @@ public class BlockTerrainLighter extends BlockBase implements ITileEntityProvide
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileEntityTerrainLighter();
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass()
+	{
+		return TileEntityTerrainLighter.class;
+	}
+
+	@Override
+	public String getTileEntityRegistryName()
+	{
+		return "tile_terrain_lighter";
 	}
 
 	@Override

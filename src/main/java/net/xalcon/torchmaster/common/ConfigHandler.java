@@ -4,7 +4,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.server.TorchRegistry;
 
 import java.io.File;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package net.xalcon.torchmaster.server;
+package net.xalcon.torchmaster.common;
 
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;

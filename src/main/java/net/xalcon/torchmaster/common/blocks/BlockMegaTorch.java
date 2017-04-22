@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
+import net.xalcon.torchmaster.common.tiles.TileEntityDreadLamp;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
@@ -24,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 
-public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
+public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
 {
 	protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.35, 0.0D, 0.35, 0.65, 1.0, 0.65);
 
@@ -40,6 +42,18 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileEntityMegaTorch();
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass()
+	{
+		return TileEntityMegaTorch.class;
+	}
+
+	@Override
+	public String getTileEntityRegistryName()
+	{
+		return "tile_mega_torch";
 	}
 
 	@SuppressWarnings("deprecation")

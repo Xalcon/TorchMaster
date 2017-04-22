@@ -1,7 +1,7 @@
 package net.xalcon.torchmaster.common.tiles;
 
 import net.minecraft.tileentity.TileEntity;
-import net.xalcon.torchmaster.server.TorchRegistry;
+import net.xalcon.torchmaster.common.TorchRegistry;
 
 public class TileEntityMegaTorch extends TileEntity
 {
