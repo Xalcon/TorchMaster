@@ -8,14 +8,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -25,6 +25,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.client.IItemRenderRegister;
+import net.xalcon.torchmaster.common.ConfigHandler;
+import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
@@ -139,6 +141,35 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 			}
 		}
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+	}
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	{
+		if(worldIn.isRemote) return true;
+
+		ItemStack itemStack = playerIn.getHeldItem(hand);
+		if(itemStack.isEmpty()) return true;
+
+		String itemId = itemStack.getItem().getRegistryName().toString();
+		if(!TorchMasterMod.ConfigHandler.getMegaTorchLighterItems().contains(itemId)) return false;
+
+		NBTTagCompound nbt = itemStack.getSubCompound("tm:lighter");
+		int amount = 1;
+		if(nbt != null)
+		{
+			amount = nbt.getInteger("amount");
+		}
+
+		if(itemStack.isItemStackDamageable())
+			itemStack.damageItem(amount, playerIn);
+		else
+			itemStack.shrink(amount);
+
+		worldIn.setBlockState(pos, ModBlocks.MegaTorch.getDefaultState().withProperty(BlockMegaTorch.BURNING, true));
+		worldIn.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, worldIn.rand.nextFloat() * 0.4F + 0.8F);
+
+		return true;
 	}
 
 	@SideOnly(Side.CLIENT)
