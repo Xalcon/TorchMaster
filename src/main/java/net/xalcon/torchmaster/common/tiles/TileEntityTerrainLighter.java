@@ -101,7 +101,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 	@Nonnull
 	public ITextComponent getDisplayName()
 	{
-		return new TextComponentTranslation("container.terrain_lighter");
+		return new TextComponentTranslation("container." + TorchMasterMod.MODID + ".terrain_lighter");
 	}
 
 	@Override

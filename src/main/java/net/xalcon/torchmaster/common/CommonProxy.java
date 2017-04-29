@@ -10,16 +10,7 @@ public abstract class CommonProxy
 {
 	public <T extends BlockBase> T registerBlock(T block)
 	{
-		ItemBlock itemBlock = new ItemBlock(block);
-		ResourceLocation registryName = block.getRegistryName();
-		if (registryName == null)
-			throw new NullPointerException("Block registry name must not be null! Blame the developer (Block: " + block + ")");
-		itemBlock.setRegistryName(registryName);
-		return registerBlock(block, itemBlock);
-	}
-
-	public <T extends BlockBase> T registerBlock(T block, ItemBlock itemBlock)
-	{
+		ItemBlock itemBlock = block.createItemBlock();
 		GameRegistry.register(block);
 		GameRegistry.register(itemBlock);
 

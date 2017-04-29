@@ -2,33 +2,43 @@ package net.xalcon.torchmaster.common.blocks;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.client.IItemRenderRegister;
+import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
-import net.xalcon.torchmaster.common.tiles.TileEntityDreadLamp;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.Random;
 
 public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
 {
 	protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.35, 0.0D, 0.35, 0.65, 1.0, 0.65);
+
+	public static final PropertyBool BURNING = PropertyBool.create("burning");
 
 	public BlockMegaTorch()
 	{
@@ -36,6 +46,15 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		this.setHardness(1.5f);
 		this.setResistance(1.0f);
 		this.setLightLevel(1.0f);
+
+		this.setDefaultState(this.blockState.getBaseState().withProperty(BURNING, true));
+	}
+
+	@Override
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	{
+		list.add(new ItemStack(itemIn,1, this.getMetaFromState(this.getDefaultState())));
+		list.add(new ItemStack(itemIn, 1, this.getMetaFromState(this.getDefaultState().withProperty(BURNING, false))));
 	}
 
 	@Override
@@ -48,6 +67,12 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	public Class<? extends TileEntity> getTileEntityClass()
 	{
 		return TileEntityMegaTorch.class;
+	}
+
+	@Override
+	public boolean hasTileEntity(IBlockState state)
+	{
+		return state.getValue(BURNING);
 	}
 
 	@Override
@@ -93,7 +118,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
-		if (!worldIn.isRemote)
+		if (!worldIn.isRemote && state.getValue(BURNING))
 		{
 			if (TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
 			{
@@ -104,7 +129,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 					{
 						BlockUtils.addTagToSpawner("IsSpawnerMob", (TileEntityMobSpawner) te);
 					}
-					else if (Objects.equals(te.getBlockType().getRegistryName().toString(), "extrautils2:supermobspawner"))
+					else if ("extrautils2:supermobspawner".equals(te.getBlockType().getRegistryName().toString()))
 					{
 						BlockUtils.addTagToXU2Spawner("IsSpawnerMob", te);
 					}
@@ -119,11 +144,57 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{
+		// no fire for you if the torch isnt burning :x
+		if(!stateIn.getValue(BURNING)) return;
+
 		double d0 = (double) pos.getX() + 0.5D;
 		double d1 = (double) pos.getY() + 1.1D;
 		double d2 = (double) pos.getZ() + 0.5D;
 
 		worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState()
+	{
+		return new BlockStateContainer(this, BURNING);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return state.getValue(BURNING) ? 0 : 1;
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		return meta == 0 ? this.getDefaultState().withProperty(BURNING, true) : this.getDefaultState().withProperty(BURNING, false);
+	}
+
+	@Override
+	public void registerItemModels(ItemBlock itemBlock, IItemRenderRegister register)
+	{
+		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getDefaultState().withProperty(BURNING, true)), this.getRegistryName(), "burning=true");
+		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getDefaultState().withProperty(BURNING, false)), this.getRegistryName(), "burning=false");
+	}
+
+	@Override
+	public ItemBlock createItemBlock()
+	{
+		return (ItemBlock) new ItemBlockMegaTorch(this).setRegistryName(this.getRegistryName());
+	}
+
+	@Override
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
+	{
+		return state.getValue(BURNING) ? 15 : 0;
+	}
+
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+	{
+		return new ItemStack(Item.getItemFromBlock(this), 1, this.getMetaFromState(state));
 	}
 }

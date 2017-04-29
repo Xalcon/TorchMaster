@@ -14,6 +14,18 @@ public class TorchMasterGuiFactory implements IModGuiFactory
 	}
 
 	@Override
+	public boolean hasConfigGui()
+	{
+		return true;
+	}
+
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parentScreen)
+	{
+		return new TorchMasterConfigGui(parentScreen);
+	}
+
+	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass()
 	{
 		return TorchMasterConfigGui.class;

@@ -9,13 +9,13 @@ import net.xalcon.torchmaster.client.IItemRenderRegister;
 
 public class BlockBase extends Block
 {
-	protected String internalName;
+	protected final String internalName;
 
 	public BlockBase(Material material, String name)
 	{
 		super(material);
 		this.internalName = name;
-		setUnlocalizedName(this.internalName);
+		setUnlocalizedName(TorchMasterMod.MODID + "." + this.internalName);
 		setRegistryName(this.internalName);
 		setCreativeTab(CreativeTabs.MISC);
 	}
@@ -24,6 +24,11 @@ public class BlockBase extends Block
 	{
 		//noinspection ConstantConditions
 		register.registerItemRenderer(itemBlock, 0, this.getRegistryName(), "inventory");
+	}
+
+	public ItemBlock createItemBlock()
+	{
+		return (ItemBlock) new ItemBlock(this).setRegistryName(this.getRegistryName());
 	}
 }
 

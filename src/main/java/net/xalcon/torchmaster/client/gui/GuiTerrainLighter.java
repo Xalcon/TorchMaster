@@ -14,6 +14,7 @@ import java.util.List;
 
 public class GuiTerrainLighter extends GuiContainer
 {
+	private static final String NO_RS_SIGNAL_KEY = "gui." + TorchMasterMod.MODID + ".block.state.no_signal";
 	private static final ResourceLocation GUI_TEXTURES = new ResourceLocation(TorchMasterMod.MODID + ":textures/gui/container/terrain_lighter.png");
 	private TileEntityTerrainLighter tile;
 	private IInventory playerInv;
@@ -45,8 +46,8 @@ public class GuiTerrainLighter extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
 		String s = this.tile.getDisplayName().getUnformattedText();
-		this.fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
-		this.fontRendererObj.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+		this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 
 		int i = (this.width - this.xSize) / 2; //X asis on GUI
 		int j = (this.height - this.ySize) / 2; //Y asis on GUI
@@ -60,8 +61,8 @@ public class GuiTerrainLighter extends GuiContainer
 
 				list.add(value + " / " + max);
 				if(tile.getWorld().isBlockIndirectlyGettingPowered(tile.getPos()) == 0)
-					list.add(new TextComponentTranslation("state.no_signal").getFormattedText());
-				this.drawHoveringText(list, mouseX - i, mouseY - j, this.fontRendererObj);
+					list.add(new TextComponentTranslation(NO_RS_SIGNAL_KEY).getFormattedText());
+				this.drawHoveringText(list, mouseX - i, mouseY - j, this.fontRenderer);
 			}
 		}
 	}

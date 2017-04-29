@@ -9,14 +9,11 @@
       "west": "#south",
       "east": "#south",
       "particle": "#south"
-    }
+    },
+    "model": "cube"
   },
   "variants": {
-    "normal": {
-      "model": "cube"
-    },
-    "inventory": {
-      "model": "cube"
-    }
+    "normal": [{}],
+    "inventory": [{}]
   }
 }
