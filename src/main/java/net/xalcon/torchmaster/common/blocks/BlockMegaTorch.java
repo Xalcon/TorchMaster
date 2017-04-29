@@ -6,13 +6,17 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.*;
@@ -22,13 +26,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.client.IItemRenderRegister;
-import net.xalcon.torchmaster.common.ConfigHandler;
-import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
@@ -51,14 +52,14 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		this.setResistance(1.0f);
 		this.setLightLevel(1.0f);
 
-		this.setDefaultState(this.getTorch(true));
+		this.setDefaultState(this.getTorchState(true));
 	}
 
 	@Override
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
 	{
-		list.add(new ItemStack(itemIn,1, this.getMetaFromState(this.getTorch(true))));
-		list.add(new ItemStack(itemIn, 1, this.getMetaFromState(this.getTorch(false))));
+		list.add(new ItemStack(itemIn,1, this.getMetaFromState(this.getTorchState(true))));
+		list.add(new ItemStack(itemIn, 1, this.getMetaFromState(this.getTorchState(false))));
 	}
 
 	@Override
@@ -141,6 +142,15 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 				long diff = System.nanoTime() - startTime;
 				TorchMasterMod.Log.info("MegaTorch placed down @ " + pos + " (DIM: " + worldIn.provider.getDimension() + "); MobSpawner scan took " + diff + "ns");
 			}
+
+			if(!stack.hasTagCompound()) return;
+
+			TileEntity tile = worldIn.getTileEntity(pos);
+			if(!(tile instanceof TileEntityMegaTorch)) return;
+
+			NBTTagCompound compound = stack.getSubCompound("tm_tile");
+			if(compound != null)
+				((TileEntityMegaTorch) tile).readSyncNbt(compound);
 		}
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
@@ -191,9 +201,18 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 			return false;
 		}
 
-		worldIn.setBlockState(pos, this.getTorch(true));
-		worldIn.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, worldIn.rand.nextFloat() * 0.4F + 0.8F);
+		worldIn.setBlockState(pos, this.getTorchState(true));
 
+		TileEntity torchTe = worldIn.getTileEntity(pos);
+		if(torchTe instanceof TileEntityMegaTorch)
+		{
+			((TileEntityMegaTorch) torchTe).relightTorch(TorchMasterMod.ConfigHandler.getMegaTorchBurnoutValue());
+			worldIn.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, worldIn.rand.nextFloat() * 0.4F + 0.8F);
+		}
+		else
+		{
+			TorchMasterMod.Log.error("There is an error whith the MegaTorch @ " + pos + ". Please replace the block!");
+		}
 		return true;
 	}
 
@@ -217,7 +236,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		return new BlockStateContainer(this, BURNING);
 	}
 
-	public IBlockState getTorch(boolean isLit) { return this.getDefaultState().withProperty(BURNING, isLit); }
+	public IBlockState getTorchState(boolean isLit) { return this.getDefaultState().withProperty(BURNING, isLit); }
 
 	@Override
 	public int getMetaFromState(IBlockState state)
@@ -228,14 +247,14 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return this.getTorch(meta == 0);
+		return this.getTorchState(meta == 0);
 	}
 
 	@Override
 	public void registerItemModels(ItemBlock itemBlock, IItemRenderRegister register)
 	{
-		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorch(true)), this.getRegistryName(), "burning=true");
-		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorch(false)), this.getRegistryName(), "burning=false");
+		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorchState(true)), this.getRegistryName(), "burning=true");
+		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorchState(false)), this.getRegistryName(), "burning=false");
 	}
 
 	@Override
@@ -259,12 +278,48 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public int damageDropped(IBlockState state)
 	{
-		return this.getMetaFromState(TorchMasterMod.ConfigHandler.isMegaTorchExtinguishOnHarvest() ? this.getTorch(false) : state);
+		return this.getMetaFromState(TorchMasterMod.ConfigHandler.isMegaTorchExtinguishOnHarvest() ? this.getTorchState(false) : state);
 	}
 
 	@Override
 	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
-		return true;
+		return TorchMasterMod.ConfigHandler.isMegaTorchAllowSilkTouch();
+	}
+
+	private ItemStack getItemDroppedWithNbt(IBlockState state, TileEntityMegaTorch tile, Random rand, int fortune)
+	{
+		Item item = this.getItemDropped(state, rand, fortune);
+		if (item == Items.AIR) return ItemStack.EMPTY;
+
+		ItemStack itemStack = new ItemStack(item, this.quantityDropped(rand), 0);
+		NBTTagCompound compound = itemStack.getOrCreateSubCompound("tm_tile");
+		tile.writeSyncNbt(compound);
+		return itemStack;
+	}
+
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
+	{
+		if (te instanceof TileEntityMegaTorch)
+		{
+			if (worldIn.isRemote) return;
+			if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
+			{
+				ItemStack itemStack = this.getSilkTouchDrop(state);
+				if(!itemStack.isEmpty())
+				{
+					//noinspection ConstantConditions | this will never be null when we are getting called - otherwise, its a MC bug
+					player.addStat(StatList.getBlockStats(this));
+					player.addExhaustion(0.005F);
+
+					NBTTagCompound compound = itemStack.getOrCreateSubCompound("tm_tile");
+					((TileEntityMegaTorch) te).writeSyncNbt(compound);
+					spawnAsEntity(worldIn, pos, itemStack);
+					return;
+				}
+			}
+		}
+		super.harvestBlock(worldIn, player, pos, state, te, stack);
 	}
 }

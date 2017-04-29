@@ -17,6 +17,8 @@ public class ConfigHandler
 	private boolean megaTorchAllowVanillaSpawners;
 	private boolean megaTorchExtinguishOnHarvest;
 	private boolean megaTorchAllowSilkTouch;
+	private int megaTorchBurnoutRate;
+	private int megaTorchBurnoutValue;
 	private int megaTorchRange;
 	private int dreadLampRange;
 	private int terrainLighterTorchCount;
@@ -44,6 +46,8 @@ public class ConfigHandler
 		{
 			this.megaTorchRange = config.getInt("MegaTorchRange", "general", 32, 0, 512, "The radius of the spawn prevention. (Monster)");
 			this.megaTorchLighterItems = new HashSet<>(Arrays.asList(config.get("general", "MegaTorchLighterItems", new String[]{"minecraft:flint_and_steel"}, "The lighter item to light an unlit torch, see ADD_WEBSITE_HERE for more info.").getStringList()));
+			this.megaTorchBurnoutRate = config.getInt("MegaTorchBurnoutRate", "general", 0, 0, Integer.MAX_VALUE, "The speed at which the torch will extinguish. Set to 0 to disable.");
+			this.megaTorchBurnoutValue = config.getInt("MegaTorchBurnoutValue", "general", Integer.MAX_VALUE, 0, Integer.MAX_VALUE, "The burnout value. This value is removed by the amount of burnout rate per tick");
 			this.megaTorchExtinguishOnHarvest = config.getBoolean("MegaTorchExtinguishOnHarvest", "general", false, "If set to true, the mega torch will drop as an unlit torch when harvesting it");
 			this.megaTorchAllowSilkTouch = config.getBoolean("MegaTorchAllowSilkTouch", "general", false, "Allows to get the lit torch when harvested with silk touch. Has no effect if MegaTorchExtinguishOnHarvest is false");
 
@@ -105,4 +109,7 @@ public class ConfigHandler
 	public boolean isMegaTorchExtinguishOnHarvest() { return megaTorchExtinguishOnHarvest; }
 
 	public boolean isMegaTorchAllowSilkTouch() { return megaTorchAllowSilkTouch; }
+
+	public int getMegaTorchBurnoutRate() { return megaTorchBurnoutRate; }
+	public int getMegaTorchBurnoutValue() { return megaTorchBurnoutValue; }
 }
