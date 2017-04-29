@@ -36,6 +36,7 @@ public class TorchMasterMod
         ConfigHandler = new ConfigHandler(event.getSuggestedConfigurationFile());
 
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
+        MinecraftForge.EVENT_BUS.register(ConfigHandler);
         ModBlocks.init();
         ModRecipes.init();
     }

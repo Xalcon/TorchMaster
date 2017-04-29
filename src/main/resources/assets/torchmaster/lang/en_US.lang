@@ -2,6 +2,11 @@ tile.torchmaster.mega_torch.lit.name=Mega Torch
 tile.torchmaster.mega_torch.unlit.name=Unlit Mega Torch
 tile.torchmaster.terrain_lighter.name=Terrain Lighter
 tile.torchmaster.dread_lamp.name=Dread Lamp
+
+tile.torchmaster.mega_torch.light_failed_itemcount=§CYou dont have enough items to light the torch§r
+tile.torchmaster.mega_torch.light_failed_itemtoodamaged=§CYour item was too damaged to light the torch§r
+tile.torchmaster.mega_torch.already_lit=§CThe torch is already lit§r
+
 container.torchmaster.terrain_lighter=Terrain Lighter
 gui.torchmaster.block.state.no_signal=No Redstone Signal
 itemGroup.torchmaster=TorchMaster

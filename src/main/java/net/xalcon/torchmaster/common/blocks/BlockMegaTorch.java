@@ -19,8 +19,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
@@ -49,14 +51,14 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		this.setResistance(1.0f);
 		this.setLightLevel(1.0f);
 
-		this.setDefaultState(this.blockState.getBaseState().withProperty(BURNING, true));
+		this.setDefaultState(this.getTorch(true));
 	}
 
 	@Override
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
 	{
-		list.add(new ItemStack(itemIn,1, this.getMetaFromState(this.getDefaultState())));
-		list.add(new ItemStack(itemIn, 1, this.getMetaFromState(this.getDefaultState().withProperty(BURNING, false))));
+		list.add(new ItemStack(itemIn,1, this.getMetaFromState(this.getTorch(true))));
+		list.add(new ItemStack(itemIn, 1, this.getMetaFromState(this.getTorch(false))));
 	}
 
 	@Override
@@ -146,6 +148,11 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
+		if(state.getValue(BURNING))
+		{
+			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".already_lit"), true);
+			return true;
+		}
 		if(worldIn.isRemote) return true;
 
 		ItemStack itemStack = playerIn.getHeldItem(hand);
@@ -154,19 +161,37 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		String itemId = itemStack.getItem().getRegistryName().toString();
 		if(!TorchMasterMod.ConfigHandler.getMegaTorchLighterItems().contains(itemId)) return false;
 
-		NBTTagCompound nbt = itemStack.getSubCompound("tm:lighter");
+		NBTTagCompound nbt = itemStack.getSubCompound("tm_lighter");
 		int amount = 1;
+		float chance = 1f;
 		if(nbt != null)
 		{
 			amount = nbt.getInteger("amount");
 		}
 
 		if(itemStack.isItemStackDamageable())
+		{
+			int remainingDamage = 1 + itemStack.getMaxDamage() - itemStack.getItemDamage(); // item breaks only if damage > maxDamage, hence why we need to add +1
+			chance = (float)remainingDamage / amount;
 			itemStack.damageItem(amount, playerIn);
+		}
 		else
+		{
+			if(amount > itemStack.getCount())
+			{
+				playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemcount"), true);
+				return false;
+			}
 			itemStack.shrink(amount);
+		}
 
-		worldIn.setBlockState(pos, ModBlocks.MegaTorch.getDefaultState().withProperty(BlockMegaTorch.BURNING, true));
+		if(worldIn.rand.nextFloat() > chance)
+		{
+			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemtoodamaged"), false);
+			return false;
+		}
+
+		worldIn.setBlockState(pos, this.getTorch(true));
 		worldIn.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, worldIn.rand.nextFloat() * 0.4F + 0.8F);
 
 		return true;
@@ -192,6 +217,8 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		return new BlockStateContainer(this, BURNING);
 	}
 
+	public IBlockState getTorch(boolean isLit) { return this.getDefaultState().withProperty(BURNING, isLit); }
+
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
@@ -201,14 +228,14 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return meta == 0 ? this.getDefaultState().withProperty(BURNING, true) : this.getDefaultState().withProperty(BURNING, false);
+		return this.getTorch(meta == 0);
 	}
 
 	@Override
 	public void registerItemModels(ItemBlock itemBlock, IItemRenderRegister register)
 	{
-		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getDefaultState().withProperty(BURNING, true)), this.getRegistryName(), "burning=true");
-		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getDefaultState().withProperty(BURNING, false)), this.getRegistryName(), "burning=false");
+		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorch(true)), this.getRegistryName(), "burning=true");
+		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorch(false)), this.getRegistryName(), "burning=false");
 	}
 
 	@Override
@@ -227,5 +254,17 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
 		return new ItemStack(Item.getItemFromBlock(this), 1, this.getMetaFromState(state));
+	}
+
+	@Override
+	public int damageDropped(IBlockState state)
+	{
+		return this.getMetaFromState(TorchMasterMod.ConfigHandler.isMegaTorchExtinguishOnHarvest() ? this.getTorch(false) : state);
+	}
+
+	@Override
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
+	{
+		return true;
 	}
 }
