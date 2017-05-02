@@ -287,24 +287,13 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		return TorchMasterMod.ConfigHandler.isMegaTorchAllowSilkTouch();
 	}
 
-	private ItemStack getItemDroppedWithNbt(IBlockState state, TileEntityMegaTorch tile, Random rand, int fortune)
-	{
-		Item item = this.getItemDropped(state, rand, fortune);
-		if (item == Items.AIR) return ItemStack.EMPTY;
-
-		ItemStack itemStack = new ItemStack(item, this.quantityDropped(rand), 0);
-		NBTTagCompound compound = itemStack.getOrCreateSubCompound("tm_tile");
-		tile.writeSyncNbt(compound);
-		return itemStack;
-	}
-
 	@Override
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
 	{
 		if (te instanceof TileEntityMegaTorch)
 		{
 			if (worldIn.isRemote) return;
-			if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
+			if (!TorchMasterMod.ConfigHandler.isMegaTorchExtinguishOnHarvest() || this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
 			{
 				ItemStack itemStack = this.getSilkTouchDrop(state);
 				if(!itemStack.isEmpty())

@@ -19,7 +19,6 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 	public TileEntityMegaTorch()
 	{
 		this.burnRate = TorchMasterMod.ConfigHandler.getMegaTorchBurnoutRate();
-		TorchMasterMod.Log.info("Created new tile");
 	}
 
 	public void relightTorch(int burnValueLeft)
@@ -31,7 +30,6 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 	@Override
 	public void onLoad()
 	{
-		TorchMasterMod.Log.info("onLoad()");
 		super.onLoad();
 		if(!this.getWorld().isRemote)
 			TorchRegistry.getMegaTorchRegistry().registerTorch(this.getWorld(), this.getPos());
@@ -40,7 +38,6 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 	@Override
 	public void invalidate()
 	{
-		TorchMasterMod.Log.info("invalidate()");
 		super.invalidate();
 		if(!this.getWorld().isRemote)
 			TorchRegistry.getMegaTorchRegistry().unregisterTorch(this.getWorld(), this.getPos());
@@ -49,7 +46,6 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 	@Override
 	public void onChunkUnload()
 	{
-		TorchMasterMod.Log.info("onChunkUnload()");
 		super.onChunkUnload();
 		if(!this.getWorld().isRemote)
 			TorchRegistry.getMegaTorchRegistry().unregisterTorch(this.getWorld(), this.getPos());
