@@ -18,7 +18,7 @@ public class TorchMasterMod
     public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
 
     public static final String MODID = "torchmaster";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "@VERSION@";
     public static ConfigHandler ConfigHandler;
 
 	private EventHandlerServer eventHandlerServer;
@@ -27,7 +27,7 @@ public class TorchMasterMod
     @Mod.Instance
     public static TorchMasterMod instance;
 
-    @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.server.CommonProxy")
+    @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.common.CommonProxy")
     public static CommonProxy Proxy;
 
     @EventHandler

@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.xalcon.torchmaster.common.blocks.BlockBase;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 
-public abstract class CommonProxy
+public class CommonProxy
 {
 	public <T extends BlockBase> T registerBlock(T block)
 	{
