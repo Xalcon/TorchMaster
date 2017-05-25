@@ -286,8 +286,8 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		int torchSlot = getTorchSlot();
 		if (torchSlot >= 0 && this.burnTime > 0)
 		{
-			IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.stacks[torchSlot]);
-			if(torchBlockState == null) return;
+			//IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.stacks[torchSlot]);
+			//(torchBlockState == null) return;
 			BlockPos gridPos = getPosFromIndex(index);
 
 			int height = worldObj.getHeight(new BlockPos(gridPos.getX(), worldObj.getActualHeight(), gridPos.getZ())).getY();
