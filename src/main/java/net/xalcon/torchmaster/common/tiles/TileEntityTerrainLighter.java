@@ -150,8 +150,8 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 		int torchSlot = getTorchSlot();
 		if (torchSlot >= 0 && this.burnTime > 0)
 		{
-			IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.inventory.getStackInSlot(torchSlot));
-			if (torchBlockState.getBlock() == Blocks.AIR) return;
+			//IBlockState torchBlockState = BlockUtils.getBlockStateFromItemStack(this.inventory.getStackInSlot(torchSlot));
+			//if (torchBlockState.getBlock() == Blocks.AIR) return;
 			BlockPos gridPos = getPosFromIndex(index);
 
 			int height = world.getHeight(new BlockPos(gridPos.getX(), world.getActualHeight(), gridPos.getZ())).getY();
