@@ -21,6 +21,9 @@ public class ConfigHandler
 	private int terrainLighterSpacing;
 	private HashSet<String> terrainLighterTorches;
 
+	public boolean isLycaniteCompatEnabled;
+	public boolean isMoCreaturesCompatEnabled;
+
 	public ConfigHandler(File configFile)
 	{
 		config = new Configuration(configFile);
@@ -45,6 +48,9 @@ public class ConfigHandler
 			terrainLighterTorchCount = config.getInt("TerrainLighterTorchCount", "general", 7, 0, 32, "The amount of torches to place in each direction. The effective range is multiplied by the torch spacing (32 * 5 = 160 blocks, default 7 * 5 = 35 blocks)");
 			terrainLighterSpacing = config.getInt("TerrainLighterSpacing", "general", 5, 1, 16, "The spacing between each torch. Distance of 5 means there will be a torch every 5 blocks with 4 blocks space in between.");
 			terrainLighterTorches = new HashSet<>(Arrays.asList(config.get("general", "TerrainLighterTorches", new String[]{"minecraft:torch", "tconstruct:stone_torch"}, "This controls which torches are supported by the terrain lighter").getStringList()));
+
+			isLycaniteCompatEnabled = config.getBoolean("LycanitesMobsBlockAll", "compat", true, "If this setting is enabled, the mega torch will block all natural spawn attempts from Lycanites Mobs in its radius");
+			isMoCreaturesCompatEnabled = config.getBoolean("MoCreaturesBlockAll", "compat", true, "If this setting is enabled, the mega torch will block all natural spawn attempts from MoCreatures in its radius");
 		}
 		catch (Exception e)
 		{

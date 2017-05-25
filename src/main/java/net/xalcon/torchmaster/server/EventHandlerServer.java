@@ -1,7 +1,5 @@
 package net.xalcon.torchmaster.server;
 
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.IAnimals;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -13,7 +11,7 @@ public class EventHandlerServer
 	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
 		if(event.getResult() == Event.Result.ALLOW) return;
-		if(event.getEntityLiving() instanceof IMob)
+		if(TorchMasterMod.MegaTorchFilterRegistry.containsEntity(event.getEntity()))
 		{
 			if(TorchRegistry.getMegaTorchRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
@@ -21,7 +19,7 @@ public class EventHandlerServer
 					event.setResult(Event.Result.DENY);
 			}
 		}
-		else if(event.getEntityLiving() instanceof IAnimals)
+		else if(TorchMasterMod.DreadLampFilterRegistry.containsEntity(event.getEntity()))
 		{
 			if(TorchRegistry.getDreadLampRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
