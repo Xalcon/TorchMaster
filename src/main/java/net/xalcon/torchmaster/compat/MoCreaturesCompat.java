@@ -11,15 +11,14 @@ import java.util.Objects;
 @Mod.EventBusSubscriber()
 public class MoCreaturesCompat
 {
-
 	@SubscribeEvent
 	public static void registerTorchEntities(EntityFilterRegisterEvent.MegaTorch event)
 	{
 		if(!TorchMasterMod.ConfigHandler.isMoCreaturesCompatEnabled) return;
 
 		EntityList.getEntityNameList().stream()
-				.filter(n -> n.contains("mocreatures."))
-				.map(EntityList.NAME_TO_CLASS::get)
+				.filter(n -> "mocreatures".equals(n.getResourceDomain()))
+				.map(EntityList::getClass)
 				.filter(Objects::nonNull)
 				.forEach(c -> event.getRegistry().registerEntity(c));
 	}

@@ -33,8 +33,8 @@ public class LycaniteMobsCompat
 		if(!TorchMasterMod.ConfigHandler.isLycaniteCompatEnabled) return;
 
 		EntityList.getEntityNameList().stream()
-				.filter(n -> Arrays.stream(MODS).anyMatch(n::contains))
-				.map(EntityList.NAME_TO_CLASS::get)
+				.filter(n -> Arrays.stream(MODS).anyMatch(m -> m.equals(n.getResourceDomain())))
+				.map(EntityList::getClass)
 				.filter(Objects::nonNull)
 				.forEach(c -> event.getRegistry().registerEntity(c));
 	}

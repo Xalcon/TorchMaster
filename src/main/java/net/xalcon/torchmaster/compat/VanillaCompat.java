@@ -15,7 +15,7 @@ public class VanillaCompat
 	public static void registerTorchEntities(EntityFilterRegisterEvent.MegaTorch event)
 	{
 		EntityList.getEntityNameList().stream()
-				.map(EntityList.NAME_TO_CLASS::get)
+				.map(EntityList::getClass)
 				.filter(Objects::nonNull)
 				.filter(IMob.class::isAssignableFrom)
 				.forEach(event.getRegistry()::registerEntity);
@@ -26,7 +26,7 @@ public class VanillaCompat
 	public static void registerDreadLampEntities(EntityFilterRegisterEvent.DreadLamp event)
 	{
 		EntityList.getEntityNameList().stream()
-				.map(EntityList.NAME_TO_CLASS::get)
+				.map(EntityList::getClass)
 				.filter(Objects::nonNull)
 				.filter(c -> IAnimals.class.isAssignableFrom(c) && !IMob.class.isAssignableFrom(c))
 				.forEach(event.getRegistry()::registerEntity);
