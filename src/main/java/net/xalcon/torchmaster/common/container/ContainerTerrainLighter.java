@@ -4,24 +4,29 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnaceFuel;
 import net.minecraft.item.ItemStack;
-import net.xalcon.torchmaster.client.gui.SlotTerrainLighter;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
+
+import javax.annotation.Nonnull;
 
 public class ContainerTerrainLighter extends Container
 {
 
-	public ContainerTerrainLighter(IInventory playerInv, IInventory tile)
+	public ContainerTerrainLighter(IInventory playerInv, TileEntityTerrainLighter terrainLighter)
 	{
+		IItemHandler itemHandler = terrainLighter.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+
 		for (int i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				this.addSlotToContainer(new SlotTerrainLighter(tile, j + i * 3, 73 + j * 18, 17 + i * 18));
+				this.addSlotToContainer(new SlotTerrainLighter(itemHandler, j + i * 3, 73 + j * 18, 17 + i * 18));
 			}
 		}
 
-		this.addSlotToContainer(new SlotFurnaceFuel(tile, 9, 49, 35));
+		this.addSlotToContainer(new SlotItemHandlerFurnaceFuel(itemHandler, 9, 49, 35));
 
 		for (int k = 0; k < 3; ++k)
 		{
@@ -38,6 +43,7 @@ public class ContainerTerrainLighter extends Container
 	}
 
 	@Override
+	@Nonnull
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int fromSlot) {
 		ItemStack previous = null;
 		Slot slot = this.inventorySlots.get(fromSlot);
@@ -49,26 +55,26 @@ public class ContainerTerrainLighter extends Container
 			if (fromSlot < 10) {
 				// From TE Inventory to Player Inventory
 				if (!this.mergeItemStack(current, 10, 46, true))
-					return null;
+					return ItemStack.EMPTY;
 			} else {
 				// From Player Inventory to TE Inventory
 				if (!this.mergeItemStack(current, 0, 10, false))
-					return null;
+					return ItemStack.EMPTY;
 			}
-			if (current.stackSize == 0)
-				slot.putStack(null);
+			if (current.getCount() == 0)
+				slot.putStack(ItemStack.EMPTY);
 			else
 				slot.onSlotChanged();
 
-			if (current.stackSize == previous.stackSize)
-				return null;
-			slot.onPickupFromSlot(playerIn, current);
+			if (current.getCount() == previous.getCount())
+				return ItemStack.EMPTY;
+			slot.onTake(playerIn, current);
 		}
-		return previous;
+		return previous != null ? previous : ItemStack.EMPTY;
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer player)
+	public boolean canInteractWith(@Nonnull EntityPlayer player)
 	{
 		return true;
 	}

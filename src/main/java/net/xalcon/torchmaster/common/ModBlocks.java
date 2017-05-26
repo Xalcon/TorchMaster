@@ -1,10 +1,7 @@
 package net.xalcon.torchmaster.common;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemBlock;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.blocks.*;
-import net.xalcon.torchmaster.common.creativetabs.CreativeTabTorchMaster;
 
 public class ModBlocks
 {
@@ -14,24 +11,8 @@ public class ModBlocks
 
 	public static void init()
 	{
-		MegaTorch = Register(new BlockMegaTorch());
-		TerrainLighter = Register(new BlockTerrainLighter());
-		DreadLamp = Register(new BlockDreadLamp());
-	}
-
-	private static <T extends BlockBase> T Register(T block, ItemBlock itemBlock) {
-		GameRegistry.register(block);
-		GameRegistry.register(itemBlock);
-
-		block.RegisterItemModel(itemBlock);
-
-		return block;
-	}
-
-	private static <T extends BlockBase> T Register(T block) {
-		ItemBlock itemBlock = new ItemBlock(block);
-		itemBlock.setRegistryName(block.getRegistryName());
-		block.setCreativeTab(CreativeTabTorchMaster.INSTANCE);
-		return Register(block, itemBlock);
+		MegaTorch = TorchMasterMod.Proxy.registerBlock(new BlockMegaTorch());
+		TerrainLighter = TorchMasterMod.Proxy.registerBlock(new BlockTerrainLighter());
+		DreadLamp = TorchMasterMod.Proxy.registerBlock(new BlockDreadLamp());
 	}
 }

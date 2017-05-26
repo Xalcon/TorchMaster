@@ -15,12 +15,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityDreadLamp;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import java.util.Random;
 
-public class BlockDreadLamp extends BlockBase implements ITileEntityProvider
+public class BlockDreadLamp extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
 {
 	public BlockDreadLamp()
 	{
@@ -56,6 +57,18 @@ public class BlockDreadLamp extends BlockBase implements ITileEntityProvider
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileEntityDreadLamp();
+	}
+
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass()
+	{
+		return TileEntityDreadLamp.class;
+	}
+
+	@Override
+	public String getTileEntityRegistryName()
+	{
+		return "tile_dread_lamp";
 	}
 
 	@Override

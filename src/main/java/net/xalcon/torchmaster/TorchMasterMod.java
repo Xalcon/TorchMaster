@@ -29,7 +29,7 @@ public class TorchMasterMod
     public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
 
     public static final String MODID = "torchmaster";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "@VERSION@";
     public static ConfigHandler ConfigHandler;
 
 	private EventHandlerServer eventHandlerServer;
@@ -41,8 +41,8 @@ public class TorchMasterMod
     @Mod.Instance
     public static TorchMasterMod instance;
 
-    @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.server.ServerProxy")
-    public static Proxy Proxy;
+    @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.common.CommonProxy")
+    public static CommonProxy Proxy;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -50,8 +50,8 @@ public class TorchMasterMod
         ConfigHandler = new ConfigHandler(event.getSuggestedConfigurationFile());
 
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
+        MinecraftForge.EVENT_BUS.register(ConfigHandler);
         ModBlocks.init();
-        ModTileEntities.init();
         ModRecipes.init();
     }
 

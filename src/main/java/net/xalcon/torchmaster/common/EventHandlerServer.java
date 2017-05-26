@@ -1,4 +1,4 @@
-package net.xalcon.torchmaster.server;
+package net.xalcon.torchmaster.common;
 
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
