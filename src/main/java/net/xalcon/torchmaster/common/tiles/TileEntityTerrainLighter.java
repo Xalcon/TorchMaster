@@ -199,9 +199,9 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 	 * Don't rename this method to canInteractWith due to conflicts with Container
 	 */
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player)
+	public boolean isUsableByPlayer(EntityPlayer player)
 	{
-		return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+		return this.getWorld().getTileEntity(this.pos) == this && player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -265,7 +265,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		if(this.getWorld().isRemote) return;
 		if(done) return;
 		if(tick++ % 5 != 0) return;
-		if(!this.worldObj.isBlockPowered(this.pos)) return;
+		if(!this.getWorld().isBlockPowered(this.pos)) return;
 
 		boolean updated = false;
 		if(this.burnTime <= 0 && this.stacks[FUEL_SLOT] != null && this.stacks[FUEL_SLOT].stackSize > 0)
@@ -290,7 +290,7 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 			//(torchBlockState == null) return;
 			BlockPos gridPos = getPosFromIndex(index);
 
-			int height = worldObj.getHeight(new BlockPos(gridPos.getX(), worldObj.getActualHeight(), gridPos.getZ())).getY();
+			int height = this.getWorld().getHeight(new BlockPos(gridPos.getX(), this.getWorld().getActualHeight(), gridPos.getZ())).getY();
 			int maxY =  this.pos.getY() + 8;
 			int minY = this.pos.getY() - 8;
 			if(height > minY)
@@ -299,18 +299,18 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 				for(int y = height + 1; y > minY; y--)
 				{
 					BlockPos checkPos = new BlockPos(gridPos.getX(), y, gridPos.getZ());
-					IBlockState blockState = worldObj.getBlockState(checkPos);
-					IBlockState upState = worldObj.getBlockState(checkPos.up());
-					if(blockState.getBlock().canPlaceTorchOnTop(blockState, worldObj, checkPos) && upState.getMaterial().isReplaceable() && !upState.getMaterial().isLiquid())
+					IBlockState blockState = this.getWorld().getBlockState(checkPos);
+					IBlockState upState = this.getWorld().getBlockState(checkPos.up());
+					if(blockState.getBlock().canPlaceTorchOnTop(blockState, this.getWorld(), checkPos) && upState.getMaterial().isReplaceable() && !upState.getMaterial().isLiquid())
 					{
-						FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) this.worldObj, TERRAIN_LIGHTER_IDENTITY);
+						FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) this.getWorld(), TERRAIN_LIGHTER_IDENTITY);
 						// move the player to the light position and let him face down
 						// some mods use the players facing to determine placement details
 						// instead of relying on the EnumFacing :( *points at BiblioCraft*
 						fakePlayer.setPosition(checkPos.getX() + 0.5, checkPos.getY() + 1.5, checkPos.getZ() + 0.5);
 						fakePlayer.rotationPitch = 90f;
 
-						EnumActionResult result = this.stacks[torchSlot].onItemUse(fakePlayer, this.worldObj, checkPos, EnumHand.MAIN_HAND, EnumFacing.UP, 0.5f, 1f, 0.5f);
+						EnumActionResult result = this.stacks[torchSlot].onItemUse(fakePlayer, this.getWorld(), checkPos, EnumHand.MAIN_HAND, EnumFacing.UP, 0.5f, 1f, 0.5f);
 						if(result == EnumActionResult.SUCCESS)
 						{
 							//worldObj.setBlockState(checkPos.up(), torchBlockState);
@@ -330,8 +330,8 @@ public class TileEntityTerrainLighter extends TileEntity implements IInventory, 
 		if(updated)
 		{
 			this.markDirty();
-			IBlockState meState = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, meState, meState, 3);
+			IBlockState meState = this.getWorld().getBlockState(this.pos);
+			this.getWorld().notifyBlockUpdate(this.pos, meState, meState, 3);
 		}
 	}
 

@@ -9,7 +9,7 @@ public class TileEntityDreadLamp extends TileEntity
 	public void onLoad()
 	{
 		super.onLoad();
-		if(!this.worldObj.isRemote)
+		if(!this.getWorld().isRemote)
 			TorchRegistry.getDreadLampRegistry().registerTorch(this.getWorld(), this.getPos());
 	}
 
@@ -17,7 +17,7 @@ public class TileEntityDreadLamp extends TileEntity
 	public void invalidate()
 	{
 		super.invalidate();
-		if(!worldObj.isRemote)
+		if(!this.getWorld().isRemote)
 			TorchRegistry.getDreadLampRegistry().unregisterTorch(this.getWorld(), this.getPos());
 	}
 
@@ -25,7 +25,7 @@ public class TileEntityDreadLamp extends TileEntity
 	public void onChunkUnload()
 	{
 		super.onChunkUnload();
-		if(!worldObj.isRemote)
+		if(!this.getWorld().isRemote)
 			TorchRegistry.getDreadLampRegistry().unregisterTorch(this.getWorld(), this.getPos());
 	}
 }
