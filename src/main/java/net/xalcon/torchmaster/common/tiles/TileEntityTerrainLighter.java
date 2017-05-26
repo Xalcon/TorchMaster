@@ -30,6 +30,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
+import net.xalcon.torchmaster.common.utils.ItemstackUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -129,7 +130,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 		if(this.burnTime <= 0)
 		{
 			ItemStack fuelStack = this.inventory.extractItem(FUEL_SLOT, 1, true);
-			if (!fuelStack.isEmpty())
+			if (!ItemstackUtils.isEmpty(fuelStack))
 			{
 				int burnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
 				if (burnTime > 0)
@@ -137,7 +138,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 					this.inventory.extractItem(FUEL_SLOT, 1, false);
 				this.burnTime = this.totalBurnTime = burnTime;
 					Item fuelItem = fuelStack.getItem();
-					if (!fuelStack.isEmpty() && fuelItem.hasContainerItem(fuelStack))
+					if (!ItemstackUtils.isEmpty(fuelStack) && fuelItem.hasContainerItem(fuelStack))
 				{
 						ItemStack containerItemStack = fuelItem.getContainerItem(fuelStack);
 						this.inventory.setStackInSlot(FUEL_SLOT, containerItemStack);
@@ -168,7 +169,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 					if (blockState.getBlock().canPlaceTorchOnTop(blockState, world, checkPos) && upState.getMaterial().isReplaceable() && !upState.getMaterial().isLiquid())
 					{
 						ItemStack stack = this.inventory.extractItem(torchSlot, 1, false);
-						if(!stack.isEmpty())
+						if(!ItemstackUtils.isEmpty(stack))
 						{
 							FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) this.world, TERRAIN_LIGHTER_IDENTITY);
 							// move the player to the light position and let him face down
@@ -214,7 +215,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 		for (int i = 0; i < 9; i++)
 		{
 			ItemStack stack = this.inventory.getStackInSlot(i);
-			if (!stack.isEmpty() && isItemAllowed(stack))
+			if (!ItemstackUtils.isEmpty(stack) && isItemAllowed(stack))
 				return i;
 		}
 		return -1;

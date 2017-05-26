@@ -35,12 +35,14 @@ import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
+import net.xalcon.torchmaster.common.utils.ItemstackUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -61,7 +63,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
 	{
 		list.add(new ItemStack(itemIn,1, this.getMetaFromState(this.getTorchState(true))));
 		list.add(new ItemStack(itemIn, 1, this.getMetaFromState(this.getTorchState(false))));
@@ -106,7 +108,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@SuppressWarnings("deprecation")
 	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos)
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos)
 	{
 		return NULL_AABB;
 	}
@@ -153,7 +155,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 			TileEntity tile = worldIn.getTileEntity(pos);
 			if(!(tile instanceof TileEntityMegaTorch)) return;
 
-			NBTTagCompound compound = stack.getSubCompound("tm_tile");
+			NBTTagCompound compound = stack.getSubCompound("tm_tile", false);
 			if(compound != null)
 				((TileEntityMegaTorch) tile).readSyncNbt(compound);
 		}
@@ -161,22 +163,22 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if(state.getValue(BURNING))
 		{
-			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".already_lit"), true);
+			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".already_lit"));
 			return true;
 		}
 		if(worldIn.isRemote) return true;
 
 		ItemStack itemStack = playerIn.getHeldItem(hand);
-		if(itemStack.isEmpty()) return true;
+		if(ItemstackUtils.isEmpty(itemStack)) return true;
 
 		String itemId = itemStack.getItem().getRegistryName().toString();
 		if(!TorchMasterMod.ConfigHandler.getMegaTorchLighterItems().contains(itemId)) return false;
 
-		NBTTagCompound nbt = itemStack.getSubCompound("tm_lighter");
+		NBTTagCompound nbt = itemStack.getSubCompound("tm_lighter", false);
 		int amount = 1;
 		float chance = 1f;
 		if(nbt != null)
@@ -192,17 +194,17 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		}
 		else
 		{
-			if(amount > itemStack.getCount())
+			if(amount > itemStack.stackSize)
 			{
-				playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemcount"), true);
+				playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemcount"));
 				return false;
 			}
-			itemStack.shrink(amount);
+			itemStack.stackSize -= 1;
 		}
 
 		if(worldIn.rand.nextFloat() > chance)
 		{
-			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemtoodamaged"), false);
+			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemtoodamaged"));
 			return false;
 		}
 
@@ -301,13 +303,13 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 			if (!TorchMasterMod.ConfigHandler.isMegaTorchExtinguishOnHarvest() || this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
 			{
 				ItemStack itemStack = this.getSilkTouchDrop(state);
-				if(!itemStack.isEmpty())
+				if(!ItemstackUtils.isEmpty(itemStack))
 				{
 					//noinspection ConstantConditions | this will never be null when we are getting called - otherwise, its a MC bug
 					player.addStat(StatList.getBlockStats(this));
 					player.addExhaustion(0.005F);
 
-					NBTTagCompound compound = itemStack.getOrCreateSubCompound("tm_tile");
+					NBTTagCompound compound = itemStack.getSubCompound("tm_tile", true);
 					((TileEntityMegaTorch) te).writeSyncNbt(compound);
 					spawnAsEntity(worldIn, pos, itemStack);
 					return;

@@ -42,7 +42,7 @@ public class ItemBlockMegaTorch extends ItemBlock
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		if(ModBlocks.MegaTorch.getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING))
 		{
-			NBTTagCompound compound = stack.getSubCompound("tm_tile");
+			NBTTagCompound compound = stack.getSubCompound("tm_tile", false);
 			if(compound == null) return;
 			if(compound.getBoolean("isExtinguished")) return;
 

@@ -13,7 +13,7 @@ public class TorchMasterGuiFactory implements IModGuiFactory
 	{
 	}
 
-	@Override
+	/*@Override
 	public boolean hasConfigGui()
 	{
 		return true;
@@ -23,7 +23,7 @@ public class TorchMasterGuiFactory implements IModGuiFactory
 	public GuiScreen createConfigGui(GuiScreen parentScreen)
 	{
 		return new TorchMasterConfigGui(parentScreen);
-	}
+	}*/
 
 	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass()

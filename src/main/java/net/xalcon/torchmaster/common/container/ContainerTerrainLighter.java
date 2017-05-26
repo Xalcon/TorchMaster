@@ -43,7 +43,6 @@ public class ContainerTerrainLighter extends Container
 	}
 
 	@Override
-	@Nonnull
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int fromSlot) {
 		ItemStack previous = null;
 		Slot slot = this.inventorySlots.get(fromSlot);
@@ -55,22 +54,22 @@ public class ContainerTerrainLighter extends Container
 			if (fromSlot < 10) {
 				// From TE Inventory to Player Inventory
 				if (!this.mergeItemStack(current, 10, 46, true))
-					return ItemStack.EMPTY;
+					return null;
 			} else {
 				// From Player Inventory to TE Inventory
 				if (!this.mergeItemStack(current, 0, 10, false))
-					return ItemStack.EMPTY;
+					return null;
 			}
-			if (current.getCount() == 0)
-				slot.putStack(ItemStack.EMPTY);
+			if (current.stackSize == 0)
+				slot.putStack(null);
 			else
 				slot.onSlotChanged();
 
-			if (current.getCount() == previous.getCount())
-				return ItemStack.EMPTY;
-			slot.onTake(playerIn, current);
+			if (current.stackSize == previous.stackSize)
+				return null;
+			slot.onPickupFromSlot(playerIn, current);
 		}
-		return previous != null ? previous : ItemStack.EMPTY;
+		return previous;
 	}
 
 	@Override
