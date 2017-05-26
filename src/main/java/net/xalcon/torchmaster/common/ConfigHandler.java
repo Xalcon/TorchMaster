@@ -26,6 +26,8 @@ public class ConfigHandler
 	private HashSet<String> terrainLighterTorches;
 	private HashSet<String> megaTorchLighterItems;
 
+	public boolean isLycaniteCompatEnabled;
+	public boolean isMoCreaturesCompatEnabled;
 
 	public ConfigHandler(File configFile)
 	{
@@ -59,6 +61,9 @@ public class ConfigHandler
 			this.terrainLighterTorches = new HashSet<>(Arrays.asList(config.get("general", "TerrainLighterTorches", new String[]{"minecraft:torch", "tconstruct:stone_torch"}, "This controls which torches are supported by the terrain lighter").getStringList()));
 
 
+
+			isLycaniteCompatEnabled = config.getBoolean("LycanitesMobsBlockAll", "compat", true, "If this setting is enabled, the mega torch will block all natural spawn attempts from Lycanites Mobs in its radius");
+			isMoCreaturesCompatEnabled = config.getBoolean("MoCreaturesBlockAll", "compat", true, "If this setting is enabled, the mega torch will block all natural spawn attempts from MoCreatures in its radius");
 		}
 		catch (Exception e)
 		{
