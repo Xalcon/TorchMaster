@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -17,7 +18,8 @@ import org.apache.logging.log4j.Logger;
         modid = TorchMasterMod.MODID,
         version = TorchMasterMod.VERSION,
         guiFactory = "net.xalcon.torchmaster.client.gui.config.TorchMasterGuiFactory",
-        dependencies = "after:mocreatures"
+        dependencies = "after:mocreatures",
+        canBeDeactivated = true
 
 )
 public class TorchMasterMod
@@ -39,6 +41,12 @@ public class TorchMasterMod
 
     @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.common.CommonProxy")
     public static CommonProxy Proxy;
+
+    @EventHandler
+    public void onDisable(FMLModDisabledEvent event)
+    {
+        System.out.println(event.description());
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)

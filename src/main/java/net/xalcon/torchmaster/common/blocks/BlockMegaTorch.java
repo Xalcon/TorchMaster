@@ -61,10 +61,10 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list)
 	{
-		list.add(new ItemStack(itemIn,1, this.getMetaFromState(this.getTorchState(true))));
-		list.add(new ItemStack(itemIn, 1, this.getMetaFromState(this.getTorchState(false))));
+		list.add(new ItemStack(this,1, this.getMetaFromState(this.getTorchState(true))));
+		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getTorchState(false))));
 	}
 
 	@Override
@@ -249,6 +249,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		return state.getValue(BURNING) ? 0 : 1;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{

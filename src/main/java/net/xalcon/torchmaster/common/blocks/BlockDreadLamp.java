@@ -37,16 +37,21 @@ public class BlockDreadLamp extends BlockBase implements ITileEntityProvider, IA
 		return BlockRenderLayer.CUTOUT;
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
 	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
 	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean canEntitySpawn(IBlockState state, Entity entityIn)
 	{

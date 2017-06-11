@@ -2,16 +2,19 @@ package net.xalcon.torchmaster.common.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.blocks.BlockMegaTorch;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemBlockMegaTorch extends ItemBlock
@@ -36,8 +39,7 @@ public class ItemBlockMegaTorch extends ItemBlock
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced)
 	{
 		super.addInformation(stack, playerIn, tooltip, advanced);
 		if(ModBlocks.MegaTorch.getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING))

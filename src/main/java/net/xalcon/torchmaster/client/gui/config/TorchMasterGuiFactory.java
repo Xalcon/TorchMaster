@@ -26,6 +26,7 @@ public class TorchMasterGuiFactory implements IModGuiFactory
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public Class<? extends GuiScreen> mainConfigGuiClass()
 	{
 		return TorchMasterConfigGui.class;
@@ -38,6 +39,7 @@ public class TorchMasterGuiFactory implements IModGuiFactory
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
 	{
 		return null;

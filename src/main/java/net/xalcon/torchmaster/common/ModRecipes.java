@@ -10,7 +10,7 @@ public class ModRecipes
 {
 	public static void init()
 	{
-		GameRegistry.addRecipe(new ShapedOreRecipe(
+		/*GameRegistry.addRecipe(new ShapedOreRecipe(
 				new ItemStack(ModBlocks.MegaTorch),
 				"TTT", "DLD", "GLG",
 				'T', Blocks.TORCH,
@@ -33,6 +33,6 @@ public class ModRecipes
 				'C', Blocks.CHEST,
 				'L', "logWood",
 				's', "stone"
-		));
+		));*/
 	}
 }

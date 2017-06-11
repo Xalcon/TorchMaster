@@ -1,0 +1,21 @@
+{
+    "type": "crafting_shaped",
+    "group": "torchmaster",
+    "pattern": [
+        "TTT",
+        "DLD",
+        "GLG"
+    ],
+    "key": {
+        "T": { "item": "minecraft:torch" },
+        "D": { "item": "minecraft:diamond" },
+        "G": { "item": "minecraft:gold_block" },
+        "L":
+        [
+            { "item": "minecraft:log", "data": 0 }
+        ]
+    },
+    "result": {
+        "item": "torchmaster:mega_torch"
+    }
+}
