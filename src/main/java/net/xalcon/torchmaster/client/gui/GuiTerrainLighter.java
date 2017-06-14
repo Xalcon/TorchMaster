@@ -40,14 +40,15 @@ public class GuiTerrainLighter extends GuiContainer
 	{
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.func_191948_b(mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
 		String s = this.tile.getDisplayName().getUnformattedText();
-		this.fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
-		this.fontRendererObj.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+		this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 
 		int i = (this.width - this.xSize) / 2; //X asis on GUI
 		int j = (this.height - this.ySize) / 2; //Y asis on GUI
@@ -62,7 +63,7 @@ public class GuiTerrainLighter extends GuiContainer
 				list.add(value + " / " + max);
 				if(tile.getWorld().isBlockIndirectlyGettingPowered(tile.getPos()) == 0)
 					list.add(new TextComponentTranslation(NO_RS_SIGNAL_KEY).getFormattedText());
-				this.drawHoveringText(list, mouseX - i, mouseY - j, this.fontRendererObj);
+				this.drawHoveringText(list, mouseX - i, mouseY - j, this.fontRenderer);
 			}
 		}
 	}

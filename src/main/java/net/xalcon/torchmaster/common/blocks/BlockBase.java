@@ -6,6 +6,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.client.IItemRenderRegister;
+import net.xalcon.torchmaster.common.creativetabs.CreativeTabTorchMaster;
 
 public class BlockBase extends Block
 {
@@ -17,7 +18,7 @@ public class BlockBase extends Block
 		this.internalName = name;
 		setUnlocalizedName(TorchMasterMod.MODID + "." + this.internalName);
 		setRegistryName(this.internalName);
-		setCreativeTab(CreativeTabs.MISC);
+		setCreativeTab(CreativeTabTorchMaster.INSTANCE);
 	}
 
 	public void registerItemModels(ItemBlock itemBlock, IItemRenderRegister register)
