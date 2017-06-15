@@ -1,0 +1,25 @@
+{
+    "conditions": [
+        {
+            "type": "mod_loaded",
+            "mod": "minecraft"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "group": "torchmaster",
+    "pattern": [
+        "OOO",
+        "PGP",
+        "OBO"
+    ],
+    "key": {
+        "O": { "item": "minecraft:obsidian" },
+        "P": { "item": "minecraft:glass_pane", "data": 0 },
+        "G": { "item": "minecraft:glowstone" },
+        "B": { "item": "minecraft:dye", "data": 0 }
+    },
+    "result": {
+        "item": "torchmaster:dread_lamp",
+        "data": 0
+    }
+}

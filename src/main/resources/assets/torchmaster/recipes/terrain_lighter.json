@@ -8,14 +8,13 @@
     "type": "minecraft:crafting_shaped",
     "group": "torchmaster",
     "pattern": [
-        "TTT",
-        "DLD",
-        "GLG"
+        "STS",
+        "LCL",
+        "sss"
     ],
     "key": {
+        "S": { "item": "minecraft:stick" },
         "T": { "item": "minecraft:torch" },
-        "D": { "item": "minecraft:diamond" },
-        "G": { "item": "minecraft:gold_block" },
         "L":
         [
             { "item": "minecraft:log", "data": 0 },
@@ -24,10 +23,12 @@
             { "item": "minecraft:log", "data": 3 },
             { "item": "minecraft:log2", "data": 0 },
             { "item": "minecraft:log2", "data": 1 }
-        ]
+        ],
+        "C": { "item": "minecraft:chest" },
+        "s": { "item": "minecraft:stone", "data": 0 }
     },
     "result": {
-        "item": "torchmaster:mega_torch",
+        "item": "torchmaster:terrain_lighter",
         "data": 0
     }
 }
