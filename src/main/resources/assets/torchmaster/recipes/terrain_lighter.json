@@ -1,10 +1,4 @@
 {
-    "conditions": [
-        {
-            "type": "mod_loaded",
-            "mod": "minecraft"
-        }
-    ],
     "type": "minecraft:crafting_shaped",
     "group": "torchmaster",
     "pattern": [
@@ -15,15 +9,7 @@
     "key": {
         "S": { "item": "minecraft:stick" },
         "T": { "item": "minecraft:torch" },
-        "L":
-        [
-            { "item": "minecraft:log", "data": 0 },
-            { "item": "minecraft:log", "data": 1 },
-            { "item": "minecraft:log", "data": 2 },
-            { "item": "minecraft:log", "data": 3 },
-            { "item": "minecraft:log2", "data": 0 },
-            { "item": "minecraft:log2", "data": 1 }
-        ],
+        "L": { "ore": "logWood", "type": "forge:ore_dict" },
         "C": { "item": "minecraft:chest" },
         "s": { "item": "minecraft:stone", "data": 0 }
     },

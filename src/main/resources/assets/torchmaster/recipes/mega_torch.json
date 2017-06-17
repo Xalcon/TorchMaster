@@ -1,10 +1,4 @@
 {
-    "conditions": [
-        {
-            "type": "mod_loaded",
-            "mod": "minecraft"
-        }
-    ],
     "type": "minecraft:crafting_shaped",
     "group": "torchmaster",
     "pattern": [
@@ -16,15 +10,7 @@
         "T": { "item": "minecraft:torch" },
         "D": { "item": "minecraft:diamond" },
         "G": { "item": "minecraft:gold_block" },
-        "L":
-        [
-            { "item": "minecraft:log", "data": 0 },
-            { "item": "minecraft:log", "data": 1 },
-            { "item": "minecraft:log", "data": 2 },
-            { "item": "minecraft:log", "data": 3 },
-            { "item": "minecraft:log2", "data": 0 },
-            { "item": "minecraft:log2", "data": 1 }
-        ]
+        "L": { "ore": "logWood", "type": "forge:ore_dict" }
     },
     "result": {
         "item": "torchmaster:mega_torch",
