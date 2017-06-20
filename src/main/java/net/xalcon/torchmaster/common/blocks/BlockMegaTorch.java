@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
@@ -49,10 +51,11 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.35, 0.0D, 0.35, 0.65, 1.0, 0.65);
 
 	public static final PropertyBool BURNING = PropertyBool.create("burning");
+	public static final String INTERNAL_NAME = "mega_torch";
 
-	public BlockMegaTorch()
+    public BlockMegaTorch()
 	{
-		super(Material.WOOD, "mega_torch");
+		super(Material.WOOD, INTERNAL_NAME);
 		this.setHardness(1.5f);
 		this.setResistance(1.0f);
 		this.setLightLevel(1.0f);
@@ -88,7 +91,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public String getTileEntityRegistryName()
 	{
-		return "tile_mega_torch";
+		return this.getRegistryName().toString();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -257,10 +260,11 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	}
 
 	@Override
-	public void registerItemModels(ItemBlock itemBlock, IItemRenderRegister register)
+	@SideOnly(Side.CLIENT)
+	public void registerItemModels(Item item)
 	{
-		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorchState(true)), this.getRegistryName(), "burning=true");
-		register.registerItemRenderer(itemBlock, this.getMetaFromState(this.getTorchState(false)), this.getRegistryName(), "burning=false");
+		ModelLoader.setCustomModelResourceLocation(item, this.getMetaFromState(this.getTorchState(true)), new ModelResourceLocation(this.getRegistryName(), "burning=true"));
+		ModelLoader.setCustomModelResourceLocation(item, this.getMetaFromState(this.getTorchState(false)), new ModelResourceLocation(this.getRegistryName(), "burning=false"));
 	}
 
 	@Override

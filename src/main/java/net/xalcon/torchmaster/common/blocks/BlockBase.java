@@ -2,34 +2,37 @@ package net.xalcon.torchmaster.common.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.client.IItemRenderRegister;
 import net.xalcon.torchmaster.common.creativetabs.CreativeTabTorchMaster;
 
 public class BlockBase extends Block
 {
-	protected final String internalName;
-
-	public BlockBase(Material material, String name)
+	public BlockBase(Material material, String internalName)
 	{
 		super(material);
-		this.internalName = name;
-		setUnlocalizedName(TorchMasterMod.MODID + "." + this.internalName);
-		setRegistryName(this.internalName);
+		setUnlocalizedName(TorchMasterMod.MODID + "." + internalName);
+		setRegistryName(internalName);
 		setCreativeTab(CreativeTabTorchMaster.INSTANCE);
 	}
 
-	public void registerItemModels(ItemBlock itemBlock, IItemRenderRegister register)
+	@SideOnly(Side.CLIENT)
+	public void registerItemModels(Item item)
 	{
-		//noinspection ConstantConditions
-		register.registerItemRenderer(itemBlock, 0, this.getRegistryName(), "inventory");
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
 	}
 
-	public ItemBlock createItemBlock()
+	public Item createItemBlock()
 	{
-		return (ItemBlock) new ItemBlock(this).setRegistryName(this.getRegistryName());
+		return new ItemBlock(this).setRegistryName(this.getRegistryName());
 	}
 }
 

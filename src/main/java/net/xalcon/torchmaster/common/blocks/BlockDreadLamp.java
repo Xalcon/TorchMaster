@@ -23,9 +23,11 @@ import java.util.Random;
 
 public class BlockDreadLamp extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
 {
+	public static final String INTERNAL_NAME = "dread_lamp";
+
 	public BlockDreadLamp()
 	{
-		super(Material.GROUND, "dread_lamp");
+		super(Material.GROUND, INTERNAL_NAME);
 		this.setHardness(1.5f);
 		this.setResistance(1.0f);
 		this.setLightLevel(1.0f);
@@ -73,7 +75,7 @@ public class BlockDreadLamp extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public String getTileEntityRegistryName()
 	{
-		return "tile_dread_lamp";
+		return this.getRegistryName().toString();
 	}
 
 	@Override

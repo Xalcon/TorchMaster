@@ -8,18 +8,4 @@ import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 
 public class CommonProxy
 {
-	public <T extends BlockBase> T registerBlock(T block)
-	{
-		ItemBlock itemBlock = block.createItemBlock();
-		GameRegistry.register(block);
-		GameRegistry.register(itemBlock);
-
-		if (block instanceof IAutoRegisterTileEntity)
-		{
-			IAutoRegisterTileEntity tile = (IAutoRegisterTileEntity) block;
-			GameRegistry.registerTileEntity(tile.getTileEntityClass(), tile.getTileEntityRegistryName());
-		}
-
-		return block;
-	}
 }

@@ -23,9 +23,11 @@ import javax.annotation.Nullable;
 
 public class BlockTerrainLighter extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
 {
+	public static final String INTERNAL_NAME = "terrain_lighter";
+
 	public BlockTerrainLighter()
 	{
-		super(Material.WOOD, "terrain_lighter");
+		super(Material.WOOD, INTERNAL_NAME);
 		this.setHardness(1.0f);
 		this.setResistance(3f);
 	}
@@ -45,7 +47,7 @@ public class BlockTerrainLighter extends BlockBase implements ITileEntityProvide
 	@Override
 	public String getTileEntityRegistryName()
 	{
-		return "tile_terrain_lighter";
+		return this.getRegistryName().toString();
 	}
 
 	@Override
