@@ -10,13 +10,14 @@ public class EventHandlerServer
 	@SubscribeEvent
 	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
-		System.out.println("InTick:" + TorchMasterMod.isInWorldTick);
 		if(event.getResult() == Event.Result.ALLOW) return;
+		boolean isWorldSpawn = !TorchMasterMod.isNotInWorldTick;
+		boolean allowSpawners = TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled();
 		if(TorchMasterMod.MegaTorchFilterRegistry.containsEntity(event.getEntity()))
 		{
 			if(TorchRegistry.getMegaTorchRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
-				if(!TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() || !event.getEntity().getTags().contains("IsSpawnerMob"))
+				if(isWorldSpawn || !allowSpawners)
 					event.setResult(Event.Result.DENY);
 			}
 		}
@@ -24,7 +25,7 @@ public class EventHandlerServer
 		{
 			if(TorchRegistry.getDreadLampRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
-				if(!TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() || !event.getEntity().getTags().contains("IsSpawnerMob"))
+				if(isWorldSpawn || !allowSpawners)
 					event.setResult(Event.Result.DENY);
 			}
 		}

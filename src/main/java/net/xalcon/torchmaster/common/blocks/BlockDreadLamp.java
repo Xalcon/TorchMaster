@@ -78,28 +78,6 @@ public class BlockDreadLamp extends BlockBase implements ITileEntityProvider, IA
 		return this.getRegistryName().toString();
 	}
 
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-	{
-		if (!worldIn.isRemote)
-		{
-			if(TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
-			{
-				long startTime = System.nanoTime();
-				for (TileEntity te : worldIn.tickableTileEntities)
-				{
-					if (te instanceof TileEntityMobSpawner)
-					{
-						BlockUtils.addTagToSpawner("IsSpawnerMob", (TileEntityMobSpawner) te);
-					}
-				}
-				long diff = System.nanoTime() - startTime;
-				TorchMasterMod.Log.info("DreadLamp placed down @ "+pos+" (DIM: "+worldIn.provider.getDimension()+"); MobSpawner scan took " + diff + "ns");
-			}
-		}
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-	}
-
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
 	{

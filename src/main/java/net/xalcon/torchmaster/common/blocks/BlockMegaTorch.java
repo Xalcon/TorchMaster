@@ -129,41 +129,6 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-	{
-		if (!worldIn.isRemote && state.getValue(BURNING))
-		{
-			if (TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
-			{
-				long startTime = System.nanoTime();
-				for (TileEntity te : worldIn.tickableTileEntities)
-				{
-					if (te instanceof TileEntityMobSpawner)
-					{
-						BlockUtils.addTagToSpawner("IsSpawnerMob", (TileEntityMobSpawner) te);
-					}
-					else if ("extrautils2:supermobspawner".equals(te.getBlockType().getRegistryName().toString()))
-					{
-						BlockUtils.addTagToXU2Spawner("IsSpawnerMob", te);
-					}
-				}
-				long diff = System.nanoTime() - startTime;
-				TorchMasterMod.Log.info("MegaTorch placed down @ " + pos + " (DIM: " + worldIn.provider.getDimension() + "); MobSpawner scan took " + diff + "ns");
-			}
-
-			if(!stack.hasTagCompound()) return;
-
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if(!(tile instanceof TileEntityMegaTorch)) return;
-
-			NBTTagCompound compound = stack.getSubCompound("tm_tile");
-			if(compound != null)
-				((TileEntityMegaTorch) tile).readSyncNbt(compound);
-		}
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-	}
-
-	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if(state.getValue(BURNING))
