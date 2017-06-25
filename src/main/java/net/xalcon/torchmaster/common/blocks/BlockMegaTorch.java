@@ -8,10 +8,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -19,9 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.*;
-import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,18 +28,12 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.client.IItemRenderRegister;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
-import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Objects;
 import java.util.Random;
 
 public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
@@ -126,41 +116,6 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-	{
-		if (!worldIn.isRemote && state.getValue(BURNING))
-		{
-			if (TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
-			{
-				long startTime = System.nanoTime();
-				for (TileEntity te : worldIn.tickableTileEntities)
-				{
-					if (te instanceof TileEntityMobSpawner)
-					{
-						BlockUtils.addTagToSpawner("IsSpawnerMob", (TileEntityMobSpawner) te);
-					}
-					else if ("extrautils2:supermobspawner".equals(te.getBlockType().getRegistryName().toString()))
-					{
-						BlockUtils.addTagToXU2Spawner("IsSpawnerMob", te);
-					}
-				}
-				long diff = System.nanoTime() - startTime;
-				TorchMasterMod.Log.info("MegaTorch placed down @ " + pos + " (DIM: " + worldIn.provider.getDimension() + "); MobSpawner scan took " + diff + "ns");
-			}
-
-			if(!stack.hasTagCompound()) return;
-
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if(!(tile instanceof TileEntityMegaTorch)) return;
-
-			NBTTagCompound compound = stack.getSubCompound("tm_tile");
-			if(compound != null)
-				((TileEntityMegaTorch) tile).readSyncNbt(compound);
-		}
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
 
 	@Override

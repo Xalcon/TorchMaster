@@ -23,7 +23,10 @@ compileJava {
 minecraft {
     version = mcversion + "-" + forgeversion
     runDir = "run"
-    
+
+    clientJvmArgs = ["-Dfml.coreMods.load=net.xalcon.torchasm.TorchCorePlugin"]
+    serverJvmArgs = ["-Dfml.coreMods.load=net.xalcon.torchasm.TorchCorePlugin"]
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -95,6 +98,49 @@ processResources
     }
 }
 
-def getBuildNumber() {
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': "net.xalcon.torchasm.TorchCorePlugin"
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+    }
+    classifier = 'non-compliant'
+    includeEmptyDirs = false
+}
+
+task universalJar(type: Jar, dependsOn: 'reobfAsmJar') {
+    manifest {
+        attributes 'ContainedDeps': "${archivesBaseName}-${version}-coremod.jar"
+    }
+    from(sourceSets.main.output) {
+        exclude('net/xalcon/torchasm/**') // do not include the asm stuff
+    }
+    from("${buildDir}/libs") {
+        include("${archivesBaseName}-${version}-coremod.jar") // include the asm jar instead
+    }
+    classifier = 'universal'
+    includeEmptyDirs = false
+}
+
+task asmJar(type: Jar) {
+    manifest {
+        attributes 'FMLCorePlugin': "net.xalcon.torchasm.TorchCorePlugin"
+        attributes 'FMLCorePluginContainsFMLMod': "true"
+    }
+    from(sourceSets.main.output) {
+        include "net/xalcon/torchasm/**"
+    }
+    classifier = 'coremod'
+    includeEmptyDirs = false
+}
+
+// tell gradle to reobfuscate our jars
+reobf {
+    // jar is done by default
+    // jar { }
+    asmJar { }
+    universalJar { }
+}
+
+static def getBuildNumber() {
     return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
 }

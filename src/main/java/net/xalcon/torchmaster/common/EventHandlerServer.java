@@ -15,7 +15,7 @@ public class EventHandlerServer
 		{
 			if(TorchRegistry.getMegaTorchRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
-				if(!TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() || !event.getEntity().getTags().contains("IsSpawnerMob"))
+				if(!TorchMasterMod.isNotInWorldTick || !TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
 					event.setResult(Event.Result.DENY);
 			}
 		}
@@ -23,7 +23,7 @@ public class EventHandlerServer
 		{
 			if(TorchRegistry.getDreadLampRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
-				if(!TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() || !event.getEntity().getTags().contains("IsSpawnerMob"))
+				if(!TorchMasterMod.isNotInWorldTick || !TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
 					event.setResult(Event.Result.DENY);
 			}
 		}
