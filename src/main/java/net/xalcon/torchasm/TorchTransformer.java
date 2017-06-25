@@ -30,8 +30,8 @@ public class TorchTransformer implements IClassTransformer
      * 2.) The torch would trivialize dungeons that use mobspawners to spawn monster
      * To avoid this, we need some way to detect if the spawn is an actual WorldSpawner spawn or an
      * artificial one.
-     * This patch modifies the WorldServer.tick() method to set a field to true at the start of the tick() method
-     * and then back to false at the end.
+     * This patch modifies the WorldServer.tick() method to set a field to false at the start of the tick() method
+     * and then back to true at the end.
      * WorldSpawn happens inside the tick() method. TileEntities tick outside of it.
      * This allows us to simply check the field if we are in the correct runstate
      * @param basicClass the bytes of the "unmodified" class
@@ -47,8 +47,8 @@ public class TorchTransformer implements IClassTransformer
         // do the sanity check. We dont do anything to class if the patch wasnt successful
         if(patchCount != 2)
         {
-            log.fatal("[Torchmaster] Something went wrong while patching WorldServer.tick() method! Expected 2 patches, did " + patchCount);
-            log.fatal("[Torchmaster] block mobspawns will not work properly! Report this bug to the author!");
+            log.fatal("[Torchmaster] Something went wrong while patching WorldServer.tick() method! Expected 2 patches, did " + patchCount + "; reverting changes!");
+            log.fatal("[Torchmaster] MegaTorch will not be able to distinguish between world and mobspawner spawns! Report this bug to the author!");
             return basicClass;
         }
 
@@ -108,11 +108,14 @@ public class TorchTransformer implements IClassTransformer
 
     /**
      * Specialized MethodVisitor that is only applied to the WorldServer.tick() method
-     * This MethodVisitor adds `TorchMasterMod.isInWorldTick = true;` at the start of the tick() method
-     * and `TorchMasterMod.isInWorldTick = false` at the end.
+     * This MethodVisitor adds `TorchMasterMod.isNotInWorldTick = false;` at the start of the tick() method
+     * and `TorchMasterMod.isNotInWorldTick = true` at the end.
      * This allows us to check if the CheckSpawn event is called from inside the tick() method
      * or from outside. Since the WorldSpawner only runs inside the WorldServer.tick(), this allows
-     * us to make a really fast check if a given mob is spawned naturally or by a mobspawner
+     * us to make a really fast check if a given mob is spawned naturally or by a mobspawner.
+     * The logic for isNotInWorldTick is also inverted (i.e. we are not using `isInWorldTick`) since this allows
+     * the mega torch to still work even if the patch wasnt applied. The only thing is, it can no longer
+     * distinguish between mobspawner spawns and worldspawns and just blocks everything.
      */
     private static class FieldToggleMethodAdapter extends AdviceAdapter
     {
@@ -128,9 +131,9 @@ public class TorchTransformer implements IClassTransformer
         protected void onMethodEnter()
         {
             // load 1 (true)
-            this.mv.visitInsn(Opcodes.ICONST_1);
+            this.mv.visitInsn(Opcodes.ICONST_0);
             // write loaded value to field
-            this.mv.visitFieldInsn(Opcodes.PUTSTATIC, "net/xalcon/torchmaster/TorchMasterMod", "isInWorldTick", "Z");
+            this.mv.visitFieldInsn(Opcodes.PUTSTATIC, "net/xalcon/torchmaster/TorchMasterMod", "isNotInWorldTick", "Z");
             log.info("[Torchmaster] Applied patch to WorldServer.Tick() @ method enter");
             this.sanityCheckCallback.run();
         }
@@ -139,9 +142,9 @@ public class TorchTransformer implements IClassTransformer
         protected void onMethodExit(int opcode)
         {
             // load 0 (false)
-            this.mv.visitInsn(Opcodes.ICONST_0);
+            this.mv.visitInsn(Opcodes.ICONST_1);
             // write loaded value to field
-            this.mv.visitFieldInsn(Opcodes.PUTSTATIC, "net/xalcon/torchmaster/TorchMasterMod", "isInWorldTick", "Z");
+            this.mv.visitFieldInsn(Opcodes.PUTSTATIC, "net/xalcon/torchmaster/TorchMasterMod", "isNotInWorldTick", "Z");
             log.info("[Torchmaster] Applied patch to WorldServer.Tick() @ method exit");
             this.sanityCheckCallback.run();
         }

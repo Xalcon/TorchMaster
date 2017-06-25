@@ -24,7 +24,11 @@ import org.apache.logging.log4j.Logger;
 )
 public class TorchMasterMod
 {
-    public static boolean isInWorldTick;
+    /**
+     * This field is set by a patch in the WorldServer.tick() method
+     * The logic of this field is inverted so it can be used even if the patch wasnt applied successfully
+     */
+    public static boolean isNotInWorldTick = true;
     public static boolean isWorldHookInstalled;
     public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
 
