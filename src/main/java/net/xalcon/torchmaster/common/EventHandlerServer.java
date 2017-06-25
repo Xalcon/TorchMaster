@@ -10,6 +10,7 @@ public class EventHandlerServer
 	@SubscribeEvent
 	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
+		System.out.println("InTick:" + TorchMasterMod.isInWorldTick);
 		if(event.getResult() == Event.Result.ALLOW) return;
 		if(TorchMasterMod.MegaTorchFilterRegistry.containsEntity(event.getEntity()))
 		{
