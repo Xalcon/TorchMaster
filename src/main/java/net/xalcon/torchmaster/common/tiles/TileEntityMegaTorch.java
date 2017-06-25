@@ -27,30 +27,6 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 		this.isExtinguished = false;
 	}
 
-	@Override
-	public void onLoad()
-	{
-		super.onLoad();
-		if(!this.getWorld().isRemote)
-			TorchRegistry.getMegaTorchRegistry().registerTorch(this.getWorld(), this.getPos());
-	}
-
-	@Override
-	public void invalidate()
-	{
-		super.invalidate();
-		if(!this.getWorld().isRemote)
-			TorchRegistry.getMegaTorchRegistry().unregisterTorch(this.getWorld(), this.getPos());
-	}
-
-	@Override
-	public void onChunkUnload()
-	{
-		super.onChunkUnload();
-		if(!this.getWorld().isRemote)
-			TorchRegistry.getMegaTorchRegistry().unregisterTorch(this.getWorld(), this.getPos());
-	}
-
 	public void readSyncNbt(NBTTagCompound compound)
 	{
 		this.burnValueLeft = compound.getInteger("burnValueLeft");
@@ -104,7 +80,7 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 				{
 					this.getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 0, 1, 0);
 					this.getWorld().playSound(null, this.pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.0f);
-					this.getWorld().setBlockState(this.getPos(), ModBlocks.MegaTorch.getTorchState(false));
+					this.getWorld().setBlockState(this.getPos(), ModBlocks.getMegaTorch().getTorchState(false));
 				}
 				this.isExtinguished = true;
 			}

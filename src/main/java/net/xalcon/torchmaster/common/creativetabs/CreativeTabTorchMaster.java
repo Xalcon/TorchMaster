@@ -19,6 +19,6 @@ public class CreativeTabTorchMaster extends CreativeTabs
 	@Override
 	public ItemStack getTabIconItem()
 	{
-		return new ItemStack(ModBlocks.MegaTorch, 1);
+		return new ItemStack(ModBlocks.getMegaTorch(), 1);
 	}
 }

@@ -1,5 +1,6 @@
 package net.xalcon.torchmaster;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -55,6 +56,8 @@ public class TorchMasterMod
 
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
         MinecraftForge.EVENT_BUS.register(ConfigHandler);
+        MinecraftForge.EVENT_BUS.register(TorchRegistry.getMegaTorchRegistry());
+        MinecraftForge.EVENT_BUS.register(TorchRegistry.getDreadLampRegistry());
     }
 
     @EventHandler
