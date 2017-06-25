@@ -1,9 +1,6 @@
 package net.xalcon.torchmaster.common.container;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;

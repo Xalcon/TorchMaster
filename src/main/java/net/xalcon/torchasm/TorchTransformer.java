@@ -1,7 +1,7 @@
 package net.xalcon.torchasm;
 
+import jline.internal.Log;
 import net.minecraft.launchwrapper.IClassTransformer;
-import net.xalcon.torchmaster.TorchMasterMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.*;
@@ -14,7 +14,7 @@ public class TorchTransformer implements IClassTransformer
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass)
     {
-        if("net.minecraft.world.WorldServer".equals(name))
+        if("net.minecraft.world.WorldServer".equals(transformedName))
         {
             return patchWorldServer(basicClass);
         }
@@ -38,10 +38,11 @@ public class TorchTransformer implements IClassTransformer
      */
     private static byte[] patchWorldServer(byte[] basicClass)
     {
+        log.info("[Torchmaster] Start patching WorldServer.tick()...");
         ClassReader cr = new ClassReader(basicClass);
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 
-        TorchCoreClassVisitor cv = new TorchCoreClassVisitor(Opcodes.ASM5, cw, "tick", "()V", TorchTransformer::sanityCheckCallback);
+        TorchCoreClassVisitor cv = new TorchCoreClassVisitor(Opcodes.ASM5, cw, TorchTransformer::sanityCheckCallback);
         cr.accept(cv, ClassReader.EXPAND_FRAMES); // this will apply our class+method visitor
 
         // do the sanity check. We dont do anything to class if the patch wasnt successful
@@ -54,8 +55,8 @@ public class TorchTransformer implements IClassTransformer
 
         // we are good, lets ship it
         byte[] bytes = cw.toByteArray();
-        log.info("[Torchmaster] tick state hook successfully installed. Yey!");
-        TorchMasterMod.isWorldHookInstalled = true;
+        log.info("[Torchmaster] tick state hook was successfully installed. Yey!");
+        TorchCorePlugin.isTickHookInstalled = true;
         return bytes;
     }
 
@@ -74,23 +75,21 @@ public class TorchTransformer implements IClassTransformer
      */
     private static class TorchCoreClassVisitor extends ClassVisitor
     {
-        private final String methodName;
-        private final String methodDesc;
+        private final static String METHOD_NAME_DEOBF = "tick";
+        private final static String METHOD_NAME_OBF = "func_72835_b";
+        private final static String METHOD_NAME_NOTCH = "d";
+        private final static String METHOD_DESC = "()V";
         private final Runnable sanityCheckCallback;
 
         /**
          * Custom Class visitor constructor, duh.
          * @param api the API Version, 5 is fine
          * @param cv the class visitor (class writer)
-         * @param methodName the method we want to patch with our custom method visitor
-         * @param methodDesc the description of the method we want to patch
          * @param sanityCheckCallback this callback will be passed to the custom method visitor
          */
-        TorchCoreClassVisitor(int api, ClassVisitor cv, String methodName, String methodDesc, Runnable sanityCheckCallback)
+        TorchCoreClassVisitor(int api, ClassVisitor cv, Runnable sanityCheckCallback)
         {
             super(api, cv);
-            this.methodName = methodName;
-            this.methodDesc = methodDesc;
             this.sanityCheckCallback = sanityCheckCallback;
         }
 
@@ -100,7 +99,7 @@ public class TorchTransformer implements IClassTransformer
             MethodVisitor mv = this.cv.visitMethod(access, name, desc, signature, exceptions);
             // If the method, that passed to this ClassVisitor is the one that is going to be visited next
             // use our custom method visitor instead of the default one
-            if(name.equals(this.methodName) && desc.equals(this.methodDesc))
+            if(desc.equals(METHOD_DESC) && (name.equals(METHOD_NAME_OBF) || name.equals(METHOD_NAME_DEOBF) || name.equals(METHOD_NAME_NOTCH)))
                 return new FieldToggleMethodAdapter(this.api, mv, access, name, desc, this.sanityCheckCallback);
             return mv;
         }

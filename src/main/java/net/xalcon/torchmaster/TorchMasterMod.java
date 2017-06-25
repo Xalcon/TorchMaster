@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.xalcon.torchasm.TorchCorePlugin;
 import net.xalcon.torchmaster.common.*;
 import net.xalcon.torchmaster.compat.EntityFilterRegisterEvent;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +29,6 @@ public class TorchMasterMod
      * The logic of this field is inverted so it can be used even if the patch wasnt applied successfully
      */
     public static boolean isNotInWorldTick = true;
-    public static boolean isWorldHookInstalled;
     public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
 
     public static final String MODID = "torchmaster";
@@ -61,7 +61,7 @@ public class TorchMasterMod
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
         MinecraftForge.EVENT_BUS.register(ConfigHandler);
 
-        if(!isWorldHookInstalled)
+        if(!TorchCorePlugin.isTickHookInstalled)
         {
             Log.error("8888888888 8888888b.  8888888b.   .d88888b.  8888888b.  ");
             Log.error("888        888   Y88b 888   Y88b d88P\" \"Y88b 888   Y88b ");
