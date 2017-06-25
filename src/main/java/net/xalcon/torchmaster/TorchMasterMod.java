@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 public class TorchMasterMod
 {
     public static boolean isInWorldTick;
+    public static boolean isWorldHookInstalled;
     public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
 
     public static final String MODID = "torchmaster";

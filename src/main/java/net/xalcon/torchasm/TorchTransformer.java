@@ -1,14 +1,11 @@
 package net.xalcon.torchasm;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.xalcon.torchmaster.TorchMasterMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.AdviceAdapter;
-import org.objectweb.asm.tree.*;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class TorchTransformer implements IClassTransformer
 {
@@ -37,70 +34,94 @@ public class TorchTransformer implements IClassTransformer
      * and then back to false at the end.
      * WorldSpawn happens inside the tick() method. TileEntities tick outside of it.
      * This allows us to simply check the field if we are in the correct runstate
-     * @param basicClass
+     * @param basicClass the bytes of the "unmodified" class
      */
     private static byte[] patchWorldServer(byte[] basicClass)
     {
         ClassReader cr = new ClassReader(basicClass);
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        ClassNode cn = new ClassNode(Opcodes.ASM5);
-        cr.accept(cn, ClassReader.EXPAND_FRAMES); // Expand frames if the are compressed
 
-        // Search for the tick() method
-        MethodNode method = cn.methods.stream().filter(m -> "tick".equals(m.name) && "()V".equals(m.desc)).findFirst().orElse(null);
+        TorchCoreClassVisitor cv = new TorchCoreClassVisitor(Opcodes.ASM5, cw, "tick", "()V", TorchTransformer::sanityCheckCallback);
+        cr.accept(cv, ClassReader.EXPAND_FRAMES); // this will apply our class+method visitor
 
-        if(method == null)
+        // do the sanity check. We dont do anything to class if the patch wasnt successful
+        if(patchCount != 2)
         {
-            log.fatal("Torchmaster was unable to find the WorldServer.tick() method! Block mob spawns will not work!");
+            log.fatal("[Torchmaster] Something went wrong while patching WorldServer.tick() method! Expected 2 patches, did " + patchCount);
+            log.fatal("[Torchmaster] block mobspawns will not work properly! Report this bug to the author!");
             return basicClass;
         }
 
-        TorchCoreClassVisitor cv = new TorchCoreClassVisitor(Opcodes.ASM5, cw, method);
-        cr.accept(cv, ClassReader.EXPAND_FRAMES);
-
+        // we are good, lets ship it
         byte[] bytes = cw.toByteArray();
-        dump("d:\\WorldServer.class", bytes);
+        log.info("[Torchmaster] tick state hook successfully installed. Yey!");
+        TorchMasterMod.isWorldHookInstalled = true;
         return bytes;
     }
 
-    private static void dump(String path, byte[] data)
+    private static int patchCount = 0;
+
+    /**
+     * This method is calley each time the FieldToggleMethodAdapter adds a patch
+     */
+    private static void sanityCheckCallback()
     {
-        try
-        {
-            FileOutputStream fos = new FileOutputStream(path);
-            fos.write(data);
-            fos.close();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        patchCount++;
     }
 
+    /**
+     * Custom ClassVisitor to allow our custom MethodVisitor to work on certain Methods (currently only WorldServer.tick())
+     */
     private static class TorchCoreClassVisitor extends ClassVisitor
     {
-        private final MethodNode mn;
+        private final String methodName;
+        private final String methodDesc;
+        private final Runnable sanityCheckCallback;
 
-        TorchCoreClassVisitor(int api, ClassVisitor cv, MethodNode mn)
+        /**
+         * Custom Class visitor constructor, duh.
+         * @param api the API Version, 5 is fine
+         * @param cv the class visitor (class writer)
+         * @param methodName the method we want to patch with our custom method visitor
+         * @param methodDesc the description of the method we want to patch
+         * @param sanityCheckCallback this callback will be passed to the custom method visitor
+         */
+        TorchCoreClassVisitor(int api, ClassVisitor cv, String methodName, String methodDesc, Runnable sanityCheckCallback)
         {
             super(api, cv);
-            this.mn = mn;
+            this.methodName = methodName;
+            this.methodDesc = methodDesc;
+            this.sanityCheckCallback = sanityCheckCallback;
         }
 
         @Override
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
         {
             MethodVisitor mv = this.cv.visitMethod(access, name, desc, signature, exceptions);
-            if(name.equals(mn.name) && desc.equals(mn.desc))
-                return new FieldToggleMethodAdapter(this.api, mv, access, name, desc);
+            // If the method, that passed to this ClassVisitor is the one that is going to be visited next
+            // use our custom method visitor instead of the default one
+            if(name.equals(this.methodName) && desc.equals(this.methodDesc))
+                return new FieldToggleMethodAdapter(this.api, mv, access, name, desc, this.sanityCheckCallback);
             return mv;
         }
     }
 
+    /**
+     * Specialized MethodVisitor that is only applied to the WorldServer.tick() method
+     * This MethodVisitor adds `TorchMasterMod.isInWorldTick = true;` at the start of the tick() method
+     * and `TorchMasterMod.isInWorldTick = false` at the end.
+     * This allows us to check if the CheckSpawn event is called from inside the tick() method
+     * or from outside. Since the WorldSpawner only runs inside the WorldServer.tick(), this allows
+     * us to make a really fast check if a given mob is spawned naturally or by a mobspawner
+     */
     private static class FieldToggleMethodAdapter extends AdviceAdapter
     {
-        FieldToggleMethodAdapter(int api, MethodVisitor mv, int access, String name, String desc)
+        private final Runnable sanityCheckCallback;
+
+        FieldToggleMethodAdapter(int api, MethodVisitor mv, int access, String name, String desc, Runnable sanityCheckCallback)
         {
             super(api, mv, access, name, desc);
+            this.sanityCheckCallback = sanityCheckCallback;
         }
 
         @Override
@@ -110,7 +131,8 @@ public class TorchTransformer implements IClassTransformer
             this.mv.visitInsn(Opcodes.ICONST_1);
             // write loaded value to field
             this.mv.visitFieldInsn(Opcodes.PUTSTATIC, "net/xalcon/torchmaster/TorchMasterMod", "isInWorldTick", "Z");
-
+            log.info("[Torchmaster] Applied patch to WorldServer.Tick() @ method enter");
+            this.sanityCheckCallback.run();
         }
 
         @Override
@@ -120,6 +142,8 @@ public class TorchTransformer implements IClassTransformer
             this.mv.visitInsn(Opcodes.ICONST_0);
             // write loaded value to field
             this.mv.visitFieldInsn(Opcodes.PUTSTATIC, "net/xalcon/torchmaster/TorchMasterMod", "isInWorldTick", "Z");
+            log.info("[Torchmaster] Applied patch to WorldServer.Tick() @ method exit");
+            this.sanityCheckCallback.run();
         }
     }
 }
