@@ -81,18 +81,6 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     outputFile = jar.archivePath
 }
 
-curseforge {
-    apiKey = project.curse_api_key
-
-    project {
-        id = "${curse_id}"
-        changelogType = "markdown"
-        changelog = getChangelogText()
-        releaseType = "$System.env.release_type" != "null" ? "$System.env.release_type" : 'alpha'
-        mainArtifact jar
-    }
-}
-
 if(new File("$System.env.confidental_properties").exists()) {
     println("Found confidenntal gradle properties, loading...")
     Properties props = new Properties()
@@ -131,4 +119,16 @@ static String getChangelogText() {
         done = true // once we go past the first version block, parse no more
     }
     return str
+}
+
+curseforge {
+    apiKey = project.curse_api_key
+
+    project {
+        id = "${curse_id}"
+        changelogType = "markdown"
+        changelog = getChangelogText()
+        releaseType = "$System.env.release_type" != "null" ? "$System.env.release_type" : 'alpha'
+        mainArtifact jar
+    }
 }
