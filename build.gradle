@@ -2,12 +2,19 @@ buildscript {
     repositories {
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.9'
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
+
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
@@ -74,6 +81,18 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     outputFile = jar.archivePath
 }
 
+curseforge {
+    apiKey = "$System.env.curse_key_xalcon"
+
+    project {
+        id = "${curse_id}"
+        changelogType = "markdown"
+        changelog = getChangelogText()
+        releaseType = "$System.env.release_type" != "null" ? "$System.env.release_type" : 'alpha'
+        mainArtifact jar
+    }
+}
+
 if("$System.env.CONFIDENTAL_PROPERTIES_FILE" != "null") {
     Properties props = new Properties()
     props.load(new FileInputStream("$System.env.CONFIDENTAL_PROPERTIES_FILE"))
@@ -87,4 +106,26 @@ build.dependsOn signJar
 
 def static getBuildNumber() {
     return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
+}
+
+static String getChangelogText() {
+    def changelogFile = new File('changelog.md')
+    if (!changelogFile.exists())
+        return ""
+    String str = ''
+    String separator = '### '
+    int lineCount = 0
+    boolean done = false
+    changelogFile.eachLine {
+        lineCount++
+        if (done || it == null) {
+            return
+        }
+        if (!it.startsWith(separator) || lineCount == 1) {
+            str += "$it" + '\n'
+            return
+        }
+        done = true // once we go past the first version block, parse no more
+    }
+    return str
 }
