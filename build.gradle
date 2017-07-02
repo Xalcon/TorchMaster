@@ -82,7 +82,7 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
 }
 
 curseforge {
-    apiKey = "$System.env.curse_key_xalcon"
+    apiKey = project.curse_api_key
 
     project {
         id = "${curse_id}"
@@ -93,13 +93,15 @@ curseforge {
     }
 }
 
-if("$System.env.CONFIDENTAL_PROPERTIES_FILE" != "null") {
+if(new File("confidental.properties").exists()) {
     Properties props = new Properties()
-    props.load(new FileInputStream("$System.env.CONFIDENTAL_PROPERTIES_FILE"))
+    props.load(new FileInputStream("confidental.properties"))
     signJar.keyStore=props.jarsign_keystore
     signJar.alias=props.jarsign_keystore_alias
     signJar.storePass=props.jarsign_keystore_pass
     signJar.keyPass=props.jarsign_key_pass
+
+    project.curse_api_key=props.curse_api_key
 }
 
 build.dependsOn signJar
