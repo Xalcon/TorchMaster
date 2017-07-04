@@ -3,16 +3,13 @@ package net.xalcon.torchmaster.common.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.client.IItemRenderRegister;
 import net.xalcon.torchmaster.common.creativetabs.CreativeTabTorchMaster;
+import net.xalcon.torchmaster.common.items.ItemBlockTooltipInfo;
 
 public class BlockBase extends Block
 {
@@ -32,7 +29,7 @@ public class BlockBase extends Block
 
 	public Item createItemBlock()
 	{
-		return new ItemBlock(this).setRegistryName(this.getRegistryName());
+		return new ItemBlockTooltipInfo(this).setRegistryName(this.getRegistryName());
 	}
 }
 

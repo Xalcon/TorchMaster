@@ -1,6 +1,5 @@
 package net.xalcon.torchmaster.common.blocks;
 
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -16,7 +15,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.TorchRegistry;
-import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import java.util.Random;

@@ -5,9 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -18,8 +16,6 @@ import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModGuiHandler;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
-
-import javax.annotation.Nullable;
 
 public class BlockTerrainLighter extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
 {

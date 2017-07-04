@@ -11,7 +11,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -21,7 +20,6 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.*;
-import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,7 +30,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.client.IItemRenderRegister;
 import net.xalcon.torchmaster.common.TorchRegistry;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
@@ -41,10 +38,6 @@ import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Objects;
 import java.util.Random;
 
 public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity

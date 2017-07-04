@@ -1,14 +1,10 @@
 package net.xalcon.torchmaster;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.xalcon.torchmaster.common.*;
 import net.xalcon.torchmaster.compat.EntityFilterRegisterEvent;
@@ -19,9 +15,8 @@ import org.apache.logging.log4j.Logger;
         modid = TorchMasterMod.MODID,
         version = TorchMasterMod.VERSION,
         guiFactory = "net.xalcon.torchmaster.client.gui.config.TorchMasterGuiFactory",
-        dependencies = "required-after:forge@[14.21.0.2338,)",
-        canBeDeactivated = true
-
+        dependencies = "required-after:forge@[14.21.1.2394,)",
+        certificateFingerprint = "@CERT_FINGERPRINT@"
 )
 public class TorchMasterMod
 {
@@ -72,5 +67,16 @@ public class TorchMasterMod
     {
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.MegaTorch(MegaTorchFilterRegistry));
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.DreadLamp(DreadLampFilterRegistry));
+    }
+
+    @EventHandler
+    public void onCertError(FMLFingerprintViolationEvent event)
+    {
+        Log.info("Expected " + event.getExpectedFingerprint() + ", found:");
+        for(String fp : event.getFingerprints())
+        {
+            Log.info(fp);
+        }
+        Log.info("Source: " + event.getSource());
     }
 }

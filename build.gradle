@@ -2,12 +2,19 @@ buildscript {
     repositories {
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.9'
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
+
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
@@ -33,41 +40,15 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     replace '@VERSION@', project.version
     replace '@BUILD_NUMBER@', getBuildNumber()
+    replace '@CERT_FINGERPRINT@', cert_fingerprint
 }
 
 repositories {
-    maven {
-        name 'JEI'
-        url 'http://dvs1.progwml6.com/files/maven'
-    }
-    maven {
-        name 'Hwyla'
-        url 'http://tehnut.info/maven'
-    }
+    maven { url 'http://dvs1.progwml6.com/files/maven' } // JEI
+    maven { url 'http://tehnut.info/maven' } // hwyla
 }
 
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
     deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
     //compile "mcp.mobius.waila:Hwyla:${hwyla_version}:api"
 
@@ -95,6 +76,61 @@ processResources
     }
 }
 
-def getBuildNumber() {
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+def curse_api_key=""
+
+if(new File("$System.env.confidental_properties").exists()) {
+    println("Found confidenntal gradle properties, loading...")
+    Properties props = new Properties()
+    props.load(new FileInputStream("$System.env.confidental_properties"))
+    signJar.keyStore=props.jarsign_keystore
+    signJar.alias=props.jarsign_keystore_alias
+    signJar.storePass=props.jarsign_keystore_pass
+    signJar.keyPass=props.jarsign_key_pass
+
+    curse_api_key=props.curse_api_key
+}
+
+build.dependsOn signJar
+
+def static getBuildNumber() {
     return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
+}
+
+static String getChangelogText() {
+    def changelogFile = new File('changelog.md')
+    if (!changelogFile.exists())
+        return ""
+    String str = ''
+    String separator = '### '
+    int lineCount = 0
+    boolean done = false
+    changelogFile.eachLine {
+        lineCount++
+        if (done || it == null) {
+            return
+        }
+        if (!it.startsWith(separator) || lineCount == 1) {
+            str += "$it" + '\n'
+            return
+        }
+        done = true // once we go past the first version block, parse no more
+    }
+    return str
+}
+
+curseforge {
+    apiKey = curse_api_key
+
+    project {
+        id = "${curse_id}"
+        changelogType = "markdown"
+        changelog = getChangelogText()
+        releaseType = "$System.env.release_type" != "null" ? "$System.env.release_type" : 'alpha'
+        mainArtifact jar
+    }
 }

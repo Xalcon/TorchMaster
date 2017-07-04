@@ -8,12 +8,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.client.gui.config.TorchMasterConfigGui;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class BlockUtils
 {

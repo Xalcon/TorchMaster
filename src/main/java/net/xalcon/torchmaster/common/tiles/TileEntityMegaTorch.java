@@ -8,7 +8,6 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
-import net.xalcon.torchmaster.common.TorchRegistry;
 
 public class TileEntityMegaTorch extends TileEntity implements ITickable
 {
