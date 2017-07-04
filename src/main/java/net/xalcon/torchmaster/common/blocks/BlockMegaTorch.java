@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +33,6 @@ import net.xalcon.torchmaster.common.TorchRegistry;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
-import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -141,24 +139,6 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	{
 		if (!worldIn.isRemote && state.getValue(BURNING))
 		{
-			if (TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled())
-			{
-				long startTime = System.nanoTime();
-				for (TileEntity te : worldIn.tickableTileEntities)
-				{
-					if (te instanceof TileEntityMobSpawner)
-					{
-						BlockUtils.addTagToSpawner("IsSpawnerMob", (TileEntityMobSpawner) te);
-					}
-					else if ("extrautils2:supermobspawner".equals(te.getBlockType().getRegistryName().toString()))
-					{
-						BlockUtils.addTagToXU2Spawner("IsSpawnerMob", te);
-					}
-				}
-				long diff = System.nanoTime() - startTime;
-				TorchMasterMod.Log.info("MegaTorch placed down @ " + pos + " (DIM: " + worldIn.provider.getDimension() + "); MobSpawner scan took " + diff + "ns");
-			}
-
 			if(!stack.hasTagCompound()) return;
 
 			TileEntity tile = worldIn.getTileEntity(pos);

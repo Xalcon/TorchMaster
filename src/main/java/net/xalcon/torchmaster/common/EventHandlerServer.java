@@ -11,20 +11,20 @@ public class EventHandlerServer
 	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
 		if(event.getResult() == Event.Result.ALLOW) return;
+		if(TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() && event.isSpawner()) return;
+
 		if(TorchMasterMod.MegaTorchFilterRegistry.containsEntity(event.getEntity()))
 		{
 			if(TorchRegistry.getMegaTorchRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
-				if(!TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() || !event.getEntity().getTags().contains("IsSpawnerMob"))
-					event.setResult(Event.Result.DENY);
+				event.setResult(Event.Result.DENY);
 			}
 		}
 		else if(TorchMasterMod.DreadLampFilterRegistry.containsEntity(event.getEntity()))
 		{
 			if(TorchRegistry.getDreadLampRegistry().isInRangeOfTorch(event.getWorld(), event.getEntity().getPosition()))
 			{
-				if(!TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() || !event.getEntity().getTags().contains("IsSpawnerMob"))
-					event.setResult(Event.Result.DENY);
+				event.setResult(Event.Result.DENY);
 			}
 		}
 	}

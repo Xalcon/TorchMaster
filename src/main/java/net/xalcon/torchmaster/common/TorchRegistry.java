@@ -22,8 +22,6 @@ import java.util.function.Predicate;
 
 public class TorchRegistry
 {
-
-
 	private class TorchLocation
 	{
 		public int DimensionId;
@@ -163,7 +161,7 @@ public class TorchRegistry
 			World world = DimensionManager.getWorld(loc.DimensionId);
 			this.registerTorch(world, loc.Position);
 		}
-		TorchMasterMod.Log.debug("Loaded entries for " + this.name);
+		TorchMasterMod.Log.info("Loaded entries for " + this.name);
 	}
 
 	@SubscribeEvent
@@ -181,7 +179,7 @@ public class TorchRegistry
 		try
 		{
 			CompressedStreamTools.write(nbt, file);
-			TorchMasterMod.Log.debug("Saved " + this.torches.size() + " entries for " + this.name + " to disk");
+			TorchMasterMod.Log.info("Saved " + this.torches.size() + " entries for " + this.name + " to disk");
 		}
 		catch (IOException e)
 		{
