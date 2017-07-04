@@ -81,7 +81,7 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     outputFile = jar.archivePath
 }
 
-def curse_api_key=null
+def curse_api_key=""
 
 if(new File("$System.env.confidental_properties").exists()) {
     println("Found confidenntal gradle properties, loading...")
