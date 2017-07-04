@@ -1,6 +1,5 @@
 package net.xalcon.torchmaster.common.blocks;
 
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -15,13 +14,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
-import net.xalcon.torchmaster.common.tiles.TileEntityDreadLamp;
+import net.xalcon.torchmaster.common.TorchRegistry;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import java.util.Random;
 
-public class BlockDreadLamp extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
+public class BlockDreadLamp extends BlockBase
 {
 	public static final String INTERNAL_NAME = "dread_lamp";
 
@@ -61,21 +59,17 @@ public class BlockDreadLamp extends BlockBase implements ITileEntityProvider, IA
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	{
-		return new TileEntityDreadLamp();
+		super.onBlockAdded(worldIn, pos, state);
+		TorchRegistry.getDreadLampRegistry().registerTorch(worldIn, pos);
 	}
 
 	@Override
-	public Class<? extends TileEntity> getTileEntityClass()
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		return TileEntityDreadLamp.class;
-	}
-
-	@Override
-	public String getTileEntityRegistryName()
-	{
-		return this.getRegistryName().toString();
+		super.breakBlock(worldIn, pos, state);
+		TorchRegistry.getDreadLampRegistry().unregisterTorch(worldIn, pos);
 	}
 
 	@Override

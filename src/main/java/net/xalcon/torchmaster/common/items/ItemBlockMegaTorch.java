@@ -3,7 +3,6 @@ package net.xalcon.torchmaster.common.items;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -14,7 +13,7 @@ import net.xalcon.torchmaster.common.blocks.BlockMegaTorch;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBlockMegaTorch extends ItemBlock
+public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 {
 	public ItemBlockMegaTorch(Block block)
 	{
@@ -32,14 +31,14 @@ public class ItemBlockMegaTorch extends ItemBlock
 
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		return super.getUnlocalizedName() + "." + (ModBlocks.MegaTorch.getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
+		return super.getUnlocalizedName() + "." + (ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced)
 	{
 		super.addInformation(stack, playerIn, tooltip, advanced);
-		if(ModBlocks.MegaTorch.getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING))
+		if(ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING))
 		{
 			NBTTagCompound compound = stack.getSubCompound("tm_tile");
 			if(compound == null) return;

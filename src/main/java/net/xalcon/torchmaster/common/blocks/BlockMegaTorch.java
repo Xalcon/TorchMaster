@@ -30,6 +30,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.common.TorchRegistry;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
@@ -119,6 +120,20 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
+	{
+		super.onBlockAdded(worldIn, pos, state);
+		TorchRegistry.getMegaTorchRegistry().registerTorch(worldIn, pos);
+	}
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	{
+		super.breakBlock(worldIn, pos, state);
+		TorchRegistry.getMegaTorchRegistry().unregisterTorch(worldIn, pos);
 	}
 
 	@Override

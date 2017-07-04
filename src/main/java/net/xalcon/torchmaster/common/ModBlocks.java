@@ -21,11 +21,26 @@ import java.util.Arrays;
 public class ModBlocks
 {
 	@GameRegistry.ObjectHolder(BlockMegaTorch.INTERNAL_NAME)
-	public final static BlockMegaTorch MegaTorch = null;
+	private final static BlockMegaTorch MegaTorch = null;
 	@GameRegistry.ObjectHolder(BlockTerrainLighter.INTERNAL_NAME)
-	public final static BlockTerrainLighter TerrainLighter = null;
+	private final static BlockTerrainLighter TerrainLighter = null;
 	@GameRegistry.ObjectHolder(BlockDreadLamp.INTERNAL_NAME)
-	public final static BlockDreadLamp DreadLamp = null;
+	private final static BlockDreadLamp DreadLamp = null;
+
+	public static BlockMegaTorch getMegaTorch()
+	{
+		return MegaTorch;
+	}
+
+	public static BlockTerrainLighter getTerrainLighter()
+	{
+		return TerrainLighter;
+	}
+
+	public static BlockDreadLamp getDreadLamp()
+	{
+		return DreadLamp;
+	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)

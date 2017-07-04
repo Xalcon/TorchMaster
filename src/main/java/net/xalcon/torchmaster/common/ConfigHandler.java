@@ -16,6 +16,7 @@ public class ConfigHandler
 	private boolean megaTorchAllowVanillaSpawners;
 	private boolean megaTorchExtinguishOnHarvest;
 	private boolean megaTorchAllowSilkTouch;
+	private boolean beginnerTooltips;
 	private int megaTorchBurnoutRate;
 	private int megaTorchBurnoutValue;
 	private int megaTorchRange;
@@ -59,7 +60,7 @@ public class ConfigHandler
 			this.terrainLighterSpacing = config.getInt("TerrainLighterSpacing", "general", 5, 1, 16, "The spacing between each torch. Distance of 5 means there will be a torch every 5 blocks with 4 blocks space in between.");
 			this.terrainLighterTorches = new HashSet<>(Arrays.asList(config.get("general", "TerrainLighterTorches", new String[]{"minecraft:torch", "tconstruct:stone_torch"}, "This controls which torches are supported by the terrain lighter").getStringList()));
 
-
+			this.beginnerTooltips = config.getBoolean("BeginnerTooltips", "general", true, "Adds additional information about torchmaster items into the tooltip");
 
 			isLycaniteCompatEnabled = config.getBoolean("LycanitesMobsBlockAll", "compat", true, "If this setting is enabled, the mega torch will block all natural spawn attempts from Lycanites Mobs in its radius");
 			isMoCreaturesCompatEnabled = config.getBoolean("MoCreaturesBlockAll", "compat", true, "If this setting is enabled, the mega torch will block all natural spawn attempts from MoCreatures in its radius");
@@ -116,4 +117,9 @@ public class ConfigHandler
 
 	public int getMegaTorchBurnoutRate() { return megaTorchBurnoutRate; }
 	public int getMegaTorchBurnoutValue() { return megaTorchBurnoutValue; }
+
+	public boolean showBeginnerTooltips()
+	{
+		return beginnerTooltips;
+	}
 }

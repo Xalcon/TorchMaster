@@ -15,8 +15,7 @@ import org.apache.logging.log4j.Logger;
         modid = TorchMasterMod.MODID,
         version = TorchMasterMod.VERSION,
         guiFactory = "net.xalcon.torchmaster.client.gui.config.TorchMasterGuiFactory",
-        dependencies = "required-after:forge@[14.21.0.2338,)",
-        canBeDeactivated = true,
+        dependencies = "required-after:forge@[14.21.1.2394,)",
         certificateFingerprint = "@CERT_FINGERPRINT@"
 )
 public class TorchMasterMod
@@ -52,6 +51,8 @@ public class TorchMasterMod
 
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
         MinecraftForge.EVENT_BUS.register(ConfigHandler);
+        MinecraftForge.EVENT_BUS.register(TorchRegistry.getMegaTorchRegistry());
+        MinecraftForge.EVENT_BUS.register(TorchRegistry.getDreadLampRegistry());
     }
 
     @EventHandler
