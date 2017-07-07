@@ -129,7 +129,7 @@ curseforge {
     project {
         id = "${curse_id}"
         changelogType = "markdown"
-        changelog = getChangelogText()
+        changelog = new File('changelog.md')
         releaseType = "$System.env.release_type" != "null" ? "$System.env.release_type" : 'alpha'
         mainArtifact jar
     }

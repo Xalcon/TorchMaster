@@ -1,3 +1,6 @@
+### v1.5.1
+* Switched torchmaster logging to debug instead of info to reduce log spam
+
 ### v1.5.0
 * Added beginner tooltips to the mega torch, dread lamp and terrain lighter
 * Added persistent torch registry (Allows torches and lamps to work while not being chunk loaded)
