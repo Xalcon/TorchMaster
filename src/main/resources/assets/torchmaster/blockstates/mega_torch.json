@@ -1,6 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
+	"transform": "forge:default-block",
     "textures": {
       "torch": "torchmaster:blocks/mega_torch",
       "torch_top": "torchmaster:blocks/mega_torch_top"
