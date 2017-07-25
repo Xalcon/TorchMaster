@@ -67,8 +67,14 @@ public class BlockTerrainLighter extends BlockBase implements ITileEntityProvide
 		{
 			IItemHandler itemHandler = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			if(itemHandler != null)
+			{
 				for(int i = 0; i < itemHandler.getSlots(); i++)
-					InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
+				{
+					ItemStack stack = itemHandler.getStackInSlot(i);
+					if(stack != null && stack.stackSize > 0)
+						InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
+				}
+			}
 		}
 
 		super.breakBlock(worldIn, pos, state);
