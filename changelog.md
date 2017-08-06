@@ -1,3 +1,7 @@
+### v1.5.2
+* Update to forge 14.22.0.2445 (should work just fine with older 1.12 versions)
+* Marked as stable release
+
 ### v1.5.1
 * Switched torchmaster logging to debug instead of info to reduce log spam
 

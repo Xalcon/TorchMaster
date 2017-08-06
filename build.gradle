@@ -49,10 +49,10 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
+    //deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
     //compile "mcp.mobius.waila:Hwyla:${hwyla_version}:api"
 
-    runtime "mezz.jei:jei_${mcversion}:${jei_version}"
+    //runtime "mezz.jei:jei_${mcversion}:${jei_version}"
     //runtime "mcp.mobius.waila:Hwyla:${hwyla_version}"
 }
 
@@ -99,28 +99,6 @@ build.dependsOn signJar
 
 def static getBuildNumber() {
     return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
-}
-
-static String getChangelogText() {
-    def changelogFile = new File('changelog.md')
-    if (!changelogFile.exists())
-        return ""
-    String str = ''
-    String separator = '### '
-    int lineCount = 0
-    boolean done = false
-    changelogFile.eachLine {
-        lineCount++
-        if (done || it == null) {
-            return
-        }
-        if (!it.startsWith(separator) || lineCount == 1) {
-            str += "$it" + '\n'
-            return
-        }
-        done = true // once we go past the first version block, parse no more
-    }
-    return str
 }
 
 curseforge {
