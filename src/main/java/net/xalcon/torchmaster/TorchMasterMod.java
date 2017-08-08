@@ -16,7 +16,8 @@ import org.apache.logging.log4j.Logger;
         version = TorchMasterMod.VERSION,
         guiFactory = "net.xalcon.torchmaster.client.gui.config.TorchMasterGuiFactory",
         dependencies = "required-after:forge@[14.21.1.2394,)",
-        certificateFingerprint = "@CERT_FINGERPRINT@"
+        certificateFingerprint = "@CERT_FINGERPRINT@",
+		acceptedMinecraftVersions = "[1.12, 1.13)"
 )
 public class TorchMasterMod
 {

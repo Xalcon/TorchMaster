@@ -1,5 +1,8 @@
+### v1.5.3
+* Changed buildscript and configuration to be compatible with 1.12 and 1.12.1+
+
 ### v1.5.2
-* Update to forge 14.22.0.2445 (should work just fine with older 1.12 versions)
+* Update to forge 14.22.0.2445
 * Marked as stable release
 * WARNING: IF YOU UPDATE FROM 1.4.3 OR EARLIER YOU WILL NEED TO REPLACE YOUR TORCHES AND LAMPS!
 

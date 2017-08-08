@@ -17,7 +17,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
-
+def mcversion = "${mcversion_major}.${mcversion_minor}.${mcversion_patch}"
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 group= "net.xalcon.torchmaster" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "torchmaster_" + mcversion
@@ -67,7 +67,7 @@ processResources
         include 'mcmod.info'
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':project.version, 'mcversion':"[${mcversion_major}.${mcversion_minor},${mcversion_major}.${((mcversion_minor.toInteger())+1)})"
     }
         
     // copy everything else, thats not the mcmod.info
