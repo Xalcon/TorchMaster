@@ -1,0 +1,21 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-block",
+        "textures": {
+            "tex": "torchmaster:blocks/feral_flare_lantern"
+        },
+        "model": "torchmaster:feral_flare_lantern_side"
+    },
+    "variants": {
+        "facing":
+        {
+            "south": { "x": 0, "y": 180 },
+            "north": { "x": 0, "y": 0 },
+            "west": { "x": 0, "y": 270 },
+            "east": { "x": 0, "y": 90 },
+            "up": { "x": 180, "y": 0, "model": "torchmaster:feral_flare_lantern" },
+            "down": { "x": 0, "y": 0, "model": "torchmaster:feral_flare_lantern" }
+        }
+    }
+}

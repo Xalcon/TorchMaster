@@ -8,10 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.blocks.BlockBase;
-import net.xalcon.torchmaster.common.blocks.BlockDreadLamp;
-import net.xalcon.torchmaster.common.blocks.BlockMegaTorch;
-import net.xalcon.torchmaster.common.blocks.BlockTerrainLighter;
+import net.xalcon.torchmaster.common.blocks.*;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 
 import java.util.Arrays;
@@ -26,6 +23,10 @@ public class ModBlocks
 	private final static BlockTerrainLighter TerrainLighter = null;
 	@GameRegistry.ObjectHolder(BlockDreadLamp.INTERNAL_NAME)
 	private final static BlockDreadLamp DreadLamp = null;
+	@GameRegistry.ObjectHolder(BlockFeralFlareLantern.INTERNAL_NAME)
+	private final static BlockFeralFlareLantern FeralFlareLantern = null;
+	@GameRegistry.ObjectHolder(BlockInvisibleLight.INTERNAL_NAME)
+	private final static BlockInvisibleLight InvisibleLight = null;
 
 	public static BlockMegaTorch getMegaTorch()
 	{
@@ -42,6 +43,13 @@ public class ModBlocks
 		return DreadLamp;
 	}
 
+	public static BlockInvisibleLight getInvisibleLight()
+	{
+		return InvisibleLight;
+	}
+
+
+
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
@@ -49,7 +57,9 @@ public class ModBlocks
 		{
 			new BlockMegaTorch(),
 			new BlockTerrainLighter(),
-			new BlockDreadLamp()
+			new BlockDreadLamp(),
+			new BlockFeralFlareLantern(),
+            new BlockInvisibleLight()
 		};
 
 		event.getRegistry().registerAll(blocks);
@@ -67,7 +77,9 @@ public class ModBlocks
 		{
 			MegaTorch,
 			TerrainLighter,
-			DreadLamp
+			DreadLamp,
+			FeralFlareLantern,
+			InvisibleLight
 		};
 
         event.getRegistry().registerAll(Arrays.stream(blocks)
@@ -82,7 +94,9 @@ public class ModBlocks
 		{
 			MegaTorch,
 			TerrainLighter,
-			DreadLamp
+			DreadLamp,
+			FeralFlareLantern,
+            InvisibleLight
 		};
 
         Arrays.stream(blocks)
