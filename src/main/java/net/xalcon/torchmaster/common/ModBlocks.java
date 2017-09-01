@@ -12,6 +12,7 @@ import net.xalcon.torchmaster.common.blocks.*;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @GameRegistry.ObjectHolder(TorchMasterMod.MODID)
 @Mod.EventBusSubscriber
@@ -48,8 +49,6 @@ public class ModBlocks
 		return InvisibleLight;
 	}
 
-
-
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
@@ -78,12 +77,12 @@ public class ModBlocks
 			MegaTorch,
 			TerrainLighter,
 			DreadLamp,
-			FeralFlareLantern,
-			InvisibleLight
+			FeralFlareLantern
 		};
 
         event.getRegistry().registerAll(Arrays.stream(blocks)
             .map(BlockBase::createItemBlock)
+			.filter(Objects::nonNull)
             .toArray(Item[]::new));
 	}
 

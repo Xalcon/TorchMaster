@@ -52,7 +52,7 @@ dependencies {
     //deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
     //compile "mcp.mobius.waila:Hwyla:${hwyla_version}:api"
 
-    //runtime "mezz.jei:jei_${mcversion}:${jei_version}"
+    runtime "mezz.jei:jei_${mcversion}:${jei_version}"
     //runtime "mcp.mobius.waila:Hwyla:${hwyla_version}"
 }
 
