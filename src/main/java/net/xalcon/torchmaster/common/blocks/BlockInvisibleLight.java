@@ -1,9 +1,10 @@
 package net.xalcon.torchmaster.common.blocks;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -16,75 +17,101 @@ import java.util.Random;
 
 public class BlockInvisibleLight extends BlockBase
 {
-    private final static AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0, 0,0, 0, 0,0 );
+    private final static PropertyBool DECAY = PropertyBool.create("decay");
 
     public static final String INTERNAL_NAME = "invisible_light";
+    private IBlockState decayState;
 
     public BlockInvisibleLight()
     {
         super(Material.AIR, INTERNAL_NAME);
+        this.setTickRandomly(true);
         this.setLightLevel(1);
+        this.setDefaultState(this.getDefaultState().withProperty(DECAY, false));
+        this.decayState = this.getDefaultState().withProperty(DECAY, true);
     }
 
-    /**
-     * The type of render function called. MODEL for mixed tesr and static model, MODELBLOCK_ANIMATED for TESR-only,
-     * LIQUID for vanilla liquids, INVISIBLE to skip all rendering
-     */
-    /*public EnumBlockRenderType getRenderType(IBlockState state)
+    @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, DECAY);
+    }
+
+    @Override @SuppressWarnings("deprecation")
+    public IBlockState getStateFromMeta(int meta)
+    {
+        return this.getDefaultState().withProperty(DECAY, meta != 0);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return state.getValue(DECAY) ? 1 : 0;
+    }
+
+    @Override @SuppressWarnings("deprecation")
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.INVISIBLE;
-    }*/
+    }
 
     @Nullable
+    @Override @SuppressWarnings("deprecation")
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
     {
         return NULL_AABB;
     }
 
-    /**
-     * Used to determine ambient occlusion and culling when rebuilding chunks for render
-     */
+    @Override @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
+    @Override
     public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid)
     {
         return false;
     }
 
-    /**
-     * Spawns this Block's drops into the World as EntityItems.
-     */
+    @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {
     }
 
-    /**
-     * Whether this Block can be replaced directly by other blocks (true for e.g. tall grass)
-     */
+    @Override
+    public int tickRate(World worldIn)
+    {
+        return 0;
+    }
+
+    @Override
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos)
     {
         return true;
     }
 
+    @Override @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
-    /**
-     * Get the geometry of the queried face at the given position and state. This is used to decide whether things like
-     * buttons are allowed to be placed on the face, or how glass panes connect to the face, among other things.
-     * <p>
-     * Common values are {@code SOLID}, which is the default, and {@code UNDEFINED}, which represents something that
-     * does not fit the other descriptions and will generally cause other things not to connect to the face.
-     *
-     * @return an approximation of the form of the given face
-     */
+    @Override @SuppressWarnings("deprecation")
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
         return BlockFaceShape.UNDEFINED;
+    }
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    {
+        if(state.getValue(DECAY))
+            worldIn.setBlockToAir(pos);
+    }
+
+    public IBlockState getDecayState()
+    {
+        return this.decayState;
     }
 }

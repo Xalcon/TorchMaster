@@ -1,6 +1,5 @@
 package net.xalcon.torchmaster.common.tiles;
 
-import com.google.common.base.Stopwatch;
 import net.minecraft.nbt.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -11,7 +10,6 @@ import net.xalcon.torchmaster.common.ModBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
 {
@@ -48,7 +46,7 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
     @Override
     public void update()
     {
-        if(this.world.isRemote || ++this.ticks % 1 != 0) return;
+        if(this.world.isRemote || ++this.ticks % 5 != 0) return;
         if(ticks > 1_000_000) ticks = 0;
 
         int x = (16 - this.world.rand.nextInt(32)) + this.pos.getX();
@@ -74,18 +72,14 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
 
     public void removeChildLights()
     {
-        Stopwatch w = Stopwatch.createUnstarted();
-        w.start();
+        if(this.world.isRemote) return;
         for(BlockPos pos : this.childLights)
         {
             if (this.world.getBlockState(pos).getBlock() == ModBlocks.getInvisibleLight())
             {
-                this.world.setBlockToAir(pos);
+                this.world.setBlockState(pos, ModBlocks.getInvisibleLight().getDecayState(), 2);
             }
         }
-        w.stop();
-        System.out.println(w.elapsed(TimeUnit.MICROSECONDS));
-        System.out.println("Removed " + childLights.size() + " lights");
         this.childLights.clear();
     }
 
