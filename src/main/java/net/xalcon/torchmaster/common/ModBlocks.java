@@ -94,8 +94,7 @@ public class ModBlocks
 			MegaTorch,
 			TerrainLighter,
 			DreadLamp,
-			FeralFlareLantern,
-            InvisibleLight
+			FeralFlareLantern
 		};
 
         Arrays.stream(blocks)

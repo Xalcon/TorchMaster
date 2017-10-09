@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "decay=true": [{ "model": "minecraft:stone" }],
+        "decay=false": [{ "model": "minecraft:stone" }]
+    }
+}
