@@ -1,3 +1,7 @@
+### v1.6.0
+* Add Feral Flare Lantern (Illuminates a big area with a configurable minimum light level, default 16 radius)
+* Add Frozen Pearl (Removes nearby invisible feral flare light sources)
+
 ### v1.5.3
 * Changed buildscript and configuration to be compatible with 1.12 and 1.12.1+
 
