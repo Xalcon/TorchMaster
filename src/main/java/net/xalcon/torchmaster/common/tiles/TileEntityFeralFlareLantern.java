@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.Constants;
 import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.TorchmasterConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +50,12 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         if(this.world.isRemote || ++this.ticks % 5 != 0) return;
         if(ticks > 1_000_000) ticks = 0;
 
-        int x = (16 - this.world.rand.nextInt(32)) + this.pos.getX();
-        int y = (16 - this.world.rand.nextInt(32)) + this.pos.getY();
-        int z = (16 - this.world.rand.nextInt(32)) + this.pos.getZ();
+        int radius = TorchmasterConfig.feralFlareRadius;
+        int diameter = radius * 2;
+
+        int x = (radius - this.world.rand.nextInt(diameter)) + this.pos.getX();
+        int y = (radius - this.world.rand.nextInt(diameter)) + this.pos.getY();
+        int z = (radius - this.world.rand.nextInt(diameter)) + this.pos.getZ();
 
         // limit height - lower bounds
         if (y < 3) y = 3;
@@ -62,7 +66,10 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         if (targetPos.getY() > precipitationHeight.getY() + 4)
             targetPos = precipitationHeight.up(4);
 
-        if (this.world.isBlockLoaded(targetPos) && this.world.isAirBlock(targetPos) && this.world.getBlockState(targetPos).getBlock() != ModBlocks.getInvisibleLight() && this.world.getLightFor(EnumSkyBlock.BLOCK, targetPos) < 11)
+        if (this.world.isBlockLoaded(targetPos) &&
+                this.world.isAirBlock(targetPos) &&
+                this.world.getBlockState(targetPos).getBlock() != ModBlocks.getInvisibleLight() &&
+                this.world.getLightFor(EnumSkyBlock.BLOCK, targetPos) < TorchmasterConfig.feralFlareMinLightLevel)
         {
             this.world.setBlockState(targetPos, ModBlocks.getInvisibleLight().getDefaultState(), 3);
             this.childLights.add(targetPos);

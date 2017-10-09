@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.TorchmasterConfig;
 import net.xalcon.torchmaster.common.blocks.BlockMegaTorch;
 
 import javax.annotation.Nullable;
@@ -45,7 +46,7 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 			if(compound.getBoolean("isExtinguished")) return;
 
 			int burnValueLeft = compound.getInteger("burnValueLeft");
-			int burnRate = TorchMasterMod.ConfigHandler.getMegaTorchBurnoutRate();
+			int burnRate = TorchmasterConfig.MegaTorchBurnoutRate;
 			if(burnRate <= 0) return;
 			int ticksLeft = burnValueLeft / burnRate;
 

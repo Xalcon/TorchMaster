@@ -1,10 +1,14 @@
 package net.xalcon.torchmaster;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.xalcon.torchmaster.common.*;
 import net.xalcon.torchmaster.compat.EntityFilterRegisterEvent;
@@ -14,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 @Mod(
         modid = TorchMasterMod.MODID,
         version = TorchMasterMod.VERSION,
-        guiFactory = "net.xalcon.torchmaster.client.gui.config.TorchMasterGuiFactory",
         dependencies = "required-after:forge@[14.21.1.2394,)",
         certificateFingerprint = "@CERT_FINGERPRINT@",
 		acceptedMinecraftVersions = "[1.12, 1.13)"
@@ -25,7 +28,6 @@ public class TorchMasterMod
 
     public static final String MODID = "torchmaster";
     public static final String VERSION = "@VERSION@";
-    public static ConfigHandler ConfigHandler;
 
 	private EventHandlerServer eventHandlerServer;
 	private ModGuiHandler guiHandler;
@@ -48,10 +50,7 @@ public class TorchMasterMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        ConfigHandler = new ConfigHandler(event.getSuggestedConfigurationFile());
-
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
-        MinecraftForge.EVENT_BUS.register(ConfigHandler);
         MinecraftForge.EVENT_BUS.register(TorchRegistry.getMegaTorchRegistry());
         MinecraftForge.EVENT_BUS.register(TorchRegistry.getDreadLampRegistry());
     }

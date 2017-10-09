@@ -30,12 +30,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.TorchRegistry;
+import net.xalcon.torchmaster.common.TorchmasterConfig;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Random;
 
 public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
@@ -165,7 +167,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		if(itemStack.isEmpty()) return true;
 
 		String itemId = itemStack.getItem().getRegistryName().toString();
-		if(!TorchMasterMod.ConfigHandler.getMegaTorchLighterItems().contains(itemId)) return false;
+		if(Arrays.stream(TorchmasterConfig.MegaTorchLighterItems).noneMatch(s -> s.equals(itemId))) return false;
 
 		NBTTagCompound nbt = itemStack.getSubCompound("tm_lighter");
 		int amount = 1;
@@ -202,7 +204,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		TileEntity torchTe = worldIn.getTileEntity(pos);
 		if(torchTe instanceof TileEntityMegaTorch)
 		{
-			((TileEntityMegaTorch) torchTe).relightTorch(TorchMasterMod.ConfigHandler.getMegaTorchBurnoutValue());
+			((TileEntityMegaTorch) torchTe).relightTorch(TorchmasterConfig.MegaTorchBurnoutValue);
 			worldIn.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, worldIn.rand.nextFloat() * 0.4F + 0.8F);
 		}
 		else
@@ -276,13 +278,13 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public int damageDropped(IBlockState state)
 	{
-		return this.getMetaFromState(TorchMasterMod.ConfigHandler.isMegaTorchExtinguishOnHarvest() ? this.getTorchState(false) : state);
+		return this.getMetaFromState(TorchmasterConfig.MegaTorchExtinguishOnHarvest ? this.getTorchState(false) : state);
 	}
 
 	@Override
 	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
-		return TorchMasterMod.ConfigHandler.isMegaTorchAllowSilkTouch();
+		return TorchmasterConfig.MegaTorchAllowSilkTouch;
 	}
 
 	@Override
@@ -291,7 +293,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		if (te instanceof TileEntityMegaTorch)
 		{
 			if (worldIn.isRemote) return;
-			if (!TorchMasterMod.ConfigHandler.isMegaTorchExtinguishOnHarvest() || this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
+			if (!TorchmasterConfig.MegaTorchExtinguishOnHarvest || this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0)
 			{
 				ItemStack itemStack = this.getSilkTouchDrop(state);
 				if(!itemStack.isEmpty())

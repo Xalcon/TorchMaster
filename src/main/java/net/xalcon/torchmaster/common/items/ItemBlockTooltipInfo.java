@@ -7,6 +7,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.common.TorchmasterConfig;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,7 +31,7 @@ public class ItemBlockTooltipInfo extends ItemBlock
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        if(TorchMasterMod.ConfigHandler.showBeginnerTooltips())
+        if(TorchmasterConfig.BeginnerTooltips)
             tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
     }
 }

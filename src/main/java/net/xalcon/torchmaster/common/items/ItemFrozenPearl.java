@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.TorchmasterConfig;
 import net.xalcon.torchmaster.common.creativetabs.CreativeTabTorchMaster;
 
 import javax.annotation.Nullable;
@@ -24,7 +25,7 @@ public class ItemFrozenPearl extends Item
 {
     public ItemFrozenPearl()
     {
-        this.setMaxDamage(256);
+        this.setMaxDamage(TorchmasterConfig.frozenPearlDurability);
         this.setCreativeTab(CreativeTabTorchMaster.INSTANCE);
         this.setUnlocalizedName(TorchMasterMod.MODID + ".frozen_pearl");
     }
@@ -48,7 +49,8 @@ public class ItemFrozenPearl extends Item
                     if(block == ModBlocks.getInvisibleLight())
                     {
                         worldIn.setBlockToAir(checkPos);
-                        itemStack.damageItem(1, player);
+                        if(this.isDamageable())
+                            itemStack.damageItem(1, player);
                         if(itemStack.isEmpty())
                             return new ActionResult<>(EnumActionResult.SUCCESS, ItemStack.EMPTY);
                     }

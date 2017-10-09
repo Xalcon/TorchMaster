@@ -11,7 +11,7 @@ public class EventHandlerServer
 	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
 		if(event.getResult() == Event.Result.ALLOW) return;
-		if(TorchMasterMod.ConfigHandler.isVanillaSpawnerEnabled() && event.isSpawner()) return;
+		if(TorchmasterConfig.MegaTorchAllowVanillaSpawners && event.isSpawner()) return;
 
 		if(TorchMasterMod.MegaTorchFilterRegistry.containsEntity(event.getEntity()))
 		{

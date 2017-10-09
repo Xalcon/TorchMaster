@@ -24,6 +24,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.common.TorchmasterConfig;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nonnull;
@@ -46,7 +47,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 
 	public TileEntityTerrainLighter()
 	{
-		this.spiralMap = BlockUtils.createSpiralMap(TorchMasterMod.ConfigHandler.getTerrainLighterTorchCount());
+		this.spiralMap = BlockUtils.createSpiralMap(TorchmasterConfig.TerrainLighterTorchCount);
 		this.inventory = new ItemStackHandler(10);
 	}
 
@@ -196,7 +197,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 
 	private BlockPos getPosFromIndex(int index)
 	{
-		int spacing = TorchMasterMod.ConfigHandler.getTerrainLighterSpacing();
+		int spacing = TorchmasterConfig.TerrainLighterSpacing;
 		int x = this.spiralMap[index * 2] * spacing + this.getPos().getX();
 		int z = this.spiralMap[index * 2 + 1] * spacing + this.getPos().getZ();
 		return new BlockPos(x, 0, z);
@@ -215,7 +216,10 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 
 	public static boolean isItemAllowed(ItemStack stack)
 	{
-		return TorchMasterMod.ConfigHandler.getTerrainLighterTorches().contains(stack.getItem().getRegistryName().toString());
+		for(String e : TorchmasterConfig.TerrainLighterTorches)
+			if(e.equals(stack.getItem().getRegistryName().toString()))
+				return true;
+		return false;
 	}
 
 	public boolean isBurningFuel()
@@ -230,7 +234,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 
 	public int getTorchPlacedMax()
 	{
-		int torchCount = TorchMasterMod.ConfigHandler.getTerrainLighterTorchCount() * 2 + 1;
+		int torchCount = TorchmasterConfig.TerrainLighterTorchCount * 2 + 1;
 		return torchCount * torchCount;
 	}
 
