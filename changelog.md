@@ -1,3 +1,6 @@
+### v1.6.1
+* Fix Mega Torch and Dread Lamp not working (oops...)
+
 ### v1.6.0
 * Add Feral Flare Lantern (Illuminates a big area with a configurable minimum light level, default 16 radius)
 * Add Frozen Pearl (Removes nearby invisible feral flare light sources)

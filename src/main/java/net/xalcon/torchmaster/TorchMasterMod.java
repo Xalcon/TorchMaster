@@ -67,6 +67,9 @@ public class TorchMasterMod
     {
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.MegaTorch(MegaTorchFilterRegistry));
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.DreadLamp(DreadLampFilterRegistry));
+
+        TorchRegistry.getMegaTorchRegistry().setTorchRange(TorchmasterConfig.MegaTorchRange);
+        TorchRegistry.getDreadLampRegistry().setTorchRange(TorchmasterConfig.DreadLampRange);
     }
 
     @EventHandler
