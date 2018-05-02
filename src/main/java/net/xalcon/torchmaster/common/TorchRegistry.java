@@ -153,6 +153,8 @@ public class TorchRegistry
 			return;
 		}
 
+		this.torches.clear();
+
 		NBTTagList list = nbt.getTagList("list", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.tagCount(); i++)
 		{
@@ -161,7 +163,7 @@ public class TorchRegistry
 			World world = DimensionManager.getWorld(loc.DimensionId);
 			this.registerTorch(world, loc.Position);
 		}
-		TorchMasterMod.Log.debug("Loaded entries for " + this.name);
+		TorchMasterMod.Log.debug("Loaded " + this.torches.size() + " entries for " + this.name);
 	}
 
 	@SubscribeEvent
