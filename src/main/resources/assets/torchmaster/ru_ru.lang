@@ -1,0 +1,24 @@
+tile.torchmaster.mega_torch.lit.name=Мега Факел
+tile.torchmaster.mega_torch.unlit.name=Негорящий Мега Факел
+tile.torchmaster.terrain_lighter.name=Осветитель местности
+tile.torchmaster.dread_lamp.name=Ужасная лампа
+tile.torchmaster.feral_flare_lantern.name=Полевой яркий фонарь
+
+item.torchmaster.frozen_pearl.name=Ледяная жемчужина
+
+tile.torchmaster.mega_torch.tooltip=Предотвращает естественный спаун враждебных монстров в приличном радиусе вокруг факела.
+tile.torchmaster.terrain_lighter.tooltip=Автоматически размещает факелы. Требует факелы, топливо и сигнал редстоуна.
+tile.torchmaster.dread_lamp.tooltip=Предотвращает естественный спаун пассивных животных, таких как спруты, летучие мыши или оцелоты в большом радиусе вокруг лампы.
+tile.torchmaster.feral_flare_lantern.tooltip=Медленно освещает большую площадь. Удаление фонаря приводит к тому, что огни медленно распадаются.
+
+item.torchmaster.frozen_pearl.tooltip=Очищает оставшиеся огни от полевого яркого фонаря.
+
+tile.torchmaster.mega_torch.light_failed_itemcount=§CУ вас недостаточно предметов, чтобы зажечь факел§r
+tile.torchmaster.mega_torch.light_failed_itemtoodamaged=§CВаш предмет был слишком поврежден, чтобы зажечь факел§r
+tile.torchmaster.mega_torch.torch_is_lit=§2Факел горит§r
+
+tile.torchmaster.mega_torch.lit.burntime_left=Времени осталось: %s.%s:%s:%s
+
+container.torchmaster.terrain_lighter=Осветитель местности
+gui.torchmaster.block.state.no_signal=Нет редстоун сигнала
+itemGroup.torchmaster=TorchMaster
