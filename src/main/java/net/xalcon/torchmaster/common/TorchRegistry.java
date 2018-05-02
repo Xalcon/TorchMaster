@@ -204,6 +204,7 @@ public class TorchRegistry
 			if(!this.blockValidator.test(world.getBlockState(loc.Position)))
 			{
 				TorchMasterMod.Log.info("Torch @ " + loc + " is no longer valid, removing from registry");
+				unregisterTorch(world, loc.Position);
 			}
 		}
 	}
