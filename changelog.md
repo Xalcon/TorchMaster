@@ -1,3 +1,11 @@
+### v1.6.2
+* Updated to latest stable MCForge Version (14.23.3.2655)
+* FIX: Feral Flare Lantern now uses the configuration option for its tick rate
+* FIX: Torches should no longer work across multiple world saves
+* FIX: Added small workaround to prevent a crash during world startup on certain modpacks
+* FIX: Improved Terrain lighter compatibility with replaceable blocks
+* CHANGE: Removed some Logging Spam (and added more :D well, just for some errors)
+
 ### v1.6.1
 * Fix Mega Torch and Dread Lamp not working (oops...)
 
