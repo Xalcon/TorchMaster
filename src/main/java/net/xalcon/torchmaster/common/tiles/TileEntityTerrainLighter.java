@@ -151,15 +151,17 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 			int height = world.getHeight(new BlockPos(gridPos.getX(), world.getActualHeight(), gridPos.getZ())).getY();
 			int maxY = this.pos.getY() + 8;
 			int minY = this.pos.getY() - 8;
+			if(minY < 0) minY = 0;
 			if (height > minY)
 			{
 				if (height > maxY) height = maxY;
 				for (int y = height + 1; y > minY; y--)
 				{
 					BlockPos checkPos = new BlockPos(gridPos.getX(), y, gridPos.getZ());
+					BlockPos checkUpPos = checkPos.up();
 					IBlockState blockState = world.getBlockState(checkPos);
-					IBlockState upState = world.getBlockState(checkPos.up());
-					if (blockState.getBlock().canPlaceTorchOnTop(blockState, world, checkPos) && upState.getMaterial().isReplaceable() && !upState.getMaterial().isLiquid())
+					IBlockState upState = world.getBlockState(checkUpPos);
+					if (blockState.getBlock().canPlaceTorchOnTop(blockState, world, checkPos) && upState.getBlock().isReplaceable(world, checkUpPos) && !upState.getMaterial().isLiquid())
 					{
 						ItemStack stack = this.inventory.extractItem(torchSlot, 1, false);
 						if(!stack.isEmpty())
