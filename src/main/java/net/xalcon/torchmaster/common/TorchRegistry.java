@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -108,6 +109,12 @@ public class TorchRegistry
 
 	public void registerTorch(World world, BlockPos pos)
 	{
+		if(world.provider == null)
+		{
+			TorchMasterMod.Log.error("Unable to register torch for position " + pos + ", the world doesn't have a world provider attached!!");
+			return;
+		}
+
 		TorchLocation torchLoc = new TorchLocation(world.provider.getDimension(), pos);
 		if(!torches.contains(torchLoc))
 			torches.add(torchLoc);
@@ -136,7 +143,19 @@ public class TorchRegistry
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event)
 	{
+		if(event.getWorld() == null)
+		{
+			// the world is null, for some reason. This seem to happen in only a few rare cases
+			TorchMasterMod.Log.warn("Torchmaster retrieved the WorldEvent.Load but the world object is null! Queueing reload");
+			FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(this::reloadRegistry);
+		}
+
 		if(event.getWorld().provider.getDimension() != 0) return;
+		reloadRegistry();
+	}
+
+	private void reloadRegistry()
+	{
 		File file = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/torchmaster_"+this.name+"_reg.dat");
 		if(!file.exists())
 			return;
@@ -153,15 +172,22 @@ public class TorchRegistry
 			return;
 		}
 
+		this.torches.clear();
+
 		NBTTagList list = nbt.getTagList("list", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.tagCount(); i++)
 		{
 			NBTTagCompound entry = list.getCompoundTagAt(i);
 			TorchLocation loc = new TorchLocation(entry);
 			World world = DimensionManager.getWorld(loc.DimensionId);
+			if(world == null)
+			{
+				TorchMasterMod.Log.warn("Unable to restore torch @ " + loc + ", the world " + loc.DimensionId + " was not found");
+				continue;
+			}
 			this.registerTorch(world, loc.Position);
 		}
-		TorchMasterMod.Log.debug("Loaded entries for " + this.name);
+		TorchMasterMod.Log.debug("Loaded " + this.torches.size() + " entries for " + this.name);
 	}
 
 	@SubscribeEvent
@@ -179,7 +205,6 @@ public class TorchRegistry
 		try
 		{
 			CompressedStreamTools.write(nbt, file);
-			TorchMasterMod.Log.debug("Saved " + this.torches.size() + " entries for " + this.name + " to disk");
 		}
 		catch (IOException e)
 		{
