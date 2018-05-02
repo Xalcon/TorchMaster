@@ -108,6 +108,12 @@ public class TorchRegistry
 
 	public void registerTorch(World world, BlockPos pos)
 	{
+		// if the world provider is null we should just stop
+		if(world == null || world.provider == null){
+			TorchMasterMod.Log.warn("The world object is null");
+			return;
+		}
+
 		TorchLocation torchLoc = new TorchLocation(world.provider.getDimension(), pos);
 		if(!torches.contains(torchLoc))
 			torches.add(torchLoc);
