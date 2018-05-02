@@ -179,7 +179,6 @@ public class TorchRegistry
 		try
 		{
 			CompressedStreamTools.write(nbt, file);
-			TorchMasterMod.Log.debug("Saved " + this.torches.size() + " entries for " + this.name + " to disk");
 		}
 		catch (IOException e)
 		{
