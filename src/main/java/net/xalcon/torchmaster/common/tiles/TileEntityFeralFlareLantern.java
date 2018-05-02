@@ -47,7 +47,7 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
     @Override
     public void update()
     {
-        if(this.world.isRemote || ++this.ticks % 5 != 0) return;
+        if(this.world.isRemote || ++this.ticks % TorchmasterConfig.feralFlareTickRate != 0) return;
         if(ticks > 1_000_000) ticks = 0;
 
         int radius = TorchmasterConfig.feralFlareRadius;
