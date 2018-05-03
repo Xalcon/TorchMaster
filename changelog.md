@@ -1,3 +1,6 @@
+### v1.6.3
+* FIX: Moved russian language files to correct location
+
 ### v1.6.2
 * Updated to latest stable MCForge Version (14.23.3.2655)
 * FIX: Feral Flare Lantern now uses the configuration option for its tick rate
