@@ -1,3 +1,8 @@
+### v1.6.4
+* FIX: reworked torch storage system to use capabilities instead of a global file.
+  This fixes an issue with torches not working in most modded dimensions after a restart.
+  You might need to replace your torches and lamps for the changes to take effect.
+
 ### v1.6.3
 * FIX: Moved russian language files to correct location
 
