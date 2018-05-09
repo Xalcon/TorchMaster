@@ -29,9 +29,10 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.TorchRegistry;
+import net.xalcon.torchmaster.common.ModCaps;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
+import net.xalcon.torchmaster.common.logic.ITorchRegistryContainer;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityMegaTorch;
 
@@ -126,14 +127,20 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	{
 		super.onBlockAdded(worldIn, pos, state);
-		TorchRegistry.getMegaTorchRegistry().registerTorch(worldIn, pos);
+
+		ITorchRegistryContainer container = worldIn.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
+		if(container != null)
+			container.getMegaTorchRegistry().register(pos);
 	}
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 		super.breakBlock(worldIn, pos, state);
-		TorchRegistry.getMegaTorchRegistry().unregisterTorch(worldIn, pos);
+
+		ITorchRegistryContainer container = worldIn.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
+		if(container != null)
+			container.getMegaTorchRegistry().unregister(pos);
 	}
 
 	@Override

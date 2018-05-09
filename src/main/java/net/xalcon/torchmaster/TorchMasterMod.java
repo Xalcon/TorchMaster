@@ -51,8 +51,8 @@ public class TorchMasterMod
     public void preInit(FMLPreInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
-        MinecraftForge.EVENT_BUS.register(TorchRegistry.getMegaTorchRegistry());
-        MinecraftForge.EVENT_BUS.register(TorchRegistry.getDreadLampRegistry());
+
+        ModCaps.registerModCaps();
     }
 
     @EventHandler
@@ -67,9 +67,6 @@ public class TorchMasterMod
     {
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.MegaTorch(MegaTorchFilterRegistry));
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.DreadLamp(DreadLampFilterRegistry));
-
-        TorchRegistry.getMegaTorchRegistry().setTorchRange(TorchmasterConfig.MegaTorchRange);
-        TorchRegistry.getDreadLampRegistry().setTorchRange(TorchmasterConfig.DreadLampRange);
     }
 
     @EventHandler

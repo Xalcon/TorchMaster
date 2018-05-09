@@ -92,8 +92,6 @@ public class TorchmasterConfig
         if (event.getModID().equals(TorchMasterMod.MODID))
         {
             ConfigManager.sync(TorchMasterMod.MODID, Config.Type.INSTANCE);
-            TorchRegistry.getMegaTorchRegistry().setTorchRange(MegaTorchRange);
-            TorchRegistry.getDreadLampRegistry().setTorchRange(DreadLampRange);
         }
     }
 }

@@ -9,7 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.xalcon.torchmaster.common.TorchRegistry;
+import net.xalcon.torchmaster.common.ModCaps;
+import net.xalcon.torchmaster.common.logic.ITorchRegistryContainer;
 
 import java.util.Random;
 
@@ -56,14 +57,19 @@ public class BlockDreadLamp extends BlockBase
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	{
 		super.onBlockAdded(worldIn, pos, state);
-		TorchRegistry.getDreadLampRegistry().registerTorch(worldIn, pos);
+
+		ITorchRegistryContainer container = worldIn.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
+		if(container != null)
+			container.getDreadLampRegistry().register(pos);
 	}
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 		super.breakBlock(worldIn, pos, state);
-		TorchRegistry.getDreadLampRegistry().unregisterTorch(worldIn, pos);
+		ITorchRegistryContainer container = worldIn.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
+		if(container != null)
+			container.getDreadLampRegistry().unregister(pos);
 	}
 
 	@SideOnly(Side.CLIENT)

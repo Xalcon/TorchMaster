@@ -9,19 +9,9 @@ public class EntityFilterRegistry
 {
 	private Set<Class<?>> registry = new HashSet<>();
 
-	public boolean containsEntity(Entity entity)
-	{
-		return containsEntity(entity.getClass());
-	}
-
 	public boolean containsEntity(Class<?> entityClass)
 	{
 		return this.registry.contains(entityClass);
-	}
-
-	public void registerEntity(Entity entity)
-	{
-		this.registerEntity(entity.getClass());
 	}
 
 	public void registerEntity(Class<?> entityClass)
