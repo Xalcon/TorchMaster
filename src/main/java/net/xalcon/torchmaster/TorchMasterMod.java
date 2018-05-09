@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.xalcon.torchmaster.common.*;
 import net.xalcon.torchmaster.compat.EntityFilterRegisterEvent;
+import net.xalcon.torchmaster.compat.RegistryBackwardsCompat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,6 +52,7 @@ public class TorchMasterMod
     public void preInit(FMLPreInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
+        MinecraftForge.EVENT_BUS.register(new RegistryBackwardsCompat());
 
         ModCaps.registerModCaps();
     }

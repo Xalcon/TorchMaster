@@ -86,7 +86,6 @@ public class TorchmasterConfig
     @Config.RequiresMcRestart
     public static int frozenPearlDurability = 1024;
 
-    @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
         if (event.getModID().equals(TorchMasterMod.MODID))
