@@ -32,6 +32,6 @@ public class ItemBlockTooltipInfo extends ItemBlock
     {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if(TorchmasterConfig.BeginnerTooltips)
-            tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
+            tooltip.add(I18n.format(this.getTranslationKey(stack) + ".tooltip"));
     }
 }

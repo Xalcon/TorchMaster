@@ -16,7 +16,7 @@ public class BlockBase extends Block
 	public BlockBase(Material material, String internalName)
 	{
 		super(material);
-		setUnlocalizedName(TorchMasterMod.MODID + "." + internalName);
+		setTranslationKey(TorchMasterMod.MODID + "." + internalName);
 		setRegistryName(internalName);
 		setCreativeTab(CreativeTabTorchMaster.INSTANCE);
 	}

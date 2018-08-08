@@ -17,7 +17,7 @@ public class MoCreaturesCompat
 		if(!TorchmasterConfig.MoCreaturesBlockAll) return;
 
 		EntityList.getEntityNameList().stream()
-				.filter(n -> "mocreatures".equals(n.getResourceDomain()))
+				.filter(n -> "mocreatures".equals(n.getNamespace()))
 				.map(EntityList::getClass)
 				.filter(Objects::nonNull)
 				.forEach(c -> event.getRegistry().registerEntity(c));

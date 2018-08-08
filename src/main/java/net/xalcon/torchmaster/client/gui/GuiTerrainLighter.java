@@ -61,7 +61,7 @@ public class GuiTerrainLighter extends GuiContainer
 				List<String> list = new ArrayList<>();
 
 				list.add(value + " / " + max);
-				if(tile.getWorld().isBlockIndirectlyGettingPowered(tile.getPos()) == 0)
+				if(!tile.getWorld().isBlockPowered(tile.getPos()))
 					list.add(new TextComponentTranslation(NO_RS_SIGNAL_KEY).getFormattedText());
 				this.drawHoveringText(list, mouseX - i, mouseY - j, this.fontRenderer);
 			}

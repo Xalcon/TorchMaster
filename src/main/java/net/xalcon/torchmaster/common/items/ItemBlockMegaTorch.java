@@ -30,9 +30,10 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 		return damage;
 	}
 
-	public String getUnlocalizedName(ItemStack stack)
+	@Override
+	public String getTranslationKey(ItemStack stack)
 	{
-		return super.getUnlocalizedName() + "." + (ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
+		return this.getTranslationKey(stack) + "." + (ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 			int minutes = (ticksLeft - days * DAY_TICKS - hours * HOUR_TICKS) / MINUTE_TICKS;
 			int seconds = (ticksLeft - days * DAY_TICKS - hours * HOUR_TICKS - minutes * MINUTE_TICKS) / SECOND_TICKS;
 
-			tooltip.add(I18n.format(this.getUnlocalizedName(stack) + ".burntime_left", days, fmt(hours), fmt(minutes), fmt(seconds)));
+			tooltip.add(I18n.format(this.getTranslationKey(stack) + ".burntime_left", days, fmt(hours), fmt(minutes), fmt(seconds)));
 		}
 	}
 

@@ -165,7 +165,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	{
 		if(state.getValue(BURNING))
 		{
-			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".already_lit"), true);
+			playerIn.sendStatusMessage(new TextComponentTranslation(this.getTranslationKey() + ".already_lit"), true);
 			return true;
 		}
 		if(worldIn.isRemote) return true;
@@ -194,7 +194,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 		{
 			if(amount > itemStack.getCount())
 			{
-				playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemcount"), true);
+				playerIn.sendStatusMessage(new TextComponentTranslation(this.getTranslationKey() + ".light_failed_itemcount"), true);
 				return false;
 			}
 			itemStack.shrink(amount);
@@ -202,7 +202,7 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 
 		if(worldIn.rand.nextFloat() > chance)
 		{
-			playerIn.sendStatusMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".light_failed_itemtoodamaged"), false);
+			playerIn.sendStatusMessage(new TextComponentTranslation(this.getTranslationKey() + ".light_failed_itemtoodamaged"), false);
 			return false;
 		}
 

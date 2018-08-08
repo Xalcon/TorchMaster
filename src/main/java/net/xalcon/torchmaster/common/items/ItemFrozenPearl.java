@@ -27,7 +27,7 @@ public class ItemFrozenPearl extends Item
     {
         this.setMaxDamage(TorchmasterConfig.frozenPearlDurability);
         this.setCreativeTab(CreativeTabTorchMaster.INSTANCE);
-        this.setUnlocalizedName(TorchMasterMod.MODID + ".frozen_pearl");
+        this.setTranslationKey(TorchMasterMod.MODID + ".frozen_pearl");
     }
 
     @Override
@@ -63,6 +63,6 @@ public class ItemFrozenPearl extends Item
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
+        tooltip.add(I18n.format(this.getTranslationKey(stack) + ".tooltip"));
     }
 }
