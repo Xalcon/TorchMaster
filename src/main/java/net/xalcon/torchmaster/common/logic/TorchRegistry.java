@@ -40,8 +40,7 @@ abstract class TorchRegistry implements ITorchRegistry
                 && isPositionInTorchRange(entity.posX, entity.posY, entity.posZ);
     }
 
-    @Override
-    public boolean isPositionInTorchRange(double posX, double posY, double posZ)
+    private boolean isPositionInTorchRange(double posX, double posY, double posZ)
     {
         int torchRange = getTorchRange();
         int torchRangeSq = torchRange * torchRange;

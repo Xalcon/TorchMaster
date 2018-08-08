@@ -12,6 +12,5 @@ public interface ITorchRegistry extends INBTSerializable<NBTTagList>
     void register(BlockPos pos);
     void unregister(BlockPos pos);
     boolean shouldEntityBeBlocked(Entity entity);
-    boolean isPositionInTorchRange(double posX, double posY, double posZ);
     void onGlobalTick(World world);
 }
