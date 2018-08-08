@@ -33,7 +33,7 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 	@Override
 	public String getTranslationKey(ItemStack stack)
 	{
-		return this.getTranslationKey(stack) + "." + (ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
+		return super.getTranslationKey(stack) + "." + (ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
 	}
 
 	@Override

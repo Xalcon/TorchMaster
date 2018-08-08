@@ -7,6 +7,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.client.ClientTorchRegistries;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 
@@ -66,6 +67,26 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 		NBTTagCompound compound = super.getUpdateTag();
 		this.writeSyncNbt(compound);
 		return compound;
+	}
+
+	@Override
+	public void onLoad()
+	{
+		super.onLoad();
+
+		// client side torch caching
+		if(world.isRemote)
+			ClientTorchRegistries.getRegistryForDimension(world.provider.getDimension()).addTorch(pos);
+	}
+
+	@Override
+	public void onChunkUnload()
+	{
+		super.onChunkUnload();
+
+		// client side torch caching
+		if(world.isRemote)
+			ClientTorchRegistries.getRegistryForDimension(world.provider.getDimension()).removeTorch(pos);
 	}
 
 	@Override

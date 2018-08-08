@@ -47,14 +47,16 @@ public class EventHandlerServer
     public void onGlobalTick(TickEvent.ServerTickEvent event)
     {
         if(event.side == Side.CLIENT) return;
-
-        for(int dimId : DimensionManager.getIDs())
+        if(event.phase == TickEvent.Phase.END)
         {
-            World world = DimensionManager.getWorld(dimId);
-            if(world == null) return;
-            ITorchRegistryContainer container = world.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
-            if(container != null)
-                container.onGlobalTick(world);
+            for(int dimId : DimensionManager.getIDs())
+            {
+                World world = DimensionManager.getWorld(dimId);
+                if(world == null) return;
+                ITorchRegistryContainer container = world.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
+                if(container != null)
+                    container.onGlobalTick(world);
+            }
         }
     }
 }

@@ -83,6 +83,7 @@ public class RegistryBackwardsCompat
             // the world is null, for some reason. This seem to happen in only a few rare cases
             TorchMasterMod.Log.warn("Torchmaster retrieved the WorldEvent.Load but the world object is null! Queueing reload");
             FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(this::reloadRegistry);
+            return;
         }
 
         if(event.getWorld().provider.getDimension() != 0) return;

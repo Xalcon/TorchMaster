@@ -36,20 +36,20 @@ abstract class TorchRegistry implements ITorchRegistry
     @Override
     public final boolean shouldEntityBeBlocked(Entity entity)
     {
-        return shouldHandleEntityType(entity.getClass()) && isEntityInRange(entity);
+        return shouldHandleEntityType(entity.getClass())
+                && isPositionInTorchRange(entity.posX, entity.posY, entity.posZ);
     }
 
-    private boolean isEntityInRange(Entity entity)
+    private boolean isPositionInTorchRange(double posX, double posY, double posZ)
     {
         int torchRange = getTorchRange();
         int torchRangeSq = torchRange * torchRange;
 
-        BlockPos pos = entity.getPosition();
         for(BlockPos torch : torches)
         {
-            double dx = torch.getX() + 0.5 - pos.getX();
-            double dy = Math.abs(torch.getY() + 0.5 - pos.getY());
-            double dz = torch.getZ() + 0.5 - pos.getZ();
+            double dx = torch.getX() + 0.5 - posX;
+            double dy = Math.abs(torch.getY() + 0.5 - posY);
+            double dz = torch.getZ() + 0.5 - posZ;
             if((dx * dx + dz * dz) <= (torchRangeSq) && dy <= torchRange)
                 return true;
         }

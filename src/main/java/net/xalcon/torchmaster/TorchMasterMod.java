@@ -43,12 +43,6 @@ public class TorchMasterMod
     public static CommonProxy Proxy;
 
     @EventHandler
-    public void onDisable(FMLModDisabledEvent event)
-    {
-        System.out.println(event.description());
-    }
-
-    @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
@@ -69,16 +63,5 @@ public class TorchMasterMod
     {
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.MegaTorch(MegaTorchFilterRegistry));
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.DreadLamp(DreadLampFilterRegistry));
-    }
-
-    @EventHandler
-    public void onCertError(FMLFingerprintViolationEvent event)
-    {
-        Log.info("Expected " + event.getExpectedFingerprint() + ", found:");
-        for(String fp : event.getFingerprints())
-        {
-            Log.info(fp);
-        }
-        Log.info("Source: " + event.getSource());
     }
 }
