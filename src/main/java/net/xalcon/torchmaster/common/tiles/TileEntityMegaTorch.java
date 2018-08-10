@@ -8,6 +8,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.client.ClientTorchRegistries;
+import net.xalcon.torchmaster.client.renderer.TorchVolumeRenderHandler;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 
@@ -86,7 +87,9 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 
 		// client side torch caching
 		if(world.isRemote)
+		{
 			ClientTorchRegistries.getRegistryForDimension(world.provider.getDimension()).removeTorch(pos);
+		}
 	}
 
 	@Override
