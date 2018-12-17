@@ -11,6 +11,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.client.gui.elements.GuiItemIconButton;
+import net.xalcon.torchmaster.common.network.PacketSetFeralLanternLoS;
+import net.xalcon.torchmaster.common.network.TorchmasterNetwork;
 import net.xalcon.torchmaster.common.tiles.TileEntityFeralFlareLantern;
 
 import java.io.IOException;
@@ -60,9 +62,16 @@ public class GuiFeralLantern extends GuiScreen
     }
 
     @Override
+    public boolean doesGuiPauseGame()
+    {
+        return false;
+    }
+
+    @Override
     protected void actionPerformed(GuiButton button) throws IOException
     {
-        tile.setUseLineOfSight(!tile.shouldUseLineOfSight());
+        //tile.setUseLineOfSight(!tile.shouldUseLineOfSight());
+        TorchmasterNetwork.getNetwork().sendToServer(new PacketSetFeralLanternLoS(!tile.shouldUseLineOfSight(), tile));
     }
 
     private void drawGuiBackground()

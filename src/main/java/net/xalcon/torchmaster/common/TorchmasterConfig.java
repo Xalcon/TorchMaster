@@ -80,12 +80,16 @@ public class TorchmasterConfig
     @Config.Comment("The target minimum light level to place lights for")
     public static int feralFlareMinLightLevel = 10;
 
+    @Config.Comment("If false, lights decay slowly after the lantern has been removed. If true, the lights will be removed instantly")
+    public static boolean feralFlareLightDecayInstantly = false;
+
 
     @Config.RangeInt(min = 0)
     @Config.Comment("Durability of the frozen pearl. Each removed light will remove one charge from the pearl. Set to 0 to disable durability")
     @Config.RequiresMcRestart
     public static int frozenPearlDurability = 1024;
 
+    @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
         if (event.getModID().equals(TorchMasterMod.MODID))
