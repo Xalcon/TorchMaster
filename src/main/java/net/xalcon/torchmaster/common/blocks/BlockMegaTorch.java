@@ -170,11 +170,14 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 			TorchVolumeRenderHandler.DyeColor color = TorchVolumeRenderHandler.DyeColor.FromItemStack(playerIn.getHeldItem(hand));
 			if(color != null)
 				TorchVolumeRenderHandler.toggle(pos, color);
+			else if(playerIn.getHeldItem(hand).isEmpty())
+				TorchVolumeRenderHandler.remove(pos);
 		}
 
 		if(state.getValue(BURNING))
 		{
-			playerIn.sendStatusMessage(new TextComponentTranslation(this.getTranslationKey() + ".already_lit"), true);
+			if(TorchmasterConfig.MegaTorchBurnoutRate > 0)
+				playerIn.sendStatusMessage(new TextComponentTranslation(this.getTranslationKey() + ".already_lit"), true);
 			return true;
 		}
 		if(worldIn.isRemote) return true;

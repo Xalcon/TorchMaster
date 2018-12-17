@@ -6,12 +6,20 @@ import net.minecraft.world.World;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
+import net.xalcon.torchmaster.common.logic.ITorchDistanceLogic;
 
 import java.util.ArrayList;
 
 public class ClientTorchRegistry
 {
     private ArrayList<BlockPos> torches = new ArrayList<>();
+
+    private ITorchDistanceLogic distanceLogic;
+
+    public ClientTorchRegistry(ITorchDistanceLogic distanceLogic)
+    {
+        this.distanceLogic = distanceLogic;
+    }
 
     public void addTorch(BlockPos pos)
     {
@@ -49,14 +57,10 @@ public class ClientTorchRegistry
     public boolean isPositionInRange(double posX, double posY, double posZ)
     {
         int torchRange = TorchmasterConfig.MegaTorchRange;
-        int torchRangeSq = torchRange * torchRange;
 
         for(BlockPos torch : torches)
         {
-            double dx = torch.getX() + 0.5 - posX;
-            double dy = Math.abs(torch.getY() + 0.5 - posY);
-            double dz = torch.getZ() + 0.5 - posZ;
-            if((dx * dx + dz * dz) <= (torchRangeSq) && dy <= torchRange)
+            if(distanceLogic.isPositionInRange(posX, posY, posZ, torch, torchRange))
                 return true;
         }
         return false;
