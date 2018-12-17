@@ -13,10 +13,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModCaps;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
+import net.xalcon.torchmaster.common.logic.ITorchRegistry;
 import net.xalcon.torchmaster.common.logic.ITorchRegistryContainer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Function;
 
 // TODO: REMOVE THIS IN A LATER RELEASE!
 public class RegistryBackwardsCompat
@@ -92,52 +94,17 @@ public class RegistryBackwardsCompat
 
     private void reloadRegistry()
     {
-        loadMegaTorchRegistry();
-        loadDreadLampRegistry();
+        loadRegistry("data/torchmaster_mega_torch_reg.dat", ITorchRegistryContainer::getMegaTorchRegistry);
+        loadRegistry("data/torchmaster_dread_lamp_reg.dat", ITorchRegistryContainer::getDreadLampRegistry);
     }
 
-    private void loadMegaTorchRegistry()
+    private void loadRegistry(String registryFilePath, Function<ITorchRegistryContainer, ITorchRegistry> registryGetter)
     {
-        File file = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/torchmaster_mega_torch_reg.dat");
+        File file = new File(DimensionManager.getCurrentSaveRootDirectory(), registryFilePath);
         if(!file.exists())
             return;
-        NBTTagCompound nbt;
 
-        try
-        {
-            nbt = CompressedStreamTools.read(file);
-            if(nbt == null) return;
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            return;
-        }
-
-        NBTTagList list = nbt.getTagList("list", Constants.NBT.TAG_COMPOUND);
-        for(int i = 0; i < list.tagCount(); i++)
-        {
-            NBTTagCompound entry = list.getCompoundTagAt(i);
-            TorchLocation loc = new TorchLocation(entry);
-            World world = DimensionManager.getWorld(loc.DimensionId);
-            if(world == null)
-            {
-                TorchMasterMod.Log.warn("Unable to restore torch @ " + loc + ", the world " + loc.DimensionId + " was not found");
-                continue;
-            }
-
-            ITorchRegistryContainer container = world.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
-            if(container != null)
-                container.getMegaTorchRegistry().register(loc.Position);
-        }
-        file.delete();
-    }
-
-    private void loadDreadLampRegistry()
-    {
-        File file = new File(DimensionManager.getCurrentSaveRootDirectory(), "data/torchmaster_dread_lamp_reg.dat");
-        if(!file.exists())
-            return;
+        TorchMasterMod.Log.info("Found old torch registry file at {}, importing data...", registryFilePath);
 
         NBTTagCompound nbt;
 
@@ -153,6 +120,7 @@ public class RegistryBackwardsCompat
         }
 
         NBTTagList list = nbt.getTagList("list", Constants.NBT.TAG_COMPOUND);
+        int imported = 0;
         for(int i = 0; i < list.tagCount(); i++)
         {
             NBTTagCompound entry = list.getCompoundTagAt(i);
@@ -160,14 +128,26 @@ public class RegistryBackwardsCompat
             World world = DimensionManager.getWorld(loc.DimensionId);
             if(world == null)
             {
-                TorchMasterMod.Log.warn("Unable to restore torch @ " + loc + ", the world " + loc.DimensionId + " was not found");
+                TorchMasterMod.Log.warn("Unable to restore torch @ {}, the world was not found", loc, loc.DimensionId);
                 continue;
             }
 
             ITorchRegistryContainer container = world.getCapability(ModCaps.TORCH_REGISTRY_CONTAINER, null);
-            if(container != null)
-                container.getDreadLampRegistry().register(loc.Position);
+            if(container == null) continue;
+            ITorchRegistry registry = registryGetter.apply(container);
+            if(registry == null) continue;
+            registry.register(loc.Position);
+
+            imported++;
         }
-        file.delete();
+        TorchMasterMod.Log.info("Imported {} out of {} entries", imported, list.tagCount());
+        if(!file.delete())
+        {
+            TorchMasterMod.Log.warn("Unable to delete {}, File.delete() returned false! This error is not critical but the file should be removed to avoid inconsistencies", registryFilePath);
+        }
+        else
+        {
+            TorchMasterMod.Log.info("Successfully removed {}", registryFilePath);
+        }
     }
 }

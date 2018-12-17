@@ -54,8 +54,7 @@ public class TorchMasterMod
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        this.guiHandler = new ModGuiHandler();
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, this.guiHandler);
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, this.guiHandler = new ModGuiHandler());
     }
 
     @EventHandler

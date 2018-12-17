@@ -23,12 +23,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.client.renderer.TorchVolumeRenderHandler;
 import net.xalcon.torchmaster.common.ModCaps;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 import net.xalcon.torchmaster.common.items.ItemBlockMegaTorch;
@@ -163,6 +165,13 @@ public class BlockMegaTorch extends BlockBase implements ITileEntityProvider, IA
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
+		if(worldIn.isRemote)
+		{
+			TorchVolumeRenderHandler.DyeColor color = TorchVolumeRenderHandler.DyeColor.FromItemStack(playerIn.getHeldItem(hand));
+			if(color != null)
+				TorchVolumeRenderHandler.toggle(pos, color);
+		}
+
 		if(state.getValue(BURNING))
 		{
 			playerIn.sendStatusMessage(new TextComponentTranslation(this.getTranslationKey() + ".already_lit"), true);
