@@ -11,7 +11,7 @@ import net.xalcon.torchmaster.common.TorchmasterConfig;
 
 public class TorchRegistryContainer implements ITorchRegistryContainer
 {
-    private ITorchRegistry megaTorchRegistry = new TorchRegistry()
+    private ITorchRegistry megaTorchRegistry = new TorchRegistry(TorchDistanceLogics.Cubic)
     {
         @Override
         protected boolean shouldHandleEntityType(Class<? extends Entity> entityClass)
@@ -32,7 +32,7 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
         }
     };
 
-    private ITorchRegistry dreadLampRegistry = new TorchRegistry()
+    private ITorchRegistry dreadLampRegistry = new TorchRegistry(TorchDistanceLogics.Cubic)
     {
         @Override
         protected boolean shouldHandleEntityType(Class<? extends Entity> entityClass)

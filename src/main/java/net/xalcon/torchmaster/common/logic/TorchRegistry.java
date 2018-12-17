@@ -20,6 +20,13 @@ abstract class TorchRegistry implements ITorchRegistry
     protected abstract int getTorchRange();
     protected abstract boolean isBlockStateValid(IBlockState state);
 
+    private ITorchDistanceLogic distanceLogic;
+
+    public TorchRegistry(ITorchDistanceLogic distanceLogic)
+    {
+        this.distanceLogic = distanceLogic;
+    }
+
     @Override
     public final void register(BlockPos pos)
     {
@@ -43,14 +50,10 @@ abstract class TorchRegistry implements ITorchRegistry
     private boolean isPositionInTorchRange(double posX, double posY, double posZ)
     {
         int torchRange = getTorchRange();
-        int torchRangeSq = torchRange * torchRange;
 
         for(BlockPos torch : torches)
         {
-            double dx = torch.getX() + 0.5 - posX;
-            double dy = Math.abs(torch.getY() + 0.5 - posY);
-            double dz = torch.getZ() + 0.5 - posZ;
-            if((dx * dx + dz * dz) <= (torchRangeSq) && dy <= torchRange)
+            if(distanceLogic.isPositionInRange(posX, posY, posZ, torch, torchRange))
                 return true;
         }
         return false;

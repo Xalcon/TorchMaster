@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.DyeUtils;
 import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.TorchmasterConfig;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -81,6 +82,8 @@ public class TorchVolumeRenderHandler
     @SubscribeEvent
     public static void onRender(RenderWorldLastEvent event)
     {
+        int torchCubeSize = TorchmasterConfig.MegaTorchRange * 2 + 1;
+
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         Minecraft mc = Minecraft.getMinecraft();
@@ -98,22 +101,28 @@ public class TorchVolumeRenderHandler
         GlStateManager.disableCull();
         BufferBuilder vbo = Tessellator.getInstance().getBuffer();
         vbo.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        int i = 0;
         for(HashMap.Entry<BlockPos, DyeColor> torch : visualizedTorches.entrySet())
         {
+            i++;
             BlockPos pos = torch.getKey();
             DyeColor color = torch.getValue();
-            CreateCylinder(vbo, pos.getX(), pos.getY(), pos.getZ(), color);
-            CreateCube(vbo, pos.getX(), pos.getY(), pos.getZ(), color);
+            // CreateCylinder(vbo, pos.getX(), pos.getY(), pos.getZ(), color);
+            CreateCube(vbo, pos.getX(), pos.getY(), pos.getZ(), 0, color, 0);
+            CreateCube(vbo, pos.getX(), pos.getY(), pos.getZ(), torchCubeSize, color, (i + 1) * 0.05f);
         }
         Tessellator.getInstance().draw();
         GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
 
         vbo.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        i = 0;
         for(HashMap.Entry<BlockPos, DyeColor> torch : visualizedTorches.entrySet())
         {
+            i++;
             BlockPos pos = torch.getKey();
             DyeColor color = torch.getValue();
-            CreateCylinder(vbo, pos.getX(), pos.getY(), pos.getZ(), color);
+            // CreateCylinder(vbo, pos.getX(), pos.getY(), pos.getZ(), color);
+            CreateCube(vbo, pos.getX(), pos.getY(), pos.getZ(), torchCubeSize, color, (i + 1) * 0.05f);
         }
         Tessellator.getInstance().draw();
 
@@ -122,51 +131,52 @@ public class TorchVolumeRenderHandler
         GlStateManager.popMatrix();
     }
 
-    private static void CreateCylinder(BufferBuilder vbo, float x, float y, float z, DyeColor c)
+    private static void CreateCylinder(BufferBuilder vbo, float x, float y, float z, double radius, DyeColor c)
     {
-        double radius = 32, halfLength = 32;
         int slices = 32;
         for(int i = 0; i < slices; i++)
         {
             double theta = ((double)i)*2.0*Math.PI / slices;
             double nextTheta = ((double)i+1)*2.0*Math.PI / slices;
-            /*vertex at middle of end */
-            // CENTER vbo.pos(0.0, halfLength, 0.0);
-            /*vertices at edges of circle*/
-            vbo.pos(x + .5 + radius*Math.cos(theta), y + 1 + halfLength, z + .5 + radius*Math.sin(theta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-            vbo.pos (x + .5 + radius*Math.cos(nextTheta), y + 1 + halfLength, z + .5 + radius*Math.sin(nextTheta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-            /* the same vertices at the bottom of the cylinder*/
-            vbo.pos (x + .5 + radius*Math.cos(nextTheta), y + 1 - halfLength, z + .5 + radius*Math.sin(nextTheta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-            vbo.pos(x + .5 + radius*Math.cos(theta), y + 1 - halfLength, z + .5 + radius*Math.sin(theta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-            // CENTER vbo.pos(0.0, -halfLength, 0.0);
+            vbo.pos(x + .5 + radius*Math.cos(theta), y + 1 + radius, z + .5 + radius*Math.sin(theta)).color(c.r, c.g, c.b, 0.4f).endVertex();
+            vbo.pos (x + .5 + radius*Math.cos(nextTheta), y + 1 + radius, z + .5 + radius*Math.sin(nextTheta)).color(c.r, c.g, c.b, 0.4f).endVertex();
+            vbo.pos (x + .5 + radius*Math.cos(nextTheta), y + 1 - radius, z + .5 + radius*Math.sin(nextTheta)).color(c.r, c.g, c.b, 0.4f).endVertex();
+            vbo.pos(x + .5 + radius*Math.cos(theta), y + 1 - radius, z + .5 + radius*Math.sin(theta)).color(c.r, c.g, c.b, 0.4f).endVertex();
         }
     }
 
-    private static void CreateCube(BufferBuilder vbo, float x, float y, float z, DyeColor c)
+    private static void CreateCube(BufferBuilder vbo, int x, int y, int z, int size, DyeColor c, float nudge)
     {
-        vbo.pos(x + 0, y + 1, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 1, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 1, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 1, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 0, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 0, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 0, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 0, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 0, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 0, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 1, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 1, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 0, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 1, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 1, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 0, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 0, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 1, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 1, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 1, y + 0, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 0, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 0, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 1, z + 1).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(x + 0, y + 1, z + 0).color(c.r, c.g, c.b, 0.6f).endVertex();
+        // render a cube centered at a block
+        float cx = x + .5f;
+        float cy = y + .5f;
+        float cz = z + .5f;
+
+        float offset = 0.5f + size - nudge;
+
+        vbo.pos(cx - offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx + offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        vbo.pos(cx - offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
     }
 }
