@@ -21,4 +21,9 @@ tile.torchmaster.mega_torch.lit.burntime_left=Time left: %s.%s:%s:%s
 
 container.torchmaster.terrain_lighter=Terrain Lighter
 gui.torchmaster.block.state.no_signal=No Redstone Signal
+gui.torchmaster.feral_flare_lantern.state.los_on.short=Line of Sight: §Aenabled§r
+gui.torchmaster.feral_flare_lantern.state.los_on.description=The lantern will only place lights $n at locations it can directly see
+gui.torchmaster.feral_flare_lantern.state.los_off.short=Line of Sight: §Cdisabled§r
+gui.torchmaster.feral_flare_lantern.state.los_off.description=The lantern will place lights everywhere
 itemGroup.torchmaster=TorchMaster
+

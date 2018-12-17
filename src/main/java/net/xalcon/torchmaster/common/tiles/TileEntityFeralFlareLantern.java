@@ -4,6 +4,8 @@ import net.minecraft.nbt.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.Constants;
 import net.xalcon.torchmaster.common.ModBlocks;
@@ -15,6 +17,7 @@ import java.util.List;
 public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
 {
     private int ticks;
+    private boolean useLineOfSight;
     private List<BlockPos> childLights = new ArrayList<>();
 
     @Override
@@ -26,6 +29,7 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
 
         nbt.setTag("lights", new NBTTagIntArray(childLightsEncoded));
         nbt.setInteger("ticks", this.ticks);
+        nbt.setBoolean("useLoS", this.useLineOfSight);
         return super.writeToNBT(nbt);
     }
 
@@ -41,6 +45,7 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
                 this.childLights.add(decodePosition(origin, encodedLight));
         }
         this.ticks = nbt.getInteger("ticks");
+        this.useLineOfSight = nbt.getBoolean("useLoS");
         super.readFromNBT(nbt);
     }
 
@@ -66,11 +71,18 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         if (targetPos.getY() > precipitationHeight.getY() + 4)
             targetPos = precipitationHeight.up(4);
 
-        if (this.world.isBlockLoaded(targetPos) &&
-                this.world.isAirBlock(targetPos) &&
-                this.world.getBlockState(targetPos).getBlock() != ModBlocks.getInvisibleLight() &&
-                this.world.getLightFor(EnumSkyBlock.BLOCK, targetPos) < TorchmasterConfig.feralFlareMinLightLevel)
+        if(this.world.isBlockLoaded(targetPos)) return;
+        if (this.world.isAirBlock(targetPos) && this.world.getLightFor(EnumSkyBlock.BLOCK, targetPos) < TorchmasterConfig.feralFlareMinLightLevel)
         {
+            if(this.useLineOfSight)
+            {
+                Vec3d start = new Vec3d(this.pos).add(0.5, 0.5, 0.5);
+                Vec3d end = new Vec3d(targetPos).add(0.5, 0.5, 0.5);
+                RayTraceResult rtResult = world.rayTraceBlocks(start, end, true, true, false);
+                if(rtResult == null || rtResult.typeOfHit != RayTraceResult.Type.MISS)
+                    return;
+            }
+
             this.world.setBlockState(targetPos, ModBlocks.getInvisibleLight().getDefaultState(), 3);
             this.childLights.add(targetPos);
             this.markDirty();
@@ -104,5 +116,15 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         int y = (byte)((pos >> 8) & 0xFF);
         int z = (byte)(pos & 0xFF);
         return origin.add(x, y, z);
+    }
+
+    public void setUseLineOfSight(boolean state)
+    {
+        this.useLineOfSight = state;
+    }
+
+    public boolean shouldUseLineOfSight()
+    {
+        return this.useLineOfSight;
     }
 }
