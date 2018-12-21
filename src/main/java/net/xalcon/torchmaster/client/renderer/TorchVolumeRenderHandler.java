@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -15,12 +16,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.DyeUtils;
+import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class TorchVolumeRenderHandler
@@ -70,20 +71,13 @@ public class TorchVolumeRenderHandler
 
     public static void onGlobalTick(World world)
     {
-        for(HashMap.Entry<BlockPos, DyeColor> torch : visualizedTorches.entrySet())
-        {
-            if(!world.isBlockLoaded(torch.getKey()) || world.getBlockState(torch.getKey()).getBlock() != ModBlocks.getMegaTorch())
-            {
-                remove(torch.getKey());
-            }
-        }
+        visualizedTorches.entrySet()
+                .removeIf(torch -> !world.isBlockLoaded(torch.getKey()) || world.getBlockState(torch.getKey()).getBlock() != ModBlocks.getMegaTorch());
     }
 
     @SubscribeEvent
     public static void onRender(RenderWorldLastEvent event)
     {
-        int torchCubeSize = TorchmasterConfig.MegaTorchRange * 2 + 1;
-
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         Minecraft mc = Minecraft.getMinecraft();
@@ -93,90 +87,66 @@ public class TorchVolumeRenderHandler
         double yD = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)event.getPartialTicks();
         double zD = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)event.getPartialTicks();
         GlStateManager.translate(-xD, -yD, -zD);
-        GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.disableLighting();
+
+        GlStateManager.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
         GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
         GlStateManager.disableCull();
         BufferBuilder vbo = Tessellator.getInstance().getBuffer();
-        vbo.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        int i = 0;
-        for(HashMap.Entry<BlockPos, DyeColor> torch : visualizedTorches.entrySet())
-        {
-            i++;
-            BlockPos pos = torch.getKey();
-            DyeColor color = torch.getValue();
-            // CreateCylinder(vbo, pos.getX(), pos.getY(), pos.getZ(), color);
-            CreateCube(vbo, pos.getX(), pos.getY(), pos.getZ(), 0, color, 0);
-            CreateCube(vbo, pos.getX(), pos.getY(), pos.getZ(), torchCubeSize, color, (i + 1) * 0.05f);
-        }
-        Tessellator.getInstance().draw();
-        GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
 
-        vbo.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        i = 0;
+        int segmentCount = (int) ((TorchmasterConfig.MegaTorchRange * 2 + 1) / TorchmasterConfig.TorchVisualizerSegmentationFactor);
+
         for(HashMap.Entry<BlockPos, DyeColor> torch : visualizedTorches.entrySet())
         {
-            i++;
             BlockPos pos = torch.getKey();
             DyeColor color = torch.getValue();
-            // CreateCylinder(vbo, pos.getX(), pos.getY(), pos.getZ(), color);
-            CreateCube(vbo, pos.getX(), pos.getY(), pos.getZ(), torchCubeSize, color, (i + 1) * 0.05f);
+
+            vbo.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+            CreateSegmentedCube(vbo, pos.getX(), pos.getY(), pos.getZ(), TorchmasterConfig.MegaTorchRange, color, segmentCount);
+            Tessellator.getInstance().draw();
         }
-        Tessellator.getInstance().draw();
+        GlStateManager.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
 
         GlStateManager.enableCull();
         GlStateManager.enableTexture2D();
         GlStateManager.popMatrix();
     }
 
-    private static void CreateCylinder(BufferBuilder vbo, float x, float y, float z, double radius, DyeColor c)
+    private static void CreateSegmentedCube(BufferBuilder vbo, float x, float y, float z, int torchRange, DyeColor color, int segmentCount)
     {
-        int slices = 32;
-        for(int i = 0; i < slices; i++)
-        {
-            double theta = ((double)i)*2.0*Math.PI / slices;
-            double nextTheta = ((double)i+1)*2.0*Math.PI / slices;
-            vbo.pos(x + .5 + radius*Math.cos(theta), y + 1 + radius, z + .5 + radius*Math.sin(theta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-            vbo.pos (x + .5 + radius*Math.cos(nextTheta), y + 1 + radius, z + .5 + radius*Math.sin(nextTheta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-            vbo.pos (x + .5 + radius*Math.cos(nextTheta), y + 1 - radius, z + .5 + radius*Math.sin(nextTheta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-            vbo.pos(x + .5 + radius*Math.cos(theta), y + 1 - radius, z + .5 + radius*Math.sin(theta)).color(c.r, c.g, c.b, 0.4f).endVertex();
-        }
-    }
-
-    private static void CreateCube(BufferBuilder vbo, int x, int y, int z, int size, DyeColor c, float nudge)
-    {
-        // render a cube centered at a block
+        float o = (torchRange + .5f) + .005f;
         float cx = x + .5f;
         float cy = y + .5f;
         float cz = z + .5f;
 
-        float offset = 0.5f + size - nudge;
+        float segmentSize = ((torchRange * 2f) + 1) / segmentCount;
+        GlStateManager.glLineWidth(1);
 
-        vbo.pos(cx - offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx + offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy - offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy - offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy + offset, cz + offset).color(c.r, c.g, c.b, 0.6f).endVertex();
-        vbo.pos(cx - offset, cy + offset, cz - offset).color(c.r, c.g, c.b, 0.6f).endVertex();
+        for(float f = -o; f < o; f += segmentSize)
+        {
+            vbo.pos(cx + f, cy + o, cz - o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + f, cy + o, cz + o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + f, cy - o, cz + o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + f, cy - o, cz - o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + f, cy + o, cz - o).color(color.r, color.g, color.b, 1f).endVertex();
+        }
+
+        for(float f = -o; f < o; f += segmentSize)
+        {
+            vbo.pos(cx - o, cy + o, cz + f).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + o, cy + o, cz + f).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + o, cy - o, cz + f).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx - o, cy - o, cz + f).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx - o, cy + o, cz + f).color(color.r, color.g, color.b, 1f).endVertex();
+        }
+
+        for(float f = -o; f < o; f += segmentSize)
+        {
+            vbo.pos(cx - o, cy + f, cz + o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + o, cy + f, cz + o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx + o, cy + f, cz - o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx - o, cy + f, cz - o).color(color.r, color.g, color.b, 1f).endVertex();
+            vbo.pos(cx - o, cy + f, cz + o).color(color.r, color.g, color.b, 1f).endVertex();
+        }
     }
 }

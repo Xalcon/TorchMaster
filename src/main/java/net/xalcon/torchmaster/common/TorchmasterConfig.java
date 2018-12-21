@@ -29,13 +29,21 @@ public class TorchmasterConfig
     @Config.Comment("If set to true, the mega torch will drop as an unlit torch when harvesting it")
     public static boolean MegaTorchExtinguishOnHarvest = false;
 
-    @Config.RangeInt(min = 0, max = 512)
     @Config.Comment("Allows to get the lit torch when harvested with silk touch. Has no effect if MegaTorchExtinguishOnHarvest is false)")
     public static boolean MegaTorchAllowSilkTouch = true;
 
-    @Config.RangeInt(min = 0, max = 512)
     @Config.Comment("Controls if the mega torch should allow mob spawning from vanilla spawners")
     public static boolean MegaTorchAllowVanillaSpawners = true;
+
+    @Config.Comment({
+            "Controls the amount of blocks between each segment in the visualizer",
+            "You can increase this value in case you prefer less lines in the volume visualization",
+            "or if the visualization causes a big FPS hit to your potato.",
+            "Do not increase this value above the torch range or you might break the rendering.",
+            "Higher values will render less lines. 1.0 = 1 block per segment, 2.0 = 2 blocks per segment"
+    })
+    @Config.RangeDouble(min = 0.5)
+    public static float TorchVisualizerSegmentationFactor = 2.0f;
 
 
     @Config.RangeInt(min = 0, max = 512)

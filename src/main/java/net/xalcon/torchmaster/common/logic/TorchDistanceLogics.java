@@ -8,12 +8,12 @@ public class TorchDistanceLogics
         double minX = torch.getX() - range;
         double minY = torch.getY() - range;
         double minZ = torch.getZ() - range;
-        double maxX = torch.getX() + range;
-        double maxY = torch.getY() + range;
-        double maxZ = torch.getZ() + range;
-        return minX >= posX && maxX <= posX &&
-                minY >= posY && maxY <= posY &&
-                minZ >= posZ && maxZ <= posZ;
+        double maxX = torch.getX() + range + 1;
+        double maxY = torch.getY() + range + 1;
+        double maxZ = torch.getZ() + range + 1;
+        return minX <= posX && maxX >= posX &&
+                minY <= posY && maxY >= posY &&
+                minZ <= posZ && maxZ >= posZ;
     };
 
     public static ITorchDistanceLogic Cylinder = (posX, posY, posZ, torch, range) ->
