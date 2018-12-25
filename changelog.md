@@ -1,3 +1,9 @@
+### v1.7.0
+* CHANGE: The Mega Torch and Dread Lamp now work in a cube instead of a cylinder. This should make it much easier to setup torches without overlap or deadspots. The Size of the cube is Range + 1 in each direction. A range of 64 (default) will result in a cube of 129 by 129 blocks with the torch as its center.
+* NEW [Beta]: Mega Torches can now visualize the range at which they work. Use any dye to render a visual representation of the torches working volume. Use any dye or an empty hand to disable the renderer. The renderer will also disable itself when you change dimensions or get out of viewing range.
+* NEW: Feral Flare Lanterns can now be configured to only place lights in line of sight. Simply rightclick the lantern to open the gui. At the moment this mechanic feels a bit clunky, so there will be changes in a future release.
+* NEW: Mega Torches should now be able to suppress those scary cave ambient sounds
+
 ### v1.6.4
 * FIX: reworked torch storage system to use capabilities instead of a global file.
   This fixes an issue with torches not working in most modded dimensions after a restart.
