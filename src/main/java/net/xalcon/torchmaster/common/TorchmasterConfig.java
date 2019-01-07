@@ -88,6 +88,14 @@ public class TorchmasterConfig
     @Config.Comment("The target minimum light level to place lights for")
     public static int feralFlareMinLightLevel = 10;
 
+    @Config.RangeInt(min = 0)
+    @Config.Comment({
+            "The maximum amount of invisble lights a feral flare lantern can place. Set to 0 to disable light placement.",
+            "Warning: Setting this value too high in conjunction with the feralFlareMinLightLevel and Radius can lead to world corruption!",
+            "(Badly compressed packet error)"
+    })
+    public static int FeralFlareLanternLightCountHardcap = 255;
+
     @Config.Comment("If false, lights decay slowly after the lantern has been removed. If true, the lights will be removed instantly")
     public static boolean feralFlareLightDecayInstantly = false;
 
