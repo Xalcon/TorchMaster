@@ -21,4 +21,8 @@ tile.torchmaster.mega_torch.lit.burntime_left=Времени осталось: %
 
 container.torchmaster.terrain_lighter=Осветитель местности
 gui.torchmaster.block.state.no_signal=Нет редстоун сигнала
+gui.torchmaster.feral_flare_lantern.state.los_on.short=Линия визирования: §Aвключено§r
+gui.torchmaster.feral_flare_lantern.state.los_on.description=Фонарь будет только размещать огни $n в местах, он может непосредственно видеть
+gui.torchmaster.feral_flare_lantern.state.los_off.short=Линия визирования: §Cотключено§r
+gui.torchmaster.feral_flare_lantern.state.los_off.description=Фонарь будет размещать огни везде
 itemGroup.torchmaster=TorchMaster
