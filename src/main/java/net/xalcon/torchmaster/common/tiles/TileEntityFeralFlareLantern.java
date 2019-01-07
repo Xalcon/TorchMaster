@@ -79,6 +79,8 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         if(this.world.isRemote || ++this.ticks % TorchmasterConfig.feralFlareTickRate != 0) return;
         if(ticks > 1_000_000) ticks = 0;
 
+        if(this.childLights.size() > TorchmasterConfig.FeralFlareLanternLightCountHardcap) return;
+
         int radius = TorchmasterConfig.feralFlareRadius;
         int diameter = radius * 2;
 
@@ -94,6 +96,11 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         BlockPos precipitationHeight = this.world.getPrecipitationHeight(targetPos);
         if (targetPos.getY() > precipitationHeight.getY() + 4)
             targetPos = precipitationHeight.up(4);
+
+        // dont try to place blocks outside of the world height
+        int worldHeightCap = world.getHeight();
+        if(targetPos.getY() > worldHeightCap)
+            targetPos = new BlockPos(targetPos.getX(), worldHeightCap - 1, targetPos.getZ());
 
         if(!this.world.isBlockLoaded(targetPos)) return;
         if (this.world.isAirBlock(targetPos) && this.world.getLightFor(EnumSkyBlock.BLOCK, targetPos) < TorchmasterConfig.feralFlareMinLightLevel)
@@ -112,9 +119,11 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
                 }
             }
 
-            this.world.setBlockState(targetPos, ModBlocks.getInvisibleLight().getDefaultState(), 3);
-            this.childLights.add(targetPos);
-            this.markDirty();
+            if(this.world.setBlockState(targetPos, ModBlocks.getInvisibleLight().getDefaultState(), 3))
+            {
+                this.childLights.add(targetPos);
+                this.markDirty();
+            }
         }
     }
 
