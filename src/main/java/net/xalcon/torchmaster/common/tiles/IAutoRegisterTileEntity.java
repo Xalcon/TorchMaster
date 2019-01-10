@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public interface IAutoRegisterTileEntity
 {
-	Class<? extends TileEntity> getTileEntityClass();
+	TileEntity createTileEntity();
 
 	String getTileEntityRegistryName();
 }

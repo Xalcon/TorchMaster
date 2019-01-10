@@ -1,13 +1,11 @@
 package net.xalcon.torchmaster.compat;
 
-import net.minecraft.entity.EntityList;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 @Mod.EventBusSubscriber()
 public class LycaniteMobsCompat
@@ -33,10 +31,9 @@ public class LycaniteMobsCompat
 	{
 		if(!TorchmasterConfig.LycanitesMobsBlockAll) return;
 
-		EntityList.getEntityNameList().stream()
-				.filter(n -> Arrays.stream(MODS).anyMatch(m -> m.equals(n.getNamespace())))
-				.map(EntityList::getClass)
-				.filter(Objects::nonNull)
+		ForgeRegistries.ENTITIES.getEntries().stream()
+				.filter(n -> Arrays.stream(MODS).anyMatch(m -> m.equals(n.getKey().getNamespace())))
+				.map(n -> n.getValue().getEntityClass())
 				.forEach(c -> event.getRegistry().registerEntity(c));
 	}
 }

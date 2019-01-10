@@ -1,15 +1,15 @@
 package net.xalcon.torchmaster.common.creativetabs;
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
 
-public class CreativeTabTorchMaster extends CreativeTabs
+public class ItemGroupTorchMaster extends ItemGroup
 {
-	public static CreativeTabTorchMaster INSTANCE = new CreativeTabTorchMaster();
+	public static ItemGroupTorchMaster INSTANCE = new ItemGroupTorchMaster();
 
-	public CreativeTabTorchMaster()
+	public ItemGroupTorchMaster()
 	{
 		super(TorchMasterMod.MODID);
 	}

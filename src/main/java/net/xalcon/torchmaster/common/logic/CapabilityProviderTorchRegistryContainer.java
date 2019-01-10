@@ -5,6 +5,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.xalcon.torchmaster.common.ModCaps;
 
 import javax.annotation.Nonnull;
@@ -14,19 +15,14 @@ public class CapabilityProviderTorchRegistryContainer implements ICapabilityProv
 {
     private ITorchRegistryContainer container = new TorchRegistryContainer();
 
+    @Nonnull
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
+    public <T> OptionalCapabilityInstance<T> getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing side)
     {
-        return capability == ModCaps.TORCH_REGISTRY_CONTAINER;
-    }
 
-    @Nullable
-    @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
-    {
-        return hasCapability(capability, facing)
-                ? ModCaps.TORCH_REGISTRY_CONTAINER.cast(container)
-                : null;
+        return cap == ModCaps.TORCH_REGISTRY_CONTAINER
+                ? OptionalCapabilityInstance.of(() -> (T)container)
+                : OptionalCapabilityInstance.empty();
     }
 
     @Override

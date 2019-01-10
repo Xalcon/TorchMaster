@@ -3,7 +3,9 @@ package net.xalcon.torchmaster.common.items;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.xalcon.torchmaster.TorchMasterMod;
@@ -20,15 +22,15 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 	{
 		super(block);
 
-		this.setHasSubtypes(true);
+		// this.setHasSubtypes(true);
 	}
 
-	@Override
+	/*@Override
 	public int getMetadata(int damage)
 	{
 		// vanilla item blocks return "0" instead of the damage value
 		return damage;
-	}
+	}*/
 
 	@Override
 	public String getTranslationKey(ItemStack stack)
@@ -40,6 +42,8 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced)
 	{
 		super.addInformation(stack, playerIn, tooltip, advanced);
+		Item item = stack.getItem();
+
 		if(ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING))
 		{
 			NBTTagCompound compound = stack.getSubCompound("tm_tile");

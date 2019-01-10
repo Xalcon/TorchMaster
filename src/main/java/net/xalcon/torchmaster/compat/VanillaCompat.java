@@ -1,12 +1,10 @@
 package net.xalcon.torchmaster.compat;
 
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.entity.passive.IAnimal;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Objects;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber
 public class VanillaCompat
@@ -14,21 +12,18 @@ public class VanillaCompat
 	@SubscribeEvent
 	public static void registerTorchEntities(EntityFilterRegisterEvent.MegaTorch event)
 	{
-		EntityList.getEntityNameList().stream()
-				.map(EntityList::getClass)
-				.filter(Objects::nonNull)
+		ForgeRegistries.ENTITIES.getEntries().stream()
+				.map(e -> e.getValue().getEntityClass())
 				.filter(IMob.class::isAssignableFrom)
 				.forEach(event.getRegistry()::registerEntity);
-
 	}
 
 	@SubscribeEvent
 	public static void registerDreadLampEntities(EntityFilterRegisterEvent.DreadLamp event)
 	{
-		EntityList.getEntityNameList().stream()
-				.map(EntityList::getClass)
-				.filter(Objects::nonNull)
-				.filter(c -> IAnimals.class.isAssignableFrom(c) && !IMob.class.isAssignableFrom(c))
+		ForgeRegistries.ENTITIES.getEntries().stream()
+				.map(e -> e.getValue().getEntityClass())
+				.filter(c -> IAnimal.class.isAssignableFrom(c) && !IMob.class.isAssignableFrom(c))
 				.forEach(event.getRegistry()::registerEntity);
 	}
 }

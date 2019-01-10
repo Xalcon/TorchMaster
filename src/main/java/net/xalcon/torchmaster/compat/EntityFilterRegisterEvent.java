@@ -1,6 +1,6 @@
 package net.xalcon.torchmaster.compat;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.eventbus.api.Event;
 import net.xalcon.torchmaster.common.EntityFilterRegistry;
 
 public abstract class EntityFilterRegisterEvent extends Event

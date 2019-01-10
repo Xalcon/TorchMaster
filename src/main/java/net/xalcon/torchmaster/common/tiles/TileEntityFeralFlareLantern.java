@@ -1,15 +1,18 @@
 package net.xalcon.torchmaster.common.tiles;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceFluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.EnumLightType;
 import net.minecraftforge.common.util.Constants;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
@@ -24,57 +27,62 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
     private boolean useLineOfSight;
     private List<BlockPos> childLights = new ArrayList<>();
 
+    public TileEntityFeralFlareLantern(TileEntityType<?> tileEntityType)
+    {
+        super(tileEntityType);
+    }
+
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket()
     {
-        return new SPacketUpdateTileEntity(this.pos, -1, this.writeToNBT(new NBTTagCompound()));
+        return new SPacketUpdateTileEntity(this.pos, -1, this.write(new NBTTagCompound()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
     {
         super.onDataPacket(net, pkt);
-        this.readFromNBT(pkt.getNbtCompound());
+        this.read(pkt.getNbtCompound());
     }
 
     @Override
     public NBTTagCompound getUpdateTag()
     {
-        return writeToNBT(super.getUpdateTag());
+        return write(super.getUpdateTag());
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound write(NBTTagCompound nbt)
     {
         List<Integer> childLightsEncoded = new ArrayList<>(this.childLights.size());
         for(BlockPos child : this.childLights)
             childLightsEncoded.add(encodePosition(this.pos, child));
 
         nbt.setTag("lights", new NBTTagIntArray(childLightsEncoded));
-        nbt.setInteger("ticks", this.ticks);
+        nbt.setInt("ticks", this.ticks);
         nbt.setBoolean("useLoS", this.useLineOfSight);
-        return super.writeToNBT(nbt);
+        return super.write(nbt);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt)
+    public void read(NBTTagCompound nbt)
     {
         this.childLights.clear();
         if(nbt.getTagId("lights") == Constants.NBT.TAG_INT_ARRAY)
         {
-            BlockPos origin = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"),nbt.getInteger("z"));
+            BlockPos origin = new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"));
             int[] lightsEncoded = ((NBTTagIntArray) nbt.getTag("lights")).getIntArray();
             for(int encodedLight : lightsEncoded)
                 this.childLights.add(decodePosition(origin, encodedLight));
         }
-        this.ticks = nbt.getInteger("ticks");
+        this.ticks = nbt.getInt("ticks");
         this.useLineOfSight = nbt.getBoolean("useLoS");
-        super.readFromNBT(nbt);
+        super.read(nbt);
     }
 
     @Override
-    public void update()
+    public void tick()
     {
         if(this.world.isRemote || ++this.ticks % TorchmasterConfig.feralFlareTickRate != 0) return;
         if(ticks > 1_000_000) ticks = 0;
@@ -91,30 +99,25 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         // limit height - lower bounds
         if (y < 3) y = 3;
 
-        // limit height - upper bounds
-        BlockPos targetPos = new BlockPos(x, y, z);
-        BlockPos precipitationHeight = this.world.getPrecipitationHeight(targetPos);
-        if (targetPos.getY() > precipitationHeight.getY() + 4)
-            targetPos = precipitationHeight.up(4);
-
         // dont try to place blocks outside of the world height
+        BlockPos targetPos = new BlockPos(x, y + 4, z);
         int worldHeightCap = world.getHeight();
         if(targetPos.getY() > worldHeightCap)
             targetPos = new BlockPos(targetPos.getX(), worldHeightCap - 1, targetPos.getZ());
 
         if(!this.world.isBlockLoaded(targetPos)) return;
-        if (this.world.isAirBlock(targetPos) && this.world.getLightFor(EnumSkyBlock.BLOCK, targetPos) < TorchmasterConfig.feralFlareMinLightLevel)
+        if (this.world.isAirBlock(targetPos) && this.world.getLightFor(EnumLightType.BLOCK, targetPos) < TorchmasterConfig.feralFlareMinLightLevel)
         {
             if(this.useLineOfSight)
             {
                 Vec3d start = new Vec3d(targetPos).add(0.5, 0.5, 0.5);
                 Vec3d end = new Vec3d(this.pos).add(0.5, 0.5, 0.5);
-                RayTraceResult rtResult = world.rayTraceBlocks(start, end, true, true, false);
+                RayTraceResult rtResult = world.rayTraceBlocks(start, end, RayTraceFluidMode.NEVER, true, false);
 
                 if(rtResult != null)
                 {
                     BlockPos hitPos = rtResult.getBlockPos();
-                    if(rtResult.typeOfHit == RayTraceResult.Type.BLOCK && !(hitPos.getX() == this.pos.getX() && hitPos.getY() == this.pos.getY() && hitPos.getZ() == this.pos.getZ()))
+                    if(rtResult.type == RayTraceResult.Type.BLOCK && !(hitPos.getX() == this.pos.getX() && hitPos.getY() == this.pos.getY() && hitPos.getZ() == this.pos.getZ()))
                         return;
                 }
             }
@@ -135,7 +138,7 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
             if (this.world.getBlockState(pos).getBlock() == ModBlocks.getInvisibleLight())
             {
                 if(TorchmasterConfig.feralFlareLightDecayInstantly)
-                    this.world.setBlockToAir(pos);
+                    this.world.removeBlock(pos);
                 else
                     this.world.setBlockState(pos, ModBlocks.getInvisibleLight().getDecayState(), 2);
             }

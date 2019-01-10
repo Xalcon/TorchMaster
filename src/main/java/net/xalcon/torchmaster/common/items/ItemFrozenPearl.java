@@ -12,11 +12,13 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
-import net.xalcon.torchmaster.common.creativetabs.CreativeTabTorchMaster;
+import net.xalcon.torchmaster.common.creativetabs.ItemGroupTorchMaster;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,9 +27,9 @@ public class ItemFrozenPearl extends Item
 {
     public ItemFrozenPearl()
     {
-        this.setMaxDamage(TorchmasterConfig.frozenPearlDurability);
-        this.setCreativeTab(CreativeTabTorchMaster.INSTANCE);
-        this.setTranslationKey(TorchMasterMod.MODID + ".frozen_pearl");
+        super(new Builder()
+                .defaultMaxDamage(TorchmasterConfig.frozenPearlDurability)
+                .group(ItemGroupTorchMaster.INSTANCE));
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ItemFrozenPearl extends Item
                     Block block = worldIn.getBlockState(checkPos).getBlock();
                     if(block == ModBlocks.getInvisibleLight())
                     {
-                        worldIn.setBlockToAir(checkPos);
+                        worldIn.removeBlock(checkPos);
                         if(this.isDamageable())
                             itemStack.damageItem(1, player);
                         if(itemStack.isEmpty())
@@ -61,8 +63,8 @@ public class ItemFrozenPearl extends Item
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
-        tooltip.add(I18n.format(this.getTranslationKey(stack) + ".tooltip"));
+        tooltip.add(new TextComponentTranslation(this.getTranslationKey(stack) + ".tooltip"));
     }
 }

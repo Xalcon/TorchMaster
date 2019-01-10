@@ -1,14 +1,13 @@
 package net.xalcon.torchmaster.common.tiles;
 
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.client.ClientTorchRegistries;
-import net.xalcon.torchmaster.client.renderer.TorchVolumeRenderHandler;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 
@@ -18,8 +17,9 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 	private int burnRate;
 	private boolean isExtinguished;
 
-	public TileEntityMegaTorch()
+	public TileEntityMegaTorch(TileEntityType<TileEntityMegaTorch> tileEntityType)
 	{
+		super(tileEntityType);
 		this.burnRate = TorchmasterConfig.MegaTorchBurnoutRate;
 	}
 
@@ -31,28 +31,28 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 
 	public void readSyncNbt(NBTTagCompound compound)
 	{
-		this.burnValueLeft = compound.getInteger("burnValueLeft");
+		this.burnValueLeft = compound.getInt("burnValueLeft");
 		this.isExtinguished = compound.getBoolean("isExtinguished");
 	}
 
 	public void writeSyncNbt(NBTTagCompound compound)
 	{
-		compound.setInteger("burnValueLeft", this.burnValueLeft);
+		compound.setInt("burnValueLeft", this.burnValueLeft);
 		compound.setBoolean("isExtinguished", this.isExtinguished);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound)
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(compound);
+		super.read(compound);
 		this.readSyncNbt(compound);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound)
+	public NBTTagCompound write(NBTTagCompound compound)
 	{
 		this.writeSyncNbt(compound);
-		return super.writeToNBT(compound);
+		return super.write(compound);
 	}
 
 	@Override
@@ -77,23 +77,23 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 
 		// client side torch caching
 		if(world.isRemote)
-			ClientTorchRegistries.getRegistryForDimension(world.provider.getDimension()).addTorch(pos);
+			ClientTorchRegistries.getRegistryForDimension(world.getDimension().getId()).addTorch(pos);
 	}
 
 	@Override
-	public void onChunkUnload()
+	public void onChunkUnloaded()
 	{
-		super.onChunkUnload();
+		super.onChunkUnloaded();
 
 		// client side torch caching
 		if(world.isRemote)
 		{
-			ClientTorchRegistries.getRegistryForDimension(world.provider.getDimension()).removeTorch(pos);
+			ClientTorchRegistries.getRegistryForDimension(world.getDimension().getId()).removeTorch(pos);
 		}
 	}
 
 	@Override
-	public void update()
+	public void tick()
 	{
 		if(this.burnRate > 0 && !this.isExtinguished)
 		{
@@ -102,7 +102,7 @@ public class TileEntityMegaTorch extends TileEntity implements ITickable
 			{
 				if(!this.world.isRemote)
 				{
-					this.getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 0, 1, 0);
+					this.getWorld().spawnParticle(Particles.SMOKE, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 0, 1, 0);
 					this.getWorld().playSound(null, this.pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.0f);
 					this.getWorld().setBlockState(this.getPos(), ModBlocks.getMegaTorch().getTorchState(false));
 				}

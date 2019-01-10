@@ -2,11 +2,12 @@ package net.xalcon.torchmaster.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.blocks.*;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
@@ -14,19 +15,19 @@ import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import java.util.Arrays;
 import java.util.Objects;
 
-@GameRegistry.ObjectHolder(TorchMasterMod.MODID)
+@ObjectHolder(TorchMasterMod.MODID)
 @Mod.EventBusSubscriber
 public class ModBlocks
 {
-	@GameRegistry.ObjectHolder(BlockMegaTorch.INTERNAL_NAME)
+	@ObjectHolder(BlockMegaTorch.INTERNAL_NAME)
 	private final static BlockMegaTorch MegaTorch = null;
-	@GameRegistry.ObjectHolder(BlockTerrainLighter.INTERNAL_NAME)
+	@ObjectHolder(BlockTerrainLighter.INTERNAL_NAME)
 	private final static BlockTerrainLighter TerrainLighter = null;
-	@GameRegistry.ObjectHolder(BlockDreadLamp.INTERNAL_NAME)
+	@ObjectHolder(BlockDreadLamp.INTERNAL_NAME)
 	private final static BlockDreadLamp DreadLamp = null;
-	@GameRegistry.ObjectHolder(BlockFeralFlareLantern.INTERNAL_NAME)
+	@ObjectHolder(BlockFeralFlareLantern.INTERNAL_NAME)
 	private final static BlockFeralFlareLantern FeralFlareLantern = null;
-	@GameRegistry.ObjectHolder(BlockInvisibleLight.INTERNAL_NAME)
+	@ObjectHolder(BlockInvisibleLight.INTERNAL_NAME)
 	private final static BlockInvisibleLight InvisibleLight = null;
 
 	public static BlockMegaTorch getMegaTorch()
@@ -62,15 +63,27 @@ public class ModBlocks
 		};
 
 		event.getRegistry().registerAll(blocks);
+	}
+
+	public static void registerTileEntities(final RegistryEvent.Register<TileEntityType<?>> event)
+	{
+		Block[] blocks = new Block[]
+		{
+			MegaTorch,
+			TerrainLighter,
+			DreadLamp,
+			FeralFlareLantern,
+			InvisibleLight
+		};
 
 		Arrays.stream(blocks)
-			.filter(block -> block instanceof IAutoRegisterTileEntity)
-			.map(block -> (IAutoRegisterTileEntity)block)
-			.forEach(block -> GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getTileEntityRegistryName()));
+				.filter(block -> block instanceof IAutoRegisterTileEntity)
+				.map(block -> (IAutoRegisterTileEntity)block)
+				.forEach(block -> event.getRegistry().register(TileEntityType.Builder.create(block::createTileEntity).build(null)));
 	}
 
 	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> event)
+	public static void registerItems(final RegistryEvent.Register<Item> event)
 	{
 		BlockBase[] blocks = new BlockBase[]
 		{

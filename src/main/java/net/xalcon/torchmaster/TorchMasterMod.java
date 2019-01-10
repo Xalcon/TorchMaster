@@ -1,29 +1,28 @@
 package net.xalcon.torchmaster;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.javafmlmod.FMLModLoadingContext;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.xalcon.torchmaster.client.ClientProxy;
 import net.xalcon.torchmaster.common.*;
 import net.xalcon.torchmaster.common.network.TorchmasterNetwork;
 import net.xalcon.torchmaster.compat.EntityFilterRegisterEvent;
-import net.xalcon.torchmaster.compat.RegistryBackwardsCompat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(
+/*@Mod(
         modid = TorchMasterMod.MODID,
         version = TorchMasterMod.VERSION,
         dependencies = "required-after:forge@[14.21.1.2394,)",
         certificateFingerprint = "@CERT_FINGERPRINT@",
 		acceptedMinecraftVersions = "[1.12, 1.13)"
-)
+)*/
+@Mod(TorchMasterMod.MODID)
 public class TorchMasterMod
 {
     public static final Logger Log = LogManager.getLogger(TorchMasterMod.MODID);
@@ -37,31 +36,32 @@ public class TorchMasterMod
 	public static final EntityFilterRegistry MegaTorchFilterRegistry = new EntityFilterRegistry();
 	public static final EntityFilterRegistry DreadLampFilterRegistry = new EntityFilterRegistry();
 
-    @Mod.Instance
     public static TorchMasterMod instance;
 
-    @SidedProxy(clientSide = "net.xalcon.torchmaster.client.ClientProxy", serverSide = "net.xalcon.torchmaster.common.CommonProxy")
-    public static CommonProxy Proxy;
+    public static CommonProxy Proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
+    public TorchMasterMod()
+    {
+        instance = this;
+        FMLModLoadingContext.get().getModEventBus().addListener(this::preInit);
+        FMLModLoadingContext.get().getModEventBus().addListener(this::init);
+        FMLModLoadingContext.get().getModEventBus().addListener(this::postInit);
+    }
+
+    private void preInit(final FMLPreInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register((this.eventHandlerServer = new EventHandlerServer()));
-        MinecraftForge.EVENT_BUS.register(new RegistryBackwardsCompat());
-
         ModCaps.registerModCaps();
-
         TorchmasterNetwork.initNetwork();
     }
 
-    @EventHandler
-    public void init(FMLInitializationEvent event)
+    private void init(FMLInitializationEvent event)
     {
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, this.guiHandler = new ModGuiHandler());
+        // TODO: GUI Registration
+        //NetworkRegistry.INSTANCE.registerGuiHandler(this, this.guiHandler = new ModGuiHandler());
     }
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
+    private void postInit(FMLPostInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.MegaTorch(MegaTorchFilterRegistry));
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.DreadLamp(DreadLampFilterRegistry));

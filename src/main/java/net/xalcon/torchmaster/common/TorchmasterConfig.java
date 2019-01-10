@@ -1,10 +1,9 @@
 package net.xalcon.torchmaster.common;
 
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.xalcon.torchmaster.TorchMasterMod;
 
 @Config(modid = TorchMasterMod.MODID)
@@ -110,7 +109,8 @@ public class TorchmasterConfig
     {
         if (event.getModID().equals(TorchMasterMod.MODID))
         {
-            ConfigManager.sync(TorchMasterMod.MODID, Config.Type.INSTANCE);
+            // TODO: fix sync
+            // ConfigManager.sync(TorchMasterMod.MODID, Config.Type.INSTANCE);
         }
     }
 }

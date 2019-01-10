@@ -1,114 +1,89 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+apply plugin: 'net.minecraftforge.gradle'
+//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
 
-plugins {
-    id 'com.matthewprenger.cursegradle' version '1.0.9'
-}
+version = '1.0'
+group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'modid'
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-
-//Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
-
-def mcversion = "${mcversion_major}.${mcversion_minor}.${mcversion_patch}"
-version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
-group= "net.xalcon.torchmaster" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "torchmaster_" + mcversion
-
-sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = mcversion + "-" + forgeversion
-    runDir = "run"
-    
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
+    // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = mcp_mappings
+    mappings channel: 'snapshot', version: '20180921-1.13'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    replace '@VERSION@', project.version
-    replace '@BUILD_NUMBER@', getBuildNumber()
-    replace '@CERT_FINGERPRINT@', cert_fingerprint
-}
+    
+    //accessTransformer = file('my_at.cfg')
 
-repositories {
-    maven { url 'http://dvs1.progwml6.com/files/maven' } // JEI
-    maven { url 'http://tehnut.info/maven' } // hwyla
+    // default run configurations.
+    // these can be tweaked, removed, or duplicated as needed.
+    runs {
+        client = {
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+        server = {
+            workingDirectory project.file('run').canonicalPath
+        }
+    }
 }
 
 dependencies {
-    //deobfCompile "mezz.jei:jei_${mcversion}:${jei_version}:api"
-    //compile "mcp.mobius.waila:Hwyla:${hwyla_version}:api"
+    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+    minecraft 'net.minecraftforge.test:forge:1.13-24.0.64-1.13-pre'
 
-    runtime "mezz.jei:jei_${mcversion}:${jei_version}"
-    //runtime "mcp.mobius.waila:Hwyla:${hwyla_version}"
+    // you may put jars on which you depend on in ./libs
+    // or you may define them like so..
+    //compile "some.group:artifact:version:classifier"
+    //compile "some.group:artifact:version"
+
+    // real examples
+    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
+    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
+    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // These dependencies get remapped to your current MCP mappings
+    //deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // for more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
 }
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', '1.13'
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include 'META_INF/mods.toml'
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':"[${mcversion_major}.${mcversion_minor},${mcversion_major}.${((mcversion_minor.toInteger())+1)})"
+        expand 'version':project.version, 'mcversion': '1.13'
     }
-        
-    // copy everything else, thats not the mcmod.info
+
+    // copy everything else except the mods.toml
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
-
-task signJar(type: SignJar, dependsOn: reobfJar) {
-    inputFile = jar.archivePath
-    outputFile = jar.archivePath
-}
-
-def curse_api_key=""
-
-if(new File("$System.env.confidental_properties").exists()) {
-    println("Found confidenntal gradle properties, loading...")
-    Properties props = new Properties()
-    props.load(new FileInputStream("$System.env.confidental_properties"))
-    signJar.keyStore=props.jarsign_keystore
-    signJar.alias=props.jarsign_keystore_alias
-    signJar.storePass=props.jarsign_keystore_pass
-    signJar.keyPass=props.jarsign_key_pass
-
-    curse_api_key=props.curse_api_key
-}
-
-build.dependsOn signJar
-
-def static getBuildNumber() {
-    return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
-}
-
-curseforge {
-    apiKey = curse_api_key
-
-    project {
-        id = "${curse_id}"
-        changelogType = "markdown"
-        changelog = new File('changelog.md')
-        releaseType = "$System.env.release_type" != "null" ? "$System.env.release_type" : 'alpha'
-        mainArtifact jar
+        exclude 'META_INF/mods.toml'
     }
 }

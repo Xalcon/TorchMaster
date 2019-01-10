@@ -8,45 +8,43 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.oredict.DyeUtils;
-import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.HashMap;
 
-@Mod.EventBusSubscriber(Side.CLIENT)
+@Mod.EventBusSubscriber(Dist.CLIENT)
 public class TorchVolumeRenderHandler
 {
-
     public static class DyeColor
     {
         float r;
         float g;
         float b;
 
-        private static DyeColor[] colors = Arrays.stream(ItemDye.DYE_COLORS).mapToObj(DyeColor::new).toArray(DyeColor[]::new);
-
-        public DyeColor(int color)
+        DyeColor(float r, float g, float b)
         {
-            r = ((color & 0xFF0000) >> 16) / 255.0f;
-            g = ((color & 0x00FF00) >> 8) / 255.0f;
-            b = (color & 0x0000FF) / 255.0f;
+            this.r = r;
+            this.g = g;
+            this.b = b;
         }
 
         public static DyeColor FromItemStack(ItemStack stack)
         {
-            int meta = DyeUtils.rawDyeDamageFromStack(stack);
-            if(meta < 0 || meta > 15) return null;
-            return colors[meta];
+            if(stack.getItem() instanceof ItemDye)
+            {
+                ItemDye itemDye = ((ItemDye)stack.getItem());
+                float[] color = itemDye.getDyeColor().getColorComponentValues();
+                return new DyeColor(color[0], color[1], color[2]);
+            }
+            return null;
         }
     }
 
@@ -78,17 +76,17 @@ public class TorchVolumeRenderHandler
     @SubscribeEvent
     public static void onRender(RenderWorldLastEvent event)
     {
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getInstance();
         EntityPlayerSP player = mc.player;
-        GlStateManager.glLineWidth(2.0F);
+        GlStateManager.lineWidth(2.0F);
         double xD = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)event.getPartialTicks();
         double yD = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)event.getPartialTicks();
         double zD = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)event.getPartialTicks();
-        GlStateManager.translate(-xD, -yD, -zD);
+        GlStateManager.translated(-xD, -yD, -zD);
 
-        GlStateManager.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+        GlStateManager.polygonMode(GL11.GL_FRONT, GL11.GL_LINE);
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
@@ -105,7 +103,7 @@ public class TorchVolumeRenderHandler
             CreateSegmentedCube(vbo, pos.getX(), pos.getY(), pos.getZ(), TorchmasterConfig.MegaTorchRange, color, segmentCount);
             Tessellator.getInstance().draw();
         }
-        GlStateManager.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
+        GlStateManager.polygonMode(GL11.GL_FRONT, GL11.GL_FILL);
 
         GlStateManager.enableCull();
         GlStateManager.enableTexture2D();
@@ -120,7 +118,7 @@ public class TorchVolumeRenderHandler
         float cz = z + .5f;
 
         float segmentSize = ((torchRange * 2f) + 1) / segmentCount;
-        GlStateManager.glLineWidth(1);
+        GlStateManager.lineWidth(1);
 
         for(float f = -o; f < o; f += segmentSize)
         {
