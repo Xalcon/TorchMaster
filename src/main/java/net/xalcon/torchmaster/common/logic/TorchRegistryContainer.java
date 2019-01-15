@@ -5,8 +5,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.Torchmaster;
+import net.xalcon.torchmaster.common.init.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 
 public class TorchRegistryContainer implements ITorchRegistryContainer
@@ -16,7 +16,7 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
         @Override
         protected boolean shouldHandleEntityType(Class<? extends Entity> entityClass)
         {
-            return TorchMasterMod.MegaTorchFilterRegistry.containsEntity(entityClass);
+            return Torchmaster.MegaTorchFilterRegistry.containsEntity(entityClass);
         }
 
         @Override
@@ -28,7 +28,7 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
         @Override
         protected boolean isBlockStateValid(IBlockState state)
         {
-            return state.getBlock() == ModBlocks.getMegaTorch();
+            return state.getBlock() == ModBlocks.MegaTorch;
         }
     };
 
@@ -37,7 +37,7 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
         @Override
         protected boolean shouldHandleEntityType(Class<? extends Entity> entityClass)
         {
-            return TorchMasterMod.DreadLampFilterRegistry.containsEntity(entityClass);
+            return Torchmaster.DreadLampFilterRegistry.containsEntity(entityClass);
         }
 
         @Override
@@ -49,7 +49,7 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
         @Override
         protected boolean isBlockStateValid(IBlockState state)
         {
-            return state.getBlock() == ModBlocks.getDreadLamp();
+            return state.getBlock() == ModBlocks.DreadLamp;
         }
     };
 
@@ -91,8 +91,8 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
     public void deserializeNBT(NBTTagCompound nbt)
     {
         if(nbt.hasKey("mega_torch"))
-            megaTorchRegistry.deserializeNBT(nbt.getTagList("mega_torch", Constants.NBT.TAG_COMPOUND));
+            megaTorchRegistry.deserializeNBT(nbt.getList("mega_torch", Constants.NBT.TAG_COMPOUND));
         if(nbt.hasKey("dread_lamp"))
-            dreadLampRegistry.deserializeNBT(nbt.getTagList("dread_lamp", Constants.NBT.TAG_COMPOUND));
+            dreadLampRegistry.deserializeNBT(nbt.getList("dread_lamp", Constants.NBT.TAG_COMPOUND));
     }
 }

@@ -1,5 +1,6 @@
 package net.xalcon.torchmaster.common.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -9,66 +10,66 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.ModGuiHandler;
-import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
+import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
 
-public class BlockTerrainLighter extends BlockBase implements ITileEntityProvider, IAutoRegisterTileEntity
+import javax.annotation.Nullable;
+
+public class BlockTerrainLighter extends Block implements ITileEntityProvider
 {
 	public static final String INTERNAL_NAME = "terrain_lighter";
 
 	public BlockTerrainLighter()
 	{
-		super(Material.WOOD, INTERNAL_NAME);
-		this.setHardness(1.0f);
-		this.setResistance(3f);
+		super(Builder.create(Material.ROCK).hardnessAndResistance(1f, 3f));
+		this.setRegistryName(Torchmaster.MODID, INTERNAL_NAME);
 	}
 
+	@Nullable
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	public TileEntity createTileEntity(IBlockState state, IBlockReader world)
+	{
+		return new TileEntityTerrainLighter();
+	}
+
+	@Nullable
+	@Override
+	public TileEntity createNewTileEntity(IBlockReader iBlockReader)
 	{
 		return new TileEntityTerrainLighter();
 	}
 
 	@Override
-	public Class<? extends TileEntity> getTileEntityClass()
+	public boolean onBlockActivated(IBlockState p_196250_1_, World p_196250_2_, BlockPos p_196250_3_, EntityPlayer p_196250_4_, EnumHand p_196250_5_, EnumFacing p_196250_6_, float p_196250_7_, float p_196250_8_, float p_196250_9_)
 	{
-		return TileEntityTerrainLighter.class;
-	}
-
-	@Override
-	public String getTileEntityRegistryName()
-	{
-		return this.getRegistryName().toString();
-	}
-
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-	{
-		if(!worldIn.isRemote)
+		if(!p_196250_2_.isRemote)
 		{
-			playerIn.openGui(TorchMasterMod.instance, ModGuiHandler.GuiType.TERRAIN_LIGHTER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+			// TODO
+			//playerIn.openGui(TorchMasterMod.instance, ModGuiHandler.GuiType.TERRAIN_LIGHTER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving)
 	{
-		TileEntity tileentity = worldIn.getTileEntity(pos);
+		if (state.getBlock() != newState.getBlock()) {
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if (tileentity instanceof TileEntityTerrainLighter)
+			{
+				tileentity
+						.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+						.ifPresent(itemHandler ->
+						{
+							for(int i = 0; i < itemHandler.getSlots(); i++)
+							InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
+						});
+			}
 
-		if (tileentity instanceof TileEntityTerrainLighter)
-		{
-			IItemHandler itemHandler = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-			if(itemHandler != null)
-				for(int i = 0; i < itemHandler.getSlots(); i++)
-					InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
-
-		super.breakBlock(worldIn, pos, state);
 	}
 }

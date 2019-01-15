@@ -1,17 +1,14 @@
 package net.xalcon.torchmaster.common.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
-import net.xalcon.torchmaster.common.blocks.BlockMegaTorch;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -35,22 +32,34 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 	@Override
 	public String getTranslationKey(ItemStack stack)
 	{
-		return super.getTranslationKey(stack) + "." + (ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
+		return super.getTranslationKey(stack);
+		// TODO: get blockstate from itemstack
+		//return super.getTranslationKey(stack) + "." + (ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING) ? "lit" : "unlit");
 	}
 
+	/**
+	 * allows items to add custom lines of information to the mouseover description
+	 *
+	 * @param stack
+	 * @param worldIn
+	 * @param tooltip
+	 * @param flagIn
+	 */
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		super.addInformation(stack, playerIn, tooltip, advanced);
+		super.addInformation(stack, worldIn, tooltip, flagIn);
 		Item item = stack.getItem();
 
-		if(ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING))
+		// TODO: get blockstate from itemstack
+		//if(ModBlocks.getMegaTorch().getStateFromMeta(stack.getMetadata()).getValue(BlockMegaTorch.BURNING))
+		if(false)
 		{
-			NBTTagCompound compound = stack.getSubCompound("tm_tile");
+			NBTTagCompound compound = stack.getChildTag("tm_tile");
 			if(compound == null) return;
 			if(compound.getBoolean("isExtinguished")) return;
 
-			int burnValueLeft = compound.getInteger("burnValueLeft");
+			int burnValueLeft = compound.getInt("burnValueLeft");
 			int burnRate = TorchmasterConfig.MegaTorchBurnoutRate;
 			if(burnRate <= 0) return;
 			int ticksLeft = burnValueLeft / burnRate;
@@ -60,7 +69,7 @@ public class ItemBlockMegaTorch extends ItemBlockTooltipInfo
 			int minutes = (ticksLeft - days * DAY_TICKS - hours * HOUR_TICKS) / MINUTE_TICKS;
 			int seconds = (ticksLeft - days * DAY_TICKS - hours * HOUR_TICKS - minutes * MINUTE_TICKS) / SECOND_TICKS;
 
-			tooltip.add(I18n.format(this.getTranslationKey(stack) + ".burntime_left", days, fmt(hours), fmt(minutes), fmt(seconds)));
+			tooltip.add(new TextComponentTranslation(this.getTranslationKey(stack) + ".burntime_left", days, fmt(hours), fmt(minutes), fmt(seconds)));
 		}
 	}
 

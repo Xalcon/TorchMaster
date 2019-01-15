@@ -3,7 +3,7 @@ package net.xalcon.torchmaster.common.network;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.Torchmaster;
 
 public class TorchmasterNetwork
 {
@@ -11,7 +11,7 @@ public class TorchmasterNetwork
 
     public static void initNetwork()
     {
-        channel = NetworkRegistry.newSimpleChannel(new ResourceLocation(TorchMasterMod.MODID, "channel"), () -> "1.0", s -> true, s -> true);
+        channel = NetworkRegistry.newSimpleChannel(new ResourceLocation(Torchmaster.MODID, "channel"), () -> "1.0", s -> true, s -> true);
         PacketSetFeralLanternLoS.Handler.Register(channel, 1);
     }
 

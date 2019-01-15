@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.container.ContainerTerrainLighter;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
 
@@ -14,8 +14,8 @@ import java.util.List;
 
 public class GuiTerrainLighter extends GuiContainer
 {
-	private static final String NO_RS_SIGNAL_KEY = "gui." + TorchMasterMod.MODID + ".block.state.no_signal";
-	private static final ResourceLocation GUI_TEXTURES = new ResourceLocation(TorchMasterMod.MODID + ":textures/gui/container/terrain_lighter.png");
+	private static final String NO_RS_SIGNAL_KEY = "gui." + Torchmaster.MODID + ".block.state.no_signal";
+	private static final ResourceLocation GUI_TEXTURES = new ResourceLocation(Torchmaster.MODID + ":textures/gui/container/terrain_lighter.png");
 	private TileEntityTerrainLighter tile;
 	private IInventory playerInv;
 
@@ -36,19 +36,20 @@ public class GuiTerrainLighter extends GuiContainer
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	public void render(int mouseX, int mouseY, float partialTicks)
 	{
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		String s = this.tile.getDisplayName().getUnformattedText();
+		// TODO: verify .getUnformattedComponentText() is correct here
+		String s = "FIXME: TE Name"; // this.tile.getDisplayName().getUnformattedComponentText();
 		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(this.playerInv.getDisplayName().getUnformattedComponentText(), 8, this.ySize - 96 + 2, 4210752);
 
 		int i = (this.width - this.xSize) / 2; //X asis on GUI
 		int j = (this.height - this.ySize) / 2; //Y asis on GUI
@@ -71,7 +72,7 @@ public class GuiTerrainLighter extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(GUI_TEXTURES);
 		int i = (this.width - this.xSize) / 2;
 		int j = (this.height - this.ySize) / 2;

@@ -1,18 +1,15 @@
 package net.xalcon.torchmaster.common.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
-import net.xalcon.torchmaster.common.creativetabs.ItemGroupTorchMaster;
+import net.xalcon.torchmaster.common.itemgroups.ItemGroupTorchMaster;
 
 import javax.annotation.Nullable;
 import java.util.List;

@@ -10,14 +10,17 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.Torchmaster;
+import net.xalcon.torchmaster.common.init.ModCaps;
 import net.xalcon.torchmaster.common.logic.CapabilityProviderTorchRegistryContainer;
 
+@Mod.EventBusSubscriber(modid = Torchmaster.MODID)
 public class EventHandlerServer
 {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
+	public static void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
 		if(event.getResult() == Event.Result.ALLOW) return;
 		if(TorchmasterConfig.MegaTorchAllowVanillaSpawners && event.isSpawner()) return;
@@ -33,13 +36,13 @@ public class EventHandlerServer
 	}
 
     @SubscribeEvent
-	public void onWorldAttachCapabilityEvent(AttachCapabilitiesEvent<World> event)
+	public static void onWorldAttachCapabilityEvent(AttachCapabilitiesEvent<World> event)
     {
-        event.addCapability(new ResourceLocation(TorchMasterMod.MODID, "registry"), new CapabilityProviderTorchRegistryContainer());
+        event.addCapability(new ResourceLocation(Torchmaster.MODID, "registry"), new CapabilityProviderTorchRegistryContainer());
     }
 
     @SubscribeEvent
-    public void onGlobalTick(TickEvent.ServerTickEvent event)
+    public static void onGlobalTick(TickEvent.ServerTickEvent event)
     {
         if(event.side == LogicalSide.CLIENT) return;
         if(event.phase == TickEvent.Phase.END)

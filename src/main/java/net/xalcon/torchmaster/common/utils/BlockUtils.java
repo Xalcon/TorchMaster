@@ -10,7 +10,8 @@ public class BlockUtils
 	public static IBlockState getBlockStateFromItemStack(ItemStack itemStack)
 	{
 		Block block = Block.getBlockFromItem(itemStack.getItem());
-		return block.getStateFromMeta(itemStack.getMetadata());
+		// TODO: get the correct state via the item stack somehow
+		return block.getDefaultState();
 	}
 
 	// Algorithm by mako @ http://stackoverflow.com/a/14010215

@@ -5,6 +5,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.xalcon.torchmaster.common.tiles.TileEntityTerrainLighter;
@@ -16,29 +17,34 @@ public class ContainerTerrainLighter extends Container
 
 	public ContainerTerrainLighter(IInventory playerInv, TileEntityTerrainLighter terrainLighter)
 	{
-		IItemHandler itemHandler = terrainLighter.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		OptionalCapabilityInstance<IItemHandler> oItemHandler = terrainLighter.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+
+		if(!oItemHandler.isPresent())
+			return;
+
+		IItemHandler itemHandler = oItemHandler.orElse(null);
 
 		for (int i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				this.addSlotToContainer(new SlotTerrainLighter(itemHandler, j + i * 3, 73 + j * 18, 17 + i * 18));
+				this.addSlot(new SlotTerrainLighter(itemHandler, j + i * 3, 73 + j * 18, 17 + i * 18));
 			}
 		}
 
-		this.addSlotToContainer(new SlotItemHandlerFurnaceFuel(itemHandler, 9, 49, 35));
+		this.addSlot(new SlotItemHandlerFurnaceFuel(itemHandler, 9, 49, 35));
 
 		for (int k = 0; k < 3; ++k)
 		{
 			for (int i1 = 0; i1 < 9; ++i1)
 			{
-				this.addSlotToContainer(new Slot(playerInv, i1 + k * 9 + 9, 8 + i1 * 18, 84 + k * 18));
+				this.addSlot(new Slot(playerInv, i1 + k * 9 + 9, 8 + i1 * 18, 84 + k * 18));
 			}
 		}
 
 		for (int l = 0; l < 9; ++l)
 		{
-			this.addSlotToContainer(new Slot(playerInv, l, 8 + l * 18, 142));
+			this.addSlot(new Slot(playerInv, l, 8 + l * 18, 142));
 		}
 	}
 

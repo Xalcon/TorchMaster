@@ -9,10 +9,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.client.renderer.TorchVolumeRenderHandler;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = TorchMasterMod.MODID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Torchmaster.MODID)
 public class EventHandlerClient
 {
     @SubscribeEvent

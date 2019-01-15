@@ -3,8 +3,8 @@ package net.xalcon.torchmaster.client;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.Torchmaster;
+import net.xalcon.torchmaster.common.init.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 import net.xalcon.torchmaster.common.logic.ITorchDistanceLogic;
 
@@ -25,14 +25,14 @@ public class ClientTorchRegistry
     {
         if(!torches.contains(pos))
         {
-            TorchMasterMod.Log.info("Cached torch at position {}", pos);
+            Torchmaster.Log.info("Cached torch at position {}", pos);
             torches.add(pos);
         }
     }
 
     public void removeTorch(BlockPos pos)
     {
-        TorchMasterMod.Log.info("Removed torch at position {}", pos);
+        Torchmaster.Log.info("Removed torch at position {}", pos);
         torches.remove(pos);
     }
 
@@ -46,7 +46,7 @@ public class ClientTorchRegistry
         if(world.isBlockLoaded(pos))
         {
             IBlockState state = world.getBlockState(pos);
-            if(state.getBlock() != ModBlocks.getMegaTorch())
+            if(state.getBlock() != ModBlocks.MegaTorch)
             {
                 this.removeTorch(pos);
             }

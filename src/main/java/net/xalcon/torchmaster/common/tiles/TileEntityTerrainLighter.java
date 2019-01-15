@@ -2,29 +2,31 @@ package net.xalcon.torchmaster.common.tiles;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
+import net.xalcon.torchmaster.common.init.ModTileEntities;
 import net.xalcon.torchmaster.common.utils.BlockUtils;
 
 import javax.annotation.Nonnull;
@@ -33,7 +35,7 @@ import java.util.UUID;
 
 public class TileEntityTerrainLighter extends TileEntity implements ITickable
 {
-	private static final GameProfile TERRAIN_LIGHTER_IDENTITY = new GameProfile(UUID.fromString("d80c982d-de38-43e6-8554-de12f86914d9"), TorchMasterMod.MODID + ":terrain_lighter");
+	private static final GameProfile TERRAIN_LIGHTER_IDENTITY = new GameProfile(UUID.fromString("d80c982d-de38-43e6-8554-de12f86914d9"), Torchmaster.MODID + ":terrain_lighter");
 	private static final int FUEL_SLOT = 9;
 	private int[] spiralMap;
 
@@ -47,20 +49,21 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 
 	public TileEntityTerrainLighter()
 	{
+		super(ModTileEntities.TERRAIN_LIGHTER);
 		this.spiralMap = BlockUtils.createSpiralMap(TorchmasterConfig.TerrainLighterTorchCount);
 		this.inventory = new ItemStackHandler(10);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound)
+	public void read(NBTTagCompound compound)
 	{
-		super.readFromNBT(compound);
+		super.read(compound);
 
-		this.inventory.deserializeNBT(compound.getCompoundTag("Items"));
+		this.inventory.deserializeNBT(compound.getCompound("Items"));
 
-		this.index = compound.getInteger("Index");
-		this.burnTime = compound.getInteger("BurnTime");
-		this.totalBurnTime = compound.getInteger("TotalBurnTime");
+		this.index = compound.getInt("Index");
+		this.burnTime = compound.getInt("BurnTime");
+		this.totalBurnTime = compound.getInt("TotalBurnTime");
 		this.done = this.index >= this.getTorchPlacedMax();
 	}
 
@@ -68,14 +71,14 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		super.onDataPacket(net, pkt);
-		readFromNBT(pkt.getNbtCompound());
+		read(pkt.getNbtCompound());
 	}
 
 	@Override
 	@Nonnull
 	public NBTTagCompound getUpdateTag()
 	{
-		return writeToNBT(super.getUpdateTag());
+		return write(super.getUpdateTag());
 	}
 
 	@Nullable
@@ -87,27 +90,20 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 
 	@Override
 	@Nonnull
-	public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound)
+	public NBTTagCompound write(@Nonnull NBTTagCompound compound)
 	{
-		super.writeToNBT(compound);
+		super.write(compound);
 
-		compound.setInteger("Index", this.index);
-		compound.setInteger("BurnTime", this.burnTime);
-		compound.setInteger("TotalBurnTime", this.totalBurnTime);
+		compound.setInt("Index", this.index);
+		compound.setInt("BurnTime", this.burnTime);
+		compound.setInt("TotalBurnTime", this.totalBurnTime);
 		compound.setTag("Items", this.inventory.serializeNBT());
 
 		return compound;
 	}
 
 	@Override
-	@Nonnull
-	public ITextComponent getDisplayName()
-	{
-		return new TextComponentTranslation("container." + TorchMasterMod.MODID + ".terrain_lighter");
-	}
-
-	@Override
-	public void update()
+	public void tick()
 	{
 		if (this.isBurningFuel())
 			this.burnTime--;
@@ -125,7 +121,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 			ItemStack fuelStack = this.inventory.extractItem(FUEL_SLOT, 1, true);
 			if (!fuelStack.isEmpty())
 			{
-				int burnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
+				int burnTime = 200; // TODO: TileEntityFurnace.getItemBurnTime(fuelStack);
 				if (burnTime > 0)
 				{
 					this.inventory.extractItem(FUEL_SLOT, 1, false);
@@ -148,7 +144,7 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 			//if (torchBlockState.getBlock() == Blocks.AIR) return;
 			BlockPos gridPos = getPosFromIndex(index);
 
-			int height = world.getHeight(new BlockPos(gridPos.getX(), world.getActualHeight(), gridPos.getZ())).getY();
+			int height = world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(gridPos.getX(), world.getActualHeight(), gridPos.getZ())).getY();
 			int maxY = this.pos.getY() + 8;
 			int minY = this.pos.getY() - 8;
 			if(minY < 0) minY = 0;
@@ -161,19 +157,21 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 					BlockPos checkUpPos = checkPos.up();
 					IBlockState blockState = world.getBlockState(checkPos);
 					IBlockState upState = world.getBlockState(checkUpPos);
-					if (blockState.getBlock().canPlaceTorchOnTop(blockState, world, checkPos) && upState.getBlock().isReplaceable(world, checkUpPos) && !upState.getMaterial().isLiquid())
+
+					FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) this.world, TERRAIN_LIGHTER_IDENTITY);
+					BlockItemUseContext ctx = new BlockItemUseContext(world, fakePlayer, ItemStack.EMPTY, checkUpPos, EnumFacing.UP, 0.5f, 1f, 0.5f);
+					if (blockState.getBlock().canPlaceTorchOnTop(blockState, world, checkPos) && upState.isReplaceable(ctx) && !upState.getMaterial().isLiquid())
 					{
 						ItemStack stack = this.inventory.extractItem(torchSlot, 1, false);
 						if(!stack.isEmpty())
 						{
-							FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) this.world, TERRAIN_LIGHTER_IDENTITY);
 							// move the player to the light position and let him face down
 							// some mods use the players facing to determine placement details
 							// instead of relying on the EnumFacing :( *points at BiblioCraft*
 							fakePlayer.setHeldItem(EnumHand.MAIN_HAND, stack);
 							fakePlayer.setPosition(checkPos.getX() + 0.5, checkPos.getY() + 1.5, checkPos.getZ() + 0.5);
 							fakePlayer.rotationPitch = 90f;
-							EnumActionResult result = stack.onItemUse(fakePlayer, this.world, checkPos, EnumHand.MAIN_HAND, EnumFacing.UP, 0.5f, 1f, 0.5f);
+							EnumActionResult result = stack.onItemUse(new ItemUseContext(fakePlayer, stack, checkUpPos, EnumFacing.UP, 0.5f, 1f, 0.5f));
 							if(result == EnumActionResult.SUCCESS)
 							{
 								updated = true;
@@ -253,17 +251,10 @@ public class TileEntityTerrainLighter extends TileEntity implements ITickable
 	}
 
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
-	{
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Nullable
-	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
+	public <T> OptionalCapabilityInstance<T> getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
 	{
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-				? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(this.inventory)
+				? OptionalCapabilityInstance.of(() -> (T)this.inventory)
 				: super.getCapability(capability, facing);
 	}
 }

@@ -6,7 +6,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
-import net.xalcon.torchmaster.common.ModCaps;
+import net.xalcon.torchmaster.common.init.ModCaps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

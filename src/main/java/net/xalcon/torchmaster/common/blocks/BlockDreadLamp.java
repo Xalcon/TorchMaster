@@ -1,5 +1,6 @@
 package net.xalcon.torchmaster.common.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -9,21 +10,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.xalcon.torchmaster.common.ModCaps;
+import net.xalcon.torchmaster.Torchmaster;
+import net.xalcon.torchmaster.common.init.ModCaps;
 
 import java.util.Random;
 
-public class BlockDreadLamp extends BlockBase
+public class BlockDreadLamp extends Block
 {
 	public static final String INTERNAL_NAME = "dread_lamp";
 
 	public BlockDreadLamp()
 	{
-		super(INTERNAL_NAME,
-				Builder.create(Material.GROUND)
-						.hardnessAndResistance(1.5f, 1f)
-						//.lightValue(15)
-		);
+		super(Builder.create(Material.GROUND).hardnessAndResistance(1.5f, 1f).lightValue(15));
+		this.setRegistryName(Torchmaster.MODID, INTERNAL_NAME);
 	}
 
 	@OnlyIn(Dist.CLIENT)

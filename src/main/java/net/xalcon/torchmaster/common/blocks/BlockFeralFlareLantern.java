@@ -1,63 +1,49 @@
 package net.xalcon.torchmaster.common.blocks;
 
-import akka.dispatch.sysmsg.Create;
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.xalcon.torchmaster.TorchMasterMod;
-import net.xalcon.torchmaster.common.ModGuiHandler;
-import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
+import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.tiles.TileEntityFeralFlareLantern;
 
 import javax.annotation.Nullable;
 
-public class BlockFeralFlareLantern extends BlockBase implements IAutoRegisterTileEntity
+public class BlockFeralFlareLantern extends Block implements ITileEntityProvider
 {
     public final static String INTERNAL_NAME = "feral_flare_lantern";
 
-    public final static IProperty<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+    public final static IProperty<EnumFacing> FACING = EnumProperty.create("facing", EnumFacing.class);
 
     public BlockFeralFlareLantern()
     {
-        super(Material.WOOD, INTERNAL_NAME);
-        this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.DOWN));
-        this.setLightLevel(1);
+        super(Builder.create(Material.WOOD).lightValue(1));
+        this.setDefaultState(this.getDefaultState().with(FACING, EnumFacing.DOWN));
+        this.setRegistryName(Torchmaster.MODID, INTERNAL_NAME);
     }
 
     @Override
-    protected BlockStateContainer createBlockState()
+    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder)
     {
-        return new BlockStateContainer(this, FACING);
+        builder.add(FACING);
     }
 
-    @Override @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta & 0b0111));
-    }
-
+    @Nullable
     @Override
-    public int getMetaFromState(IBlockState state)
+    public IBlockState getStateForPlacement(BlockItemUseContext ctx)
     {
-        return state.getValue(FACING).getIndex();
-    }
-
-    @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
-    {
-        return this.getDefaultState().withProperty(FACING, facing.getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getFace().getOpposite());
     }
 
     @Override
@@ -68,54 +54,38 @@ public class BlockFeralFlareLantern extends BlockBase implements IAutoRegisterTi
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state)
+    public TileEntity createTileEntity(IBlockState state, IBlockReader world)
+    {
+        return new TileEntityFeralFlareLantern();
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader iBlockReader)
     {
         return new TileEntityFeralFlareLantern();
     }
 
     @Override
-    public void registerItemModels(Item item)
+    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float x, float y, float z)
     {
-        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(this.getRegistryName(), "facing=down"));
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
-        playerIn.openGui(TorchMasterMod.instance, ModGuiHandler.GuiType.FERAL_LANTERN.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+        // TODO: GUI
+        //playerIn.openGui(TorchMasterMod.instance, ModGuiHandler.GuiType.FERAL_LANTERN.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving)
     {
-        TileEntity te = worldIn.getTileEntity(pos);
+        TileEntity te = world.getTileEntity(pos);
         if(te instanceof TileEntityFeralFlareLantern)
             ((TileEntityFeralFlareLantern) te).removeChildLights();
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @Override @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
+        super.onReplaced(state, world, pos, newState, isMoving);
     }
 
     @Override @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state)
     {
         return false;
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileEntityClass()
-    {
-        return TileEntityFeralFlareLantern.class;
-    }
-
-    @Override
-    public String getTileEntityRegistryName()
-    {
-        return TorchMasterMod.MODID + ":" + INTERNAL_NAME;
     }
 }

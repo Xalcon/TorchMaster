@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.init.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 import org.lwjgl.opengl.GL11;
 
@@ -70,7 +70,7 @@ public class TorchVolumeRenderHandler
     public static void onGlobalTick(World world)
     {
         visualizedTorches.entrySet()
-                .removeIf(torch -> !world.isBlockLoaded(torch.getKey()) || world.getBlockState(torch.getKey()).getBlock() != ModBlocks.getMegaTorch());
+                .removeIf(torch -> !world.isBlockLoaded(torch.getKey()) || world.getBlockState(torch.getKey()).getBlock() != ModBlocks.MegaTorch);
     }
 
     @SubscribeEvent

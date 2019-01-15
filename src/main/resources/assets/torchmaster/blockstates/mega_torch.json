@@ -9,12 +9,6 @@
     "model": "torchmaster:mega_torch"
   },
   "variants": {
-    "burning=true": [{}],
-    "burning=false": [{
-      "textures": {
-        "torch": "torchmaster:blocks/mega_torch_unlit",
-        "torch_top": "torchmaster:blocks/mega_torch_top_unlit"
-      }
-    }]
+    "normal": [{}]
   }
 }

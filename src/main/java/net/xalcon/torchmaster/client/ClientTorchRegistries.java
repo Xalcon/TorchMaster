@@ -1,6 +1,6 @@
 package net.xalcon.torchmaster.client;
 
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.logic.TorchDistanceLogics;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class ClientTorchRegistries
 
     public static void clearAll()
     {
-        TorchMasterMod.Log.info("Clearing cached mega torches");
+        Torchmaster.Log.info("Clearing cached mega torches");
         megaTorchRegistries.clear();
     }
 }

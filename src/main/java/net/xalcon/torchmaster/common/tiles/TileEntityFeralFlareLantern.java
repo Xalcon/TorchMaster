@@ -14,8 +14,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumLightType;
 import net.minecraftforge.common.util.Constants;
-import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.init.ModBlocks;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
+import net.xalcon.torchmaster.common.init.ModTileEntities;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -27,9 +28,9 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
     private boolean useLineOfSight;
     private List<BlockPos> childLights = new ArrayList<>();
 
-    public TileEntityFeralFlareLantern(TileEntityType<?> tileEntityType)
+    public TileEntityFeralFlareLantern()
     {
-        super(tileEntityType);
+        super(ModTileEntities.FERAL_FLARE_LANTERN);
     }
 
     @Nullable
@@ -122,7 +123,7 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
                 }
             }
 
-            if(this.world.setBlockState(targetPos, ModBlocks.getInvisibleLight().getDefaultState(), 3))
+            if(this.world.setBlockState(targetPos, ModBlocks.InvisibleLight.getDefaultState(), 3))
             {
                 this.childLights.add(targetPos);
                 this.markDirty();
@@ -135,12 +136,12 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         if(this.world.isRemote) return;
         for(BlockPos pos : this.childLights)
         {
-            if (this.world.getBlockState(pos).getBlock() == ModBlocks.getInvisibleLight())
+            if (this.world.getBlockState(pos).getBlock() == ModBlocks.InvisibleLight)
             {
                 if(TorchmasterConfig.feralFlareLightDecayInstantly)
                     this.world.removeBlock(pos);
                 else
-                    this.world.setBlockState(pos, ModBlocks.getInvisibleLight().getDecayState(), 2);
+                    this.world.setBlockState(pos, ModBlocks.InvisibleLight.getDecayState(), 2);
             }
         }
         this.childLights.clear();

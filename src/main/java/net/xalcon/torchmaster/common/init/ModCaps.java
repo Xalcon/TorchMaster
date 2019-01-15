@@ -1,4 +1,4 @@
-package net.xalcon.torchmaster.common;
+package net.xalcon.torchmaster.common.init;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;

@@ -7,8 +7,9 @@ import net.minecraft.item.Item;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.xalcon.torchmaster.Torchmaster;
 
-public class BlockInvisibleLight extends BlockBase
+public class BlockInvisibleLight extends Block
 {
     private final static BooleanProperty DECAY = BooleanProperty.create("decay");
 
@@ -17,9 +18,8 @@ public class BlockInvisibleLight extends BlockBase
 
     public BlockInvisibleLight()
     {
-        super(INTERNAL_NAME, Builder.create(Material.AIR)
-                //.lightLevel(15)
-        );
+        super(Builder.create(Material.AIR).lightValue(15));
+        this.setRegistryName(Torchmaster.MODID, INTERNAL_NAME);
         this.setDefaultState(this.getDefaultState().with(DECAY, false));
         this.decayState = this.getDefaultState().with(DECAY, true);
     }
@@ -45,11 +45,5 @@ public class BlockInvisibleLight extends BlockBase
     public IBlockState getDecayState()
     {
         return this.decayState;
-    }
-
-    @Override
-    public Item createItemBlock()
-    {
-        return null;
     }
 }

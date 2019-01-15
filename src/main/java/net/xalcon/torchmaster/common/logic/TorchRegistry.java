@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.xalcon.torchmaster.TorchMasterMod;
+import net.xalcon.torchmaster.Torchmaster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +73,7 @@ abstract class TorchRegistry implements ITorchRegistry
         {
             if(!this.isBlockStateValid(world.getBlockState(loc)))
             {
-                TorchMasterMod.Log.info("Torch @ " + loc + " is no longer valid, removing from registry");
+                Torchmaster.Log.info("Torch @ " + loc + " is no longer valid, removing from registry");
                 unregister(loc);
             }
         }
@@ -84,17 +84,17 @@ abstract class TorchRegistry implements ITorchRegistry
     {
         NBTTagList tagList = new NBTTagList();
         for(BlockPos loc : this.torches)
-            tagList.appendTag(NBTUtil.createPosTag(loc));
+            tagList.add(NBTUtil.writeBlockPos(loc));
         return tagList;
     }
 
     @Override
     public void deserializeNBT(NBTTagList list)
     {
-        for(int i = 0; i < list.tagCount(); i++)
+        for(int i = 0; i < list.size(); i++)
         {
-            NBTTagCompound entry = list.getCompoundTagAt(i);
-            BlockPos loc = NBTUtil.getPosFromTag(entry);
+            NBTTagCompound entry = list.getCompound(i);
+            BlockPos loc = NBTUtil.readBlockPos(entry);
             this.register(loc);
         }
     }
