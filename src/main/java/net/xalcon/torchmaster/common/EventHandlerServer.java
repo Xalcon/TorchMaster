@@ -10,6 +10,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,10 +24,10 @@ import javax.annotation.Nullable;
 
 public class EventHandlerServer
 {
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
-		if(event.getResult() == Event.Result.ALLOW) return;
+		if(event.getResult() == Event.Result.ALLOW && !TorchmasterConfig.slighlyMoreAggressiveBlocking) return;
 		if(TorchmasterConfig.MegaTorchAllowVanillaSpawners && event.isSpawner()) return;
 
 		Entity entity = event.getEntity();

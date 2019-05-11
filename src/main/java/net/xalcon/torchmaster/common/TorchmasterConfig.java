@@ -50,6 +50,8 @@ public class TorchmasterConfig
     @Config.Comment("The radius of the spawn prevention. (Passive Animals)")
     public static int DreadLampRange = 64;
 
+    @Config.Comment("Some mods override the same method as torchmaster to handle mob spawning. Setting this to true might help with certain mods still being able to spawn things. (Unlikely though)")
+    public static boolean slighlyMoreAggressiveBlocking = false;
 
     @Config.RangeInt(min = 0)
     @Config.Comment("The amount of torches to place in each direction. The effective range is multiplied by the torch spacing (32 * 5 = 160 blocks, default 7 * 5 = 35 blocks)")
