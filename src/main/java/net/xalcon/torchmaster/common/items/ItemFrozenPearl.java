@@ -63,6 +63,8 @@ public class ItemFrozenPearl extends Item
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        tooltip.add(I18n.format(this.getTranslationKey(stack) + ".tooltip"));
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        if(TorchmasterConfig.BeginnerTooltips)
+            tooltip.add(I18n.format(this.getTranslationKey(stack) + ".tooltip"));
     }
 }
