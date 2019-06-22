@@ -1,26 +1,26 @@
 package net.xalcon.torchmaster.common.logic;
 
-import net.minecraft.nbt.INBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 
-public class GenericNBTStorage<T extends INBTSerializable<NBTTagCompound>> implements Capability.IStorage<T>
+public class GenericNBTStorage<T extends INBTSerializable<CompoundNBT>> implements Capability.IStorage<T>
 {
     @Nullable
     @Override
-    public INBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side)
+    public INBT writeNBT(Capability<T> capability, T instance, Direction side)
     {
         return instance.serializeNBT();
     }
 
     @Override
-    public void readNBT(Capability<T> capability, T instance, EnumFacing side, INBTBase nbt)
+    public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt)
     {
-        if(nbt instanceof NBTTagCompound)
-            instance.deserializeNBT((NBTTagCompound) nbt);
+        if(nbt instanceof CompoundNBT)
+            instance.deserializeNBT((CompoundNBT) nbt);
     }
 }
