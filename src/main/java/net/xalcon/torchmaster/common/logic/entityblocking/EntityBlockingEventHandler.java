@@ -4,9 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,16 +13,18 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.xalcon.torchmaster.Torchmaster;
+import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.ModCaps;
 
 @Mod.EventBusSubscriber(modid = Torchmaster.MODID)
 public class EntityBlockingEventHandler
 {
     @SubscribeEvent
-    public static void onCheckSpawn(LivingSpawnEvent.CheckSpawn event)
+    public static void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) throws InterruptedException
     {
+        event.getWorld().getWorld().getProfiler().startSection("torchmaster_checkspawn");
         if(event.getResult() == Event.Result.ALLOW) return;
-        // if(TorchmasterConfig.MegaTorchAllowVanillaSpawners && event.isSpawner()) return;
+        if(!TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
 
         Entity entity = event.getEntity();
         World world = entity.getEntityWorld();
@@ -33,8 +34,22 @@ public class EntityBlockingEventHandler
             if(reg.shouldBlockEntity(entity))
             {
                 event.setResult(Event.Result.DENY);
+                event.getEntity().addTag("torchmaster_removed_spawn");
             }
         });
+        event.getWorld().getWorld().getProfiler().endSection();
+    }
+
+    @SubscribeEvent
+    public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event)
+    {
+        event.getWorld().getWorld().getProfiler().startSection("torchmaster_ejw");
+        if(event.getEntity().getTags().contains("torchmaster_removed_spawn"))
+        {
+            event.setCanceled(true);
+            event.setResult(Event.Result.DENY);
+        }
+        event.getWorld().getWorld().getProfiler().endSection();
     }
 
     @SubscribeEvent
@@ -51,7 +66,9 @@ public class EntityBlockingEventHandler
         {
             for(ServerWorld world : Torchmaster.server.getWorlds())
             {
+                world.getProfiler().startSection("torchmaster_" + world.getProviderName());
                 world.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg -> reg.onGlobalTick(world));
+                world.getProfiler().endSection();
             }
         }
     }

@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.logic.DistanceLogics;
 import net.xalcon.torchmaster.common.logic.entityblocking.IEntityBlockingLight;
@@ -21,7 +22,7 @@ public class MegatorchEntityBlockingLight implements IEntityBlockingLight
     public boolean shouldBlockEntity(Entity entity)
     {
         return entity instanceof LivingEntity
-            && DistanceLogics.Cubic.isPositionInRange(entity.posX, entity.posY, entity.posZ, pos, 1280);
+            && DistanceLogics.Cubic.isPositionInRange(entity.posX, entity.posY, entity.posZ, pos, TorchmasterConfig.GENERAL.megaTorchRadius.get());
     }
 
     @Override
