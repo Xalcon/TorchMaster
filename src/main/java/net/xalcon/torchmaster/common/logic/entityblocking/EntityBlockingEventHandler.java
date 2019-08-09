@@ -24,7 +24,7 @@ public class EntityBlockingEventHandler
     {
         event.getWorld().getWorld().getProfiler().startSection("torchmaster_checkspawn");
         if(event.getResult() == Event.Result.ALLOW) return;
-        if(!TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
+        if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
 
         Entity entity = event.getEntity();
         World world = entity.getEntityWorld();
