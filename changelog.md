@@ -1,5 +1,6 @@
 ### v1.8.0
 * FIX: Fixed rendering of the dread lamp glass texture
+* FIX: Improved compatibility with quark mobs (stonelings and frogs in particular, both should be blocked by the dread lamp)
 * NEW: Added `/torchmaster_entity_dump` command. Dumps all registered entities to the log file (Registered to the game, the mega torch and dread lamp)
 * NEW: Added `/torchmaster_list_torches` command. Dumps all mega torches and dread lamps of loaded dimensions to the log file
 * NEW: Added mega torch and dread lamp white/black listing option
