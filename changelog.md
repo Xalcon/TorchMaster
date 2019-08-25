@@ -1,3 +1,18 @@
+### v1.8.0
+* FIX: Fixed rendering of the dread lamp glass texture
+* NEW: Added `/torchmaster_entity_dump` command. Dumps all registered entities to the log file (Registered to the game, the mega torch and dread lamp)
+* NEW: Added `/torchmaster_list_torches` command. Dumps all mega torches and dread lamps of loaded dimensions to the log file
+* NEW: Added mega torch and dread lamp white/black listing option
+    * Format: [PREFIX][MOD_NAMESPACE]:[ENTITY_NAME]
+    * Valid Prefixes:
+        * **+**: Adds an entity to the list, effectively blocking it from being able to spawn
+        * **-**: Removes an entity from the list, effectively allowing it to spawn
+    * Examples:
+        * Block Bats from spawning: `+minecraft:bat`
+        * Allow pigs to spawn: `-minecraft:pig`
+        * Block Quark Stonelings from spawning: `+quark:stoneling`
+    * Use the `/torchmaster_entity_dump` command to obtain a full list of available entities (in the game log file)
+
 ### v1.7.1
 * FIX: Fixed an issue with the Feral Flare Lantern that could lead to chunk corruption when placed close to the world height limit.
 * NEW: Added a configuration option to limit the amount of lights a Feral Flare Lantern can place.
