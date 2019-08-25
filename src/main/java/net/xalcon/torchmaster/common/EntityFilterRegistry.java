@@ -59,4 +59,9 @@ public class EntityFilterRegistry
 			}
 		}
 	}
+
+	public ResourceLocation[] getRegisteredEntities()
+	{
+		return this.registry.toArray(new ResourceLocation[0]);
+	}
 }

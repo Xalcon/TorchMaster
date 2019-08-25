@@ -13,4 +13,6 @@ public interface ITorchRegistry extends INBTSerializable<NBTTagList>
     void unregister(BlockPos pos);
     boolean shouldEntityBeBlocked(Entity entity);
     void onGlobalTick(World world);
+
+    BlockPos[] getEntries();
 }

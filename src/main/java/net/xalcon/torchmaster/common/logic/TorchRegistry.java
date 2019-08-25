@@ -100,4 +100,10 @@ abstract class TorchRegistry implements ITorchRegistry
             this.register(loc);
         }
     }
+
+    @Override
+    public BlockPos[] getEntries()
+    {
+        return this.torches.toArray(new BlockPos[0]);
+    }
 }

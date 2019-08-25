@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.xalcon.torchmaster.common.*;
+import net.xalcon.torchmaster.common.commands.CommandTorchmasterEntityDump;
+import net.xalcon.torchmaster.common.commands.CommandTorchmasterTorchList;
 import net.xalcon.torchmaster.common.network.TorchmasterNetwork;
 import net.xalcon.torchmaster.compat.EntityFilterRegisterEvent;
 import net.xalcon.torchmaster.compat.RegistryBackwardsCompat;
@@ -66,5 +68,12 @@ public class TorchMasterMod
         MegaTorchFilterRegistry.applyListOverrides(TorchmasterConfig.MegaTorchEntityBlockListOverrides);
         TorchMasterMod.Log.info("Applying dread lamp entity block list overrides...");
         DreadLampFilterRegistry.applyListOverrides(TorchmasterConfig.DreadLampEntityBlockListOverrides);
+    }
+
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new CommandTorchmasterEntityDump());
+        event.registerServerCommand(new CommandTorchmasterTorchList());
     }
 }
