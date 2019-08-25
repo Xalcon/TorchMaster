@@ -1,14 +1,10 @@
 package net.xalcon.torchmaster;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.xalcon.torchmaster.common.*;
 import net.xalcon.torchmaster.common.network.TorchmasterNetwork;
@@ -65,5 +61,10 @@ public class TorchMasterMod
     {
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.MegaTorch(MegaTorchFilterRegistry));
         MinecraftForge.EVENT_BUS.post(new EntityFilterRegisterEvent.DreadLamp(DreadLampFilterRegistry));
+
+        TorchMasterMod.Log.info("Applying mega torch entity block list overrides...");
+        MegaTorchFilterRegistry.applyListOverrides(TorchmasterConfig.MegaTorchEntityBlockListOverrides);
+        TorchMasterMod.Log.info("Applying dread lamp entity block list overrides...");
+        DreadLampFilterRegistry.applyListOverrides(TorchmasterConfig.DreadLampEntityBlockListOverrides);
     }
 }

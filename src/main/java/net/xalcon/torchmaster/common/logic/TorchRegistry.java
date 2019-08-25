@@ -2,9 +2,11 @@ package net.xalcon.torchmaster.common.logic;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.xalcon.torchmaster.TorchMasterMod;
@@ -16,7 +18,7 @@ abstract class TorchRegistry implements ITorchRegistry
 {
     private final List<BlockPos> torches = new ArrayList<>();
 
-    protected abstract boolean shouldHandleEntityType(Class<? extends Entity> entityClass);
+    protected abstract boolean shouldHandleEntity(ResourceLocation entityName);
     protected abstract int getTorchRange();
     protected abstract boolean isBlockStateValid(IBlockState state);
 
@@ -43,7 +45,7 @@ abstract class TorchRegistry implements ITorchRegistry
     @Override
     public final boolean shouldEntityBeBlocked(Entity entity)
     {
-        return shouldHandleEntityType(entity.getClass())
+        return shouldHandleEntity(EntityList.getKey(entity))
                 && isPositionInTorchRange(entity.posX, entity.posY, entity.posZ);
     }
 

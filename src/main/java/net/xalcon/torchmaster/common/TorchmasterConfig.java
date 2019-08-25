@@ -107,6 +107,25 @@ public class TorchmasterConfig
     @Config.RequiresMcRestart
     public static int frozenPearlDurability = 1024;
 
+    @Config.Comment({
+        "Use this setting to override the internal lists for entity blocking",
+        "You can use this to block more entities or even allow certain entities to still spawn",
+        "The + prefix will add the entity to the list, effectivly denying its spawns",
+        "The - prefix will remove the entity from the list (if necessary), effectivly allowing its spawns",
+        "Block zombies: +minecraft:zombie",
+        "Allow creepers: -minecraft:creeper"
+    })
+    @Config.RequiresMcRestart
+    public static String[] MegaTorchEntityBlockListOverrides = { };
+
+    @Config.Comment({
+        "Same as the mega torch block list override, just for the dread lamp",
+        "Block squid: +minecraft:squid",
+        "Allow pigs: -minecraft:pig",
+    })
+    @Config.RequiresMcRestart
+    public static String[] DreadLampEntityBlockListOverrides = { };
+
     @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {

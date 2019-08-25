@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.xalcon.torchmaster.TorchMasterMod;
 import net.xalcon.torchmaster.common.TorchmasterConfig;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 @Mod.EventBusSubscriber()
@@ -17,9 +18,9 @@ public class MoCreaturesCompat
 		if(!TorchmasterConfig.MoCreaturesBlockAll) return;
 
 		EntityList.getEntityNameList().stream()
-				.filter(n -> "mocreatures".equals(n.getNamespace()))
-				.map(EntityList::getClass)
-				.filter(Objects::nonNull)
-				.forEach(c -> event.getRegistry().registerEntity(c));
+			.filter(n -> "mocreatures".equals(n.getNamespace()))
+			.map(rl -> new EntityInfoWrapper(rl, EntityList.getClass(rl)))
+			.filter(e -> e.getEntityClass() != null)
+			.forEach(e -> event.getRegistry().registerEntity(e.getEntityName()));
 	}
 }

@@ -1,6 +1,7 @@
 package net.xalcon.torchmaster.compat;
 
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.monster.IMob;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.xalcon.torchmaster.TorchMasterMod;
@@ -14,18 +15,18 @@ public class LycaniteMobsCompat
 {
 	private static final String[] MODS =
 	{
-			"arcticmobs",
-			"demonmobs",
-			"desertmobs",
-			"forestmobs",
-			"freshwatermobs",
-			"infernomobs",
-			"junglemobs",
-			"mountainmobs",
-			"plainsmobs",
-			"saltwatermobs",
-			"shadowmobs",
-			"swampmobs"
+		"arcticmobs",
+		"demonmobs",
+		"desertmobs",
+		"forestmobs",
+		"freshwatermobs",
+		"infernomobs",
+		"junglemobs",
+		"mountainmobs",
+		"plainsmobs",
+		"saltwatermobs",
+		"shadowmobs",
+		"swampmobs"
 	};
 
 	@SubscribeEvent
@@ -34,9 +35,9 @@ public class LycaniteMobsCompat
 		if(!TorchmasterConfig.LycanitesMobsBlockAll) return;
 
 		EntityList.getEntityNameList().stream()
-				.filter(n -> Arrays.stream(MODS).anyMatch(m -> m.equals(n.getNamespace())))
-				.map(EntityList::getClass)
-				.filter(Objects::nonNull)
-				.forEach(c -> event.getRegistry().registerEntity(c));
+			.filter(n -> Arrays.stream(MODS).anyMatch(m -> m.equals(n.getNamespace())))
+			.map(rl -> new EntityInfoWrapper(rl, EntityList.getClass(rl)))
+			.filter(e -> e.getEntityClass() != null)
+			.forEach(e -> event.getRegistry().registerEntity(e.getEntityName()));
 	}
 }

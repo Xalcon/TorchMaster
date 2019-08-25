@@ -26,8 +26,8 @@ public class BlockDreadLamp extends BlockBase
 		this.setLightLevel(1.0f);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer()
+	@Override
+	public BlockRenderLayer getRenderLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
 	}

@@ -3,6 +3,7 @@ package net.xalcon.torchmaster.common.logic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.xalcon.torchmaster.TorchMasterMod;
@@ -14,9 +15,9 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
     private ITorchRegistry megaTorchRegistry = new TorchRegistry(TorchDistanceLogics.Cubic)
     {
         @Override
-        protected boolean shouldHandleEntityType(Class<? extends Entity> entityClass)
+        protected boolean shouldHandleEntity(ResourceLocation entityName)
         {
-            return TorchMasterMod.MegaTorchFilterRegistry.containsEntity(entityClass);
+            return TorchMasterMod.MegaTorchFilterRegistry.containsEntity(entityName);
         }
 
         @Override
@@ -35,9 +36,9 @@ public class TorchRegistryContainer implements ITorchRegistryContainer
     private ITorchRegistry dreadLampRegistry = new TorchRegistry(TorchDistanceLogics.Cubic)
     {
         @Override
-        protected boolean shouldHandleEntityType(Class<? extends Entity> entityClass)
+        protected boolean shouldHandleEntity(ResourceLocation entityName)
         {
-            return TorchMasterMod.DreadLampFilterRegistry.containsEntity(entityClass);
+            return TorchMasterMod.DreadLampFilterRegistry.containsEntity(entityName);
         }
 
         @Override
