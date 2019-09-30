@@ -3,6 +3,8 @@ package net.xalcon.torchmaster.common.logic.entityblocking;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -10,9 +12,11 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.ModCaps;
+import net.xalcon.torchmaster.common.commands.TorchInfo;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
@@ -72,7 +76,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
 
                 if(serializerKey == null)
                 {
-                    Torchmaster.LOGGER.error("Unable to serialize light '{}', the serializer was null", lightKey);
+                    Torchmaster.Log.error("Unable to serialize light '{}', the serializer was null", lightKey);
                     continue;
                 }
 
@@ -84,7 +88,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
 
                 if(serializer == null)
                 {
-                    Torchmaster.LOGGER.error("Unable to serialize light '{}', the serializer '{}' was not found", lightKey, serializerKey);
+                    Torchmaster.Log.error("Unable to serialize light '{}', the serializer '{}' was not found", lightKey, serializerKey);
                     continue;
                 }
 
@@ -93,7 +97,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
                     CompoundNBT lightNbt = serializer.serializeLight(lightKey, light);
                     if(lightNbt == null)
                     {
-                        Torchmaster.LOGGER.error("Unable to serialize light '{}', the serializer '{}' returned null", lightKey, serializerKey);
+                        Torchmaster.Log.error("Unable to serialize light '{}', the serializer '{}' returned null", lightKey, serializerKey);
                         continue;
                     }
                     lightNbt.putString("lightSerializerKey", serializerKey);
@@ -101,8 +105,8 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
                 }
                 catch (Exception ex)
                 {
-                    Torchmaster.LOGGER.error("The serializer '{}' threw an error during serialization!", serializerKey);
-                    Torchmaster.LOGGER.error(ex);
+                    Torchmaster.Log.error("The serializer '{}' threw an error during serialization!", serializerKey);
+                    Torchmaster.Log.error(ex);
                 }
             }
 
@@ -129,7 +133,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
 
                 if(serializer == null)
                 {
-                    Torchmaster.LOGGER.error("Unable to deserialize the light '{}', the serializer '{}' was not found", lightKey, serializerKey);
+                    Torchmaster.Log.error("Unable to deserialize the light '{}', the serializer '{}' was not found", lightKey, serializerKey);
                     continue;
                 }
 
@@ -138,7 +142,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
                     IEntityBlockingLight light = serializer.deserializeLight(lightKey, lightNbt);
                     if(light == null)
                     {
-                        Torchmaster.LOGGER.error("Unable to deserialize the light '{}', the serializer returned null", lightKey);
+                        Torchmaster.Log.error("Unable to deserialize the light '{}', the serializer returned null", lightKey);
                         continue;
                     }
 
@@ -146,8 +150,8 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
                 }
                 catch (Exception ex)
                 {
-                    Torchmaster.LOGGER.error("The serializer '{}' threw an error during deserialization!", serializerKey);
-                    Torchmaster.LOGGER.error(ex);
+                    Torchmaster.Log.error("The serializer '{}' threw an error during deserialization!", serializerKey);
+                    Torchmaster.Log.error(ex);
                 }
             }
         }
@@ -194,6 +198,14 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
                 return;
             tickCounter = 0;
             lights.entrySet().removeIf(l -> l.getValue().cleanupCheck(world));
+        }
+
+        @Override
+        public TorchInfo[] getEntries()
+        {
+            return this.lights.values().stream()
+                .map(x -> new TorchInfo(x.getName(), x.getPos()))
+                .toArray(TorchInfo[]::new);
         }
     }
 }

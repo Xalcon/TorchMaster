@@ -1,12 +1,18 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 
 public interface IEntityBlockingLight
 {
     boolean shouldBlockEntity(Entity entity);
     String getLightSerializerKey();
+
+    String getName();
+    BlockPos getPos();
 
     /**
      * Called frequently for cleanup purposes

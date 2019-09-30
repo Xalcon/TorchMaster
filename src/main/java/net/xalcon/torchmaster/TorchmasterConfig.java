@@ -6,6 +6,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static net.minecraftforge.fml.Logging.CORE;
 import static net.minecraftforge.fml.loading.LogMarkers.FORGEMOD;
 
@@ -26,6 +30,7 @@ public class TorchmasterConfig
     {
         public final ForgeConfigSpec.ConfigValue<Boolean> blockOnlyNaturalSpawns;
         public final ForgeConfigSpec.ConfigValue<Integer> megaTorchRadius;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> MegaTorchEntityBlockListOverrides;
 
         private General(ForgeConfigSpec.Builder builder)
         {
@@ -41,6 +46,11 @@ public class TorchmasterConfig
                 .translation("torchmaster.config.megaTorchRadius.description")
                 .define("megaTorchRadius", 64);
 
+            MegaTorchEntityBlockListOverrides = builder
+                .comment("Bla")
+                .translation("torchmaster.config.bla")
+                .defineList("megaTorchEntityBlockListOverrides", Arrays.asList("+minecraft:zombie", "+minecraft:pig"),o -> o instanceof String);
+
             builder.pop();
         }
     }
@@ -49,11 +59,11 @@ public class TorchmasterConfig
 
     @SubscribeEvent
     public static void onLoad(final ModConfig.Loading configEvent) {
-        Torchmaster.LOGGER.debug(FORGEMOD, "Loaded torchmaster config file {}", configEvent.getConfig().getFileName());
+        Torchmaster.Log.debug(FORGEMOD, "Loaded torchmaster config file {}", configEvent.getConfig().getFileName());
     }
 
     @SubscribeEvent
     public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
-        Torchmaster.LOGGER.fatal(CORE, "torchmaster config just got changed on the file system!");
+        Torchmaster.Log.fatal(CORE, "torchmaster config just got changed on the file system!");
     }
 }

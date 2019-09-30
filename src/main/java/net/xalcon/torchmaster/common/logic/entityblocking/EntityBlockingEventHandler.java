@@ -34,13 +34,13 @@ public class EntityBlockingEventHandler
             if(reg.shouldBlockEntity(entity))
             {
                 event.setResult(Event.Result.DENY);
-                event.getEntity().addTag("torchmaster_removed_spawn");
+                //event.getEntity().addTag("torchmaster_removed_spawn");
             }
         });
         event.getWorld().getWorld().getProfiler().endSection();
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void onEntityJoinWorldEvent(EntityJoinWorldEvent event)
     {
         event.getWorld().getWorld().getProfiler().startSection("torchmaster_ejw");
@@ -50,7 +50,7 @@ public class EntityBlockingEventHandler
             event.setResult(Event.Result.DENY);
         }
         event.getWorld().getWorld().getProfiler().endSection();
-    }
+    }*/
 
     @SubscribeEvent
     public static void onWorldAttachCapabilityEvent(AttachCapabilitiesEvent<World> event)
@@ -64,6 +64,8 @@ public class EntityBlockingEventHandler
         if(event.side == LogicalSide.CLIENT) return;
         if(event.phase == TickEvent.Phase.END)
         {
+            if(Torchmaster.server == null) return;
+
             for(ServerWorld world : Torchmaster.server.getWorlds())
             {
                 world.getProfiler().startSection("torchmaster_dim" + world.dimension.getType().getId());

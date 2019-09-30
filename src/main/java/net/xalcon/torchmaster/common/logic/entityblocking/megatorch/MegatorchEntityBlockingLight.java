@@ -44,6 +44,13 @@ public class MegatorchEntityBlockingLight implements IEntityBlockingLight
         return world.isBlockLoaded(this.pos) && world.getBlockState(pos).getBlock() != ModBlocks.blockMegaTorch;
     }
 
+    @Override
+    public String getName()
+    {
+        return "Mega Torch";
+    }
+
+    @Override
     public BlockPos getPos()
     {
         return pos;

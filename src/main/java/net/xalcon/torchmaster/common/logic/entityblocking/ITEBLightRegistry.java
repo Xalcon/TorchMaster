@@ -2,8 +2,11 @@ package net.xalcon.torchmaster.common.logic.entityblocking;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.xalcon.torchmaster.common.commands.TorchInfo;
 
 public interface ITEBLightRegistry extends INBTSerializable<CompoundNBT>
 {
@@ -26,4 +29,6 @@ public interface ITEBLightRegistry extends INBTSerializable<CompoundNBT>
     IEntityBlockingLight getLight(String lightKey);
 
     void onGlobalTick(World world);
+
+    TorchInfo[] getEntries();
 }
