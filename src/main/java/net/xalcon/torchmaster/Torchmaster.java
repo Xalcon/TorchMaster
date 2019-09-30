@@ -1,6 +1,5 @@
 package net.xalcon.torchmaster;
 
-import net.minecraft.command.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -17,6 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.xalcon.torchmaster.common.EntityFilterRegistry;
 import net.xalcon.torchmaster.common.ModCaps;
 import net.xalcon.torchmaster.common.commands.CommandTorchmaster;
+import net.xalcon.torchmaster.compat.VanillaCompat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,8 +38,6 @@ public class Torchmaster
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOWEST, this::postInit);
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorchmasterConfig.spec, "torchmaster.toml");
-        //Log.info("Applying dread lamp entity block list overrides...");
-        //DreadLampFilterRegistry.applyListOverrides(TorchmasterConfig.DreadLampEntityBlockListOverrides);
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -49,8 +47,13 @@ public class Torchmaster
 
     private void postInit(final FMLLoadCompleteEvent event)
     {
+        VanillaCompat.registerTorchEntities(MegaTorchFilterRegistry);
+        VanillaCompat.registerDreadLampEntities(DreadLampFilterRegistry);
+
         Log.info("Applying mega torch entity block list overrides...");
-        MegaTorchFilterRegistry.applyListOverrides(TorchmasterConfig.GENERAL.MegaTorchEntityBlockListOverrides.get().toArray(new String[0]));
+        MegaTorchFilterRegistry.applyListOverrides(TorchmasterConfig.GENERAL.megaTorchEntityBlockListOverrides.get().toArray(new String[0]));
+        Log.info("Applying dread lamp entity block list overrides...");
+        DreadLampFilterRegistry.applyListOverrides(TorchmasterConfig.GENERAL.dreadLampEntityBlockListOverrides.get().toArray(new String[0]));
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

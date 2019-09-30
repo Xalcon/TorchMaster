@@ -1,5 +1,6 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
+import net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp.DreadLampSerializer;
 import net.xalcon.torchmaster.common.logic.entityblocking.megatorch.MegatorchSerializer;
 
 import java.util.HashMap;
@@ -10,7 +11,8 @@ public class LightSerializerRegistry
 
     static
     {
-        registerLightSerializer(new MegatorchSerializer());
+        registerLightSerializer(MegatorchSerializer.INSTANCE);
+        registerLightSerializer(DreadLampSerializer.INSTANCE);
     }
 
     public static void registerLightSerializer(ILightSerializer serializer)

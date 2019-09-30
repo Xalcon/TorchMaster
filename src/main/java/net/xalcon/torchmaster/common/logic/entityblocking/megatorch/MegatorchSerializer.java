@@ -7,8 +7,11 @@ import net.xalcon.torchmaster.common.logic.entityblocking.ILightSerializer;
 
 public class MegatorchSerializer implements ILightSerializer
 {
-
     public static final String SERIALIZER_KEY = "megatorch";
+
+    public static final MegatorchSerializer INSTANCE = new MegatorchSerializer();
+
+    private MegatorchSerializer() { }
 
     @Override
     public CompoundNBT serializeLight(String lightKey, IEntityBlockingLight ilight)
@@ -17,7 +20,7 @@ public class MegatorchSerializer implements ILightSerializer
             throw new IllegalArgumentException("Unable to serialize null");
 
         if(!(ilight instanceof MegatorchEntityBlockingLight))
-            throw new IllegalArgumentException("Unable to serialize '" + ilight.getClass().getCanonicalName() + "', expected 'MegatorchEntityBlockingLight'");
+            throw new IllegalArgumentException("Unable to serialize '" + ilight.getClass().getCanonicalName() + "', expected '"+MegatorchEntityBlockingLight.class.getCanonicalName()+"'");
 
         MegatorchEntityBlockingLight light = (MegatorchEntityBlockingLight) ilight;
 

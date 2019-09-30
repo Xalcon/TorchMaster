@@ -1,21 +1,19 @@
-package net.xalcon.torchmaster.common.logic.entityblocking.megatorch;
+package net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.logic.DistanceLogics;
 import net.xalcon.torchmaster.common.logic.entityblocking.IEntityBlockingLight;
 
-public class MegatorchEntityBlockingLight implements IEntityBlockingLight
+public class DreadLampEntityBlockingLight implements IEntityBlockingLight
 {
     private BlockPos pos;
 
-    public MegatorchEntityBlockingLight(BlockPos pos)
+    public DreadLampEntityBlockingLight(BlockPos pos)
     {
         this.pos = pos;
     }
@@ -23,14 +21,14 @@ public class MegatorchEntityBlockingLight implements IEntityBlockingLight
     @Override
     public boolean shouldBlockEntity(Entity entity)
     {
-        return Torchmaster.MegaTorchFilterRegistry.containsEntity(entity.getType().getRegistryName())
-            && DistanceLogics.Cubic.isPositionInRange(entity.posX, entity.posY, entity.posZ, pos, TorchmasterConfig.GENERAL.megaTorchRadius.get());
+        return Torchmaster.DreadLampFilterRegistry.containsEntity(entity.getType().getRegistryName())
+            && DistanceLogics.Cubic.isPositionInRange(entity.posX, entity.posY, entity.posZ, pos, TorchmasterConfig.GENERAL.dreadLampRadius.get());
     }
 
     @Override
     public String getLightSerializerKey()
     {
-        return MegatorchSerializer.SERIALIZER_KEY;
+        return DreadLampSerializer.SERIALIZER_KEY;
     }
 
     /**
