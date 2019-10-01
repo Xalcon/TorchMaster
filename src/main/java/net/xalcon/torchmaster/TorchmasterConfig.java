@@ -27,6 +27,7 @@ public class TorchmasterConfig
 
     public static class General
     {
+        public final ForgeConfigSpec.ConfigValue<Boolean> beginnerTooltips;
         public final ForgeConfigSpec.ConfigValue<Boolean> blockOnlyNaturalSpawns;
         public final ForgeConfigSpec.ConfigValue<Boolean> lycanitesMobsBlockAll;
         public final ForgeConfigSpec.ConfigValue<Integer> megaTorchRadius;
@@ -34,9 +35,20 @@ public class TorchmasterConfig
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> megaTorchEntityBlockListOverrides;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> dreadLampEntityBlockListOverrides;
 
+        public final ForgeConfigSpec.ConfigValue<Integer> feralFlareRadius;
+        public final ForgeConfigSpec.ConfigValue<Integer> feralFlareTickRate;
+        public final ForgeConfigSpec.ConfigValue<Integer> feralFlareMinLightLevel;
+        public final ForgeConfigSpec.ConfigValue<Integer> feralFlareLanternLightCountHardcap;
+        public final ForgeConfigSpec.ConfigValue<Integer> frozenPearlDurability;
+
         private General(ForgeConfigSpec.Builder builder)
         {
             builder.push("General");
+
+            beginnerTooltips = builder
+                .comment("Show additional information in the tooltip of certain items and blocks")
+                .translation("torchmaster.config.beginnerTooltips.description")
+                .define("beginnerTooltips", true);
 
             blockOnlyNaturalSpawns = builder
                 .comment("By default, mega torches only block natural spawns (i.e. from low light levels). Setting this to false will also block spawns from spawners")
@@ -51,12 +63,12 @@ public class TorchmasterConfig
             megaTorchRadius = builder
                 .comment("The radius of the mega torch in each direction (cube) with the torch at its center")
                 .translation("torchmaster.config.megaTorchRadius.description")
-                .define("megaTorchRadius", 64);
+                .defineInRange("megaTorchRadius", 64, 0, Integer.MAX_VALUE);
 
             dreadLampRadius = builder
                 .comment("The radius of the dread lamp in each direction (cube) with the torch at its center")
                 .translation("torchmaster.config.dreadLamp.description")
-                .define("dreadLampRadius", 64);
+                .defineInRange("dreadLampRadius", 64, 0, Integer.MAX_VALUE);
 
             megaTorchEntityBlockListOverrides = builder
                 .comment(
@@ -76,6 +88,34 @@ public class TorchmasterConfig
                     "Allow pigs: -minecraft:pig")
                 .translation("torchmaster.config.dreadLamp.blockListOverrides.description")
                 .defineList("dreadLampEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
+
+            feralFlareRadius = builder
+                .comment("The radius in which the feral flare should try to place lights")
+                .translation("torchmaster.config.feralFlareRadius.description")
+                .defineInRange("feralFlareRadius", 16, 1, 127);
+
+            feralFlareTickRate = builder
+                .comment("Controls how often the flare should try to place lights. 1 means every tick, 10 every 10th tick, etc")
+                .translation("torchmaster.config.feralFlareTickRate.description")
+                .defineInRange("feralFlareTickRate", 5, 1, Integer.MAX_VALUE);
+
+            feralFlareMinLightLevel = builder
+                .comment("The target minimum light level to place lights for")
+                .translation("torchmaster.config.feralFlareMinLightLevel.description")
+                .defineInRange("feralFlareMinLightLevel", 10, 0, 15);
+
+            feralFlareLanternLightCountHardcap = builder
+                .comment(
+                    "The maximum amount of invisble lights a feral flare lantern can place. Set to 0 to disable light placement.",
+                    "Warning: Setting this value too high in conjunction with the feralFlareMinLightLevel and Radius can lead to world corruption!",
+                    "(Badly compressed packet error)")
+                .translation("torchmaster.config.feralFlareLanternLightCountHardcap.description")
+                .defineInRange("feralFlareLanternLightCountHardcap", 255, 0, Short.MAX_VALUE);
+
+            frozenPearlDurability = builder
+                .comment("Durability of the frozen pearl. Each removed light will remove one charge from the pearl. Set to 0 to disable durability")
+                .translation("torchmaster.config.frozenPearlDurability.description")
+                .defineInRange("frozenPearlDurability", 1024, 0, Short.MAX_VALUE);
 
             builder.pop();
         }
