@@ -71,13 +71,7 @@ public class FeralFlareLanternBlock extends DirectionalBlock
     {
         return new FeralFlareLanternTileEntity();
     }
-
-    @Override
-    public void dropXpOnBlockBreak(World p_180637_1_, BlockPos p_180637_2_, int p_180637_3_)
-    {
-        super.dropXpOnBlockBreak(p_180637_1_, p_180637_2_, p_180637_3_);
-    }
-
+    
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moving)
     {
