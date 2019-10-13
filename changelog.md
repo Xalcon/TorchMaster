@@ -1,3 +1,6 @@
+### v2.0.0-rc1
+ - Fixed tesselating crash when placing a feral flare lantern
+
 ### v2.0.0-rc0
  - first release candidate, written from scratch
  - Improved Mega Torch from first 1.14 release
