@@ -11,12 +11,12 @@
   "variants": {
     "facing":
     {
-      "south": { "submodel": { "pin": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 90 } } },
-      "north": { "submodel": { "pin": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 270 } } },
-      "west": { "submodel": { "pin": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 90, "y": 90 } } },
-      "east": { "submodel": { "pin": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 90, "y": 270 } } },
-      "up": { "submodel": { "pin": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 180 } } },
-      "down": { "submodel": { "pin": { "model": "torchmaster:block/feral_flare_lantern_stand" } } }
+      "south": { },
+      "north": { },
+      "west": { },
+      "east": { },
+      "up": { },
+      "down": { }
     }
   }
 }
