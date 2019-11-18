@@ -1,3 +1,7 @@
+### v1.8.1
+* Slightly improved the Feral Flare Lantern Bounding Box
+* Improved compatibility with Lycanites Mobs
+
 ### v1.8.0
 * FIX: Fixed rendering of the dread lamp glass texture
 * FIX: Improved compatibility with quark mobs (stonelings and frogs in particular, both should be blocked by the dread lamp)
