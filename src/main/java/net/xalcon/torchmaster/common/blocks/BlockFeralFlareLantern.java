@@ -13,7 +13,9 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.xalcon.torchmaster.TorchMasterMod;
@@ -21,10 +23,12 @@ import net.xalcon.torchmaster.common.ModGuiHandler;
 import net.xalcon.torchmaster.common.tiles.IAutoRegisterTileEntity;
 import net.xalcon.torchmaster.common.tiles.TileEntityFeralFlareLantern;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockFeralFlareLantern extends BlockBase implements IAutoRegisterTileEntity
 {
+    protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.35, 0.0D, 0.35, 0.65, 1.0, 0.65);
     public final static String INTERNAL_NAME = "feral_flare_lantern";
 
     public final static IProperty<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
@@ -34,6 +38,13 @@ public class BlockFeralFlareLantern extends BlockBase implements IAutoRegisterTi
         super(Material.WOOD, INTERNAL_NAME);
         this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.DOWN));
         this.setLightLevel(1);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nonnull
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return STANDING_AABB;
     }
 
     @Override

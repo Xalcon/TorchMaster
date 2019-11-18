@@ -26,7 +26,8 @@ public class LycaniteMobsCompat
 		"plainsmobs",
 		"saltwatermobs",
 		"shadowmobs",
-		"swampmobs"
+		"swampmobs",
+		"lycanitesmobs"
 	};
 
 	@SubscribeEvent
