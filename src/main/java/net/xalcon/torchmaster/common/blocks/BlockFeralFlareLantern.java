@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 public class BlockFeralFlareLantern extends BlockBase implements IAutoRegisterTileEntity
 {
-    protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.35, 0.0D, 0.35, 0.65, 1.0, 0.65);
+    protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.25, 0.0D, 0.25, 0.75, 1.0, 0.75);
     public final static String INTERNAL_NAME = "feral_flare_lantern";
 
     public final static IProperty<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
