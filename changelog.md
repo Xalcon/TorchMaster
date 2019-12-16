@@ -1,3 +1,6 @@
+### v2.0.0-rc2
+ - Fixed **feral flare lantern** and **dreadlamp** not dropping when broken.
+
 ### v2.0.0-rc1
  - Fixed tesselating crash when placing a feral flare lantern
 
