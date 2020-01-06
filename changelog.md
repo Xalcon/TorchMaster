@@ -1,3 +1,6 @@
+### v2.1.0-rc0
+ - Initial Port to 1.15.1
+
 ### v2.0.0-rc2
  - Fixed **feral flare lantern** and **dreadlamp** not dropping when broken.
 
