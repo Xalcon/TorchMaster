@@ -27,7 +27,7 @@ public class FrozenPearlItem extends Item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
     {
-        BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos(0, 0, 0);
+        BlockPos.Mutable checkPos = new BlockPos.Mutable(0, 0, 0);
         BlockPos pos = player.getPosition();
         ItemStack itemStack = player.getHeldItem(hand);
         world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.7f, 0.6f, true);

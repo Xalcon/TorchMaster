@@ -1,5 +1,7 @@
 package net.xalcon.torchmaster;
 
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -14,6 +16,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.xalcon.torchmaster.common.EntityFilterRegistry;
+import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.ModCaps;
 import net.xalcon.torchmaster.common.commands.CommandTorchmaster;
 import net.xalcon.torchmaster.compat.VanillaCompat;
@@ -59,6 +62,8 @@ public class Torchmaster
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         Log.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
+        // func_228643_e_() => cutout
+        RenderTypeLookup.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.func_228643_e_());
     }
 
     @SubscribeEvent

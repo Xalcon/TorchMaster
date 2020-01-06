@@ -3,7 +3,6 @@ package net.xalcon.torchmaster.common.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -49,10 +48,6 @@ public class EntityBlockingLightBlock extends Block
         worldIn.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0f, 0.0f, 0.0f);
     }
 
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean moving)
     {
@@ -65,6 +60,11 @@ public class EntityBlockingLightBlock extends Block
             reg.registerLight(this.keyFactory.apply(pos), this.lightFactory.apply(pos));
         });
     }
+
+    public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
+        return true;
+    }
+
 
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState oldState, boolean moving)
