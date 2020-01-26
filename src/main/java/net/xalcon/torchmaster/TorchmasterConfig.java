@@ -128,7 +128,7 @@ public class TorchmasterConfig
     }
 
     @SubscribeEvent
-    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
+    public static void onFileChange(final ModConfig.Reloading configEvent) {
         Torchmaster.Log.fatal(CORE, "torchmaster config just got changed on the file system!");
     }
 }

@@ -63,7 +63,7 @@ public class Torchmaster
         // do something that can only be done on the client
         Log.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
         // func_228643_e_() => cutout
-        RenderTypeLookup.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.func_228643_e_());
+        RenderTypeLookup.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.cutout());
     }
 
     @SubscribeEvent

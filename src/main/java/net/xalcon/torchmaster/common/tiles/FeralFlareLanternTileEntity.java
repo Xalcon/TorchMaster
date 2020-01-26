@@ -70,7 +70,7 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
         if(!this.world.isBlockLoaded(targetPos)) return;
 
         // func_226658_a_ = getLightFor(LightType, BlockPos)
-        if (this.world.isAirBlock(targetPos) && this.world.func_226658_a_(LightType.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
+        if (this.world.isAirBlock(targetPos) && this.world.getLightFor(LightType.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
         {
             if(this.useLineOfSight)
             {
