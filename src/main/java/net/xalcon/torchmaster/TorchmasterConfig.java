@@ -76,8 +76,9 @@ public class TorchmasterConfig
                     "You can use this to block more entities or even allow certain entities to still spawn",
                     "The + prefix will add the entity to the list, effectivly denying its spawns",
                     "The - prefix will remove the entity from the list (if necessary), effectivly allowing its spawns",
-                    "Block zombies: +minecraft:zombie",
-                    "Allow creepers: -minecraft:creeper")
+                    "Note: Each entry needs to be put in quotes! Multiple Entries should be separated by comma.",
+                    "Block zombies: \"+minecraft:zombie\"",
+                    "Allow creepers: \"-minecraft:creeper\"")
                 .translation("torchmaster.config.megaTorch.blockListOverrides.description")
                 .defineList("megaTorchEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
 
@@ -128,7 +129,7 @@ public class TorchmasterConfig
     }
 
     @SubscribeEvent
-    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
+    public static void onFileChange(final ModConfig.Reloading configEvent) {
         Torchmaster.Log.fatal(CORE, "torchmaster config just got changed on the file system!");
     }
 }

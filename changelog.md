@@ -1,3 +1,6 @@
+### v2.1.0-rc1
+ - Upgrade to MC 1.15.2
+
 ### v2.1.0-rc0
  - Initial Port to 1.15.1
 
