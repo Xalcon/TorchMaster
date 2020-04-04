@@ -1,0 +1,32 @@
+﻿tile.torchmaster.mega_torch.lit.name=Mega Antorcha
+tile.torchmaster.mega_torch.unlit.name=Mega Antorcha Apagada
+tile.torchmaster.terrain_lighter.name=Encendedor del Terreno
+tile.torchmaster.dread_lamp.name=Lámpara Aterradora
+tile.torchmaster.feral_flare_lantern.name=Linterna de Llamarada Salvaje
+
+item.torchmaster.frozen_pearl.name=Perla Congelada
+
+tile.torchmaster.mega_torch.tooltip=Previene la generación de Mounstros, en un cierto radio de bloques. (4x4)
+tile.torchmaster.terrain_lighter.tooltip=Automáticamente coloca antorchas, necesita antorchas y señales de redstone.
+tile.torchmaster.dread_lamp.tooltip=Previene la generación de Mobs Pasivos, en un cierto radio de bloques. (4x4)
+tile.torchmaster.feral_flare_lantern.tooltip=Ilumina lentamente un gran área de bloques, si es removido, lentamente las luces se apagan.
+
+item.torchmaster.frozen_pearl.tooltip=Borra las luces residuales de una Linterna de Llamarada Salvaje.
+
+tile.torchmaster.mega_torch.light_failed_itemcount=§CNo tienes suficientes objetos para encender la antorcha§r
+tile.torchmaster.mega_torch.light_failed_itemtoodamaged=§CTus objetos están dañados para encender la antorcha§r
+tile.torchmaster.mega_torch.torch_is_lit=§2La antorcha está ardiendo§r
+
+tile.torchmaster.mega_torch.lit.burntime_left=Tiempo restante: %s.%s:%s:%s
+
+container.torchmaster.terrain_lighter=Encendedor del Terreno
+gui.torchmaster.block.state.no_signal=No hay señal de redstone.
+gui.torchmaster.feral_flare_lantern.state.los_on.short=Línea de visión: §Aenabled§r
+gui.torchmaster.feral_flare_lantern.state.los_on.description=La linterna solo colocará $n luces en lugares que pueda ver directamente.
+gui.torchmaster.feral_flare_lantern.state.los_off.short=Línea de visión: §Cdisabled§r
+gui.torchmaster.feral_flare_lantern.state.los_off.description=La linterna colocará luces en todas partes.
+itemGroup.torchmaster=TorchMaster
+
+command.torchmaster.entity_dump.completed=Se han volcado las entidades en el archivo de registro.
+command.torchmaster.torch_list.completed=Se han arrojado antorchas al archivo de registro.
+
