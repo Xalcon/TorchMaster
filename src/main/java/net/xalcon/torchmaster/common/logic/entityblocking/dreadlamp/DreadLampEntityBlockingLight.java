@@ -1,7 +1,9 @@
 package net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.TorchmasterConfig;
@@ -11,6 +13,7 @@ import net.xalcon.torchmaster.common.logic.entityblocking.IEntityBlockingLight;
 
 public class DreadLampEntityBlockingLight implements IEntityBlockingLight
 {
+    public static final VoxelShape SHAPE = Block.makeCuboidShape(1, 1, 1, 15, 15, 15);
     private BlockPos pos;
 
     public DreadLampEntityBlockingLight(BlockPos pos)
@@ -41,13 +44,13 @@ public class DreadLampEntityBlockingLight implements IEntityBlockingLight
     @Override
     public boolean cleanupCheck(World world)
     {
-        return world.isBlockLoaded(this.pos) && world.getBlockState(pos).getBlock() != ModBlocks.blockMegaTorch;
+        return world.isBlockLoaded(this.pos) && world.getBlockState(pos).getBlock() != ModBlocks.blockDreadLamp;
     }
 
     @Override
     public String getName()
     {
-        return "Mega Torch";
+        return "Dread Lamp";
     }
 
     @Override

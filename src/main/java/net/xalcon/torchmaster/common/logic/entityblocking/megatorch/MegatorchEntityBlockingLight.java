@@ -1,8 +1,10 @@
 package net.xalcon.torchmaster.common.logic.entityblocking.megatorch;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.xalcon.torchmaster.Torchmaster;
@@ -13,6 +15,7 @@ import net.xalcon.torchmaster.common.logic.entityblocking.IEntityBlockingLight;
 
 public class MegatorchEntityBlockingLight implements IEntityBlockingLight
 {
+    public static final VoxelShape SHAPE = Block.makeCuboidShape(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     private BlockPos pos;
 
     public MegatorchEntityBlockingLight(BlockPos pos)

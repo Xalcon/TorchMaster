@@ -24,18 +24,20 @@ public class EntityBlockingLightBlock extends Block
     private Function<BlockPos, String> keyFactory;
     private Function<BlockPos, IEntityBlockingLight> lightFactory;
     private float flameOffsetY;
+    private final VoxelShape shape;
 
-    public EntityBlockingLightBlock(Properties properties, Function<BlockPos, String> keyFactory, Function<BlockPos, IEntityBlockingLight> lightFactory, float flameOffsetY)
+    public EntityBlockingLightBlock(Properties properties, Function<BlockPos, String> keyFactory, Function<BlockPos, IEntityBlockingLight> lightFactory, float flameOffsetY, VoxelShape shape)
     {
         super(properties);
         this.keyFactory = keyFactory;
         this.lightFactory = lightFactory;
         this.flameOffsetY = flameOffsetY;
+        this.shape = shape;
     }
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        return SHAPE;
+        return this.shape;
     }
 
     @OnlyIn(Dist.CLIENT)

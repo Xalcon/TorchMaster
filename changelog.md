@@ -1,3 +1,8 @@
+### v2.2.0
+ - Last feature release for MC 1.15, sorry no terrain lighter :/
+ - Fix dread lamp not working at all
+ - Fix dread lamp hit box
+
 ### v2.1.0-rc1
  - Upgrade to MC 1.15.2
 
