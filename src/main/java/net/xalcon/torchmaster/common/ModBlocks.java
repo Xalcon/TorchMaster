@@ -60,7 +60,7 @@ public final class ModBlocks
                     .hardnessAndResistance(1.0f, 1.0f)
                     .lightValue(15),
                 pos -> "MT_" +pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
-                MegatorchEntityBlockingLight::new, 1.0f);
+                MegatorchEntityBlockingLight::new, 1.0f, MegatorchEntityBlockingLight.SHAPE);
             blockMegaTorch.setRegistryName("megatorch");
             registry.register(blockMegaTorch);
 
@@ -70,7 +70,7 @@ public final class ModBlocks
                 .hardnessAndResistance(1.0f, 1.0f)
                 .lightValue(15),
                 pos -> "DL_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
-                DreadLampEntityBlockingLight::new, 0.3f);
+                DreadLampEntityBlockingLight::new, 0.3f, DreadLampEntityBlockingLight.SHAPE);
             blockDreadLamp.setRegistryName("dreadlamp");
             registry.register(blockDreadLamp);
 
