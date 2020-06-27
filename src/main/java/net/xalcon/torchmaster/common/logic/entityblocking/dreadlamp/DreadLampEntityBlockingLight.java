@@ -41,13 +41,13 @@ public class DreadLampEntityBlockingLight implements IEntityBlockingLight
     @Override
     public boolean cleanupCheck(World world)
     {
-        return world.isBlockLoaded(this.pos) && world.getBlockState(pos).getBlock() != ModBlocks.blockMegaTorch;
+        return world.isBlockLoaded(this.pos) && world.getBlockState(pos).getBlock() != ModBlocks.blockDreadLamp;
     }
 
     @Override
     public String getName()
     {
-        return "Mega Torch";
+        return "Dread Lamp";
     }
 
     @Override

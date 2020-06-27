@@ -22,6 +22,7 @@ public class EntityBlockingEventHandler
     @SubscribeEvent
     public static void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) throws InterruptedException
     {
+        Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}", event.isSpawner(), event.getSpawnReason(), event.getEntity().getType().getRegistryName());
         event.getWorld().getWorld().getProfiler().startSection("torchmaster_checkspawn");
         if(event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
@@ -34,7 +35,12 @@ public class EntityBlockingEventHandler
             if(reg.shouldBlockEntity(entity))
             {
                 event.setResult(Event.Result.DENY);
+                Torchmaster.Log.debug("Blocking spawn of {}", event.getEntity().getType().getRegistryName());
                 //event.getEntity().addTag("torchmaster_removed_spawn");
+            }
+            else
+            {
+                Torchmaster.Log.debug("Allowed spawn of {}", event.getEntity().getType().getRegistryName());
             }
         });
         event.getWorld().getWorld().getProfiler().endSection();

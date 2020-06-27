@@ -62,7 +62,7 @@ public class Torchmaster
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         Log.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
-        RenderTypeLookup.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.getCutout());
     }
 
     @SubscribeEvent
