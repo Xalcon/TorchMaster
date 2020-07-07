@@ -41,6 +41,8 @@ public class TorchmasterConfig
         public final ForgeConfigSpec.ConfigValue<Integer> feralFlareLanternLightCountHardcap;
         public final ForgeConfigSpec.ConfigValue<Integer> frozenPearlDurability;
 
+        public final ForgeConfigSpec.ConfigValue<Boolean> logSpawnChecks;
+
         private General(ForgeConfigSpec.Builder builder)
         {
             builder.push("General");
@@ -117,6 +119,11 @@ public class TorchmasterConfig
                 .comment("Durability of the frozen pearl. Each removed light will remove one charge from the pearl. Set to 0 to disable durability")
                 .translation("torchmaster.config.frozenPearlDurability.description")
                 .defineInRange("frozenPearlDurability", 1024, 0, Short.MAX_VALUE);
+
+            logSpawnChecks = builder
+                .comment("Print entity spawn checks to the debug log")
+                .translation("torchmaster.config.logSpawnChecks.description")
+                .define("logSpawnChecks", false);
 
             builder.pop();
         }
