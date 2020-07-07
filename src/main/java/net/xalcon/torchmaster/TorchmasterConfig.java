@@ -122,7 +122,7 @@ public class TorchmasterConfig
 
             logSpawnChecks = builder
                 .comment("Print entity spawn checks to the debug log")
-                .translation("torchmaster.config.debugLogging.description")
+                .translation("torchmaster.config.logSpawnChecks.description")
                 .define("logSpawnChecks", false);
 
             builder.pop();
