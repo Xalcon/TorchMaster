@@ -6,7 +6,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +21,8 @@ public class EntityBlockingEventHandler
     @SubscribeEvent
     public static void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) throws InterruptedException
     {
-        Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}", event.isSpawner(), event.getSpawnReason(), event.getEntity().getType().getRegistryName());
+        boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
+        if (log) Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}", event.isSpawner(), event.getSpawnReason(), event.getEntity().getType().getRegistryName());
         event.getWorld().getWorld().getProfiler().startSection("torchmaster_checkspawn");
         if(event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
@@ -35,12 +35,12 @@ public class EntityBlockingEventHandler
             if(reg.shouldBlockEntity(entity))
             {
                 event.setResult(Event.Result.DENY);
-                Torchmaster.Log.debug("Blocking spawn of {}", event.getEntity().getType().getRegistryName());
+                if (log) Torchmaster.Log.debug("Blocking spawn of {}", event.getEntity().getType().getRegistryName());
                 //event.getEntity().addTag("torchmaster_removed_spawn");
             }
             else
             {
-                Torchmaster.Log.debug("Allowed spawn of {}", event.getEntity().getType().getRegistryName());
+                if (log) Torchmaster.Log.debug("Allowed spawn of {}", event.getEntity().getType().getRegistryName());
             }
         });
         event.getWorld().getWorld().getProfiler().endSection();
