@@ -1,3 +1,7 @@
+### v2.2.1
+ - Add missing Translations [thanks to ChloeDawn]
+ - Do not log debug statements by default [thanks to ChloeDawn]
+
 ### v2.2.0
  - Last feature release for MC 1.15, sorry no terrain lighter :/
  - Fix dread lamp not working at all
