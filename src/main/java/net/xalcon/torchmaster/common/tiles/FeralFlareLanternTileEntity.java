@@ -8,6 +8,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.LightType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
@@ -73,8 +74,8 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
         {
             if(this.useLineOfSight)
             {
-                Vec3d start = new Vec3d(targetPos).add(0.5, 0.5, 0.5);
-                Vec3d end = new Vec3d(this.pos).add(0.5, 0.5, 0.5);
+                Vector3d start = new Vector3d(targetPos.getX(), targetPos.getY(), targetPos.getZ()).add(0.5, 0.5, 0.5);
+                Vector3d end = new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()).add(0.5, 0.5, 0.5);
                 RayTraceContext rtxCtx = new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, fakePlayer);
                 BlockRayTraceResult rtResult = world.rayTraceBlocks(rtxCtx);
 
@@ -94,8 +95,8 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
         }
     }
 
-    @Override
-    public void read(CompoundNBT nbt)
+    @Override // func_230337_a_ == read()
+    public void func_230337_a_(BlockState blockState, CompoundNBT nbt)
     {
         this.childLights.clear();
         if(nbt.getTagId("lights") == Constants.NBT.TAG_INT_ARRAY)
@@ -107,7 +108,7 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
         }
         this.ticks = nbt.getInt("ticks");
         this.useLineOfSight = nbt.getBoolean("useLoS");
-        super.read(nbt);
+        super.func_230337_a_(blockState, nbt);
     }
 
     @Override

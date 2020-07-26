@@ -27,10 +27,4 @@ public class InvisibleLightBlock extends Block
     {
         return VoxelShapes.empty();
     }
-
-    @Override
-    public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_)
-    {
-        return false;
-    }
 }

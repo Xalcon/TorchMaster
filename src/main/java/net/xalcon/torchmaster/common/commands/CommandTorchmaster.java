@@ -37,7 +37,7 @@ public class CommandTorchmaster
                     {
                         world.getCapability(ModCaps.TEB_REGISTRY, Direction.DOWN).ifPresent(container ->
                         {
-                            Torchmaster.Log.info("Torches in dimension {} (Id: {}):", world.getDimension().getType().getRegistryName(), world.getDimension().getType().getId());
+                            Torchmaster.Log.info("Torches in dimension {}:", world.func_234923_W_().func_240901_a_());
                             for(TorchInfo torch: container.getEntries())
                                 Torchmaster.Log.info("  {} @ {}", torch.getName(), torch.getPos());
                         });
