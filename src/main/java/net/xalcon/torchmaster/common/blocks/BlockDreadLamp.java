@@ -82,7 +82,7 @@ public class BlockDreadLamp extends BlockBase
 		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1 + 0.1, d2, 0.0D, 0.0D, 0.0D);
 		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + 0.1, d1, d2, 0.0D, 0.0D, 0.0D);
 		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 - 0.1, d1, d2, 0.0D, 0.0D, 0.0D);
-		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d0 + 0.1, 0.0D, 0.0D, 0.0D);
-		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d0 - 0.1, 0.0D, 0.0D, 0.0D);
+		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2 + 0.1, 0.0D, 0.0D, 0.0D);
+		worldIn.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2 - 0.1, 0.0D, 0.0D, 0.0D);
 	}
 }
