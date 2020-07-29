@@ -1,3 +1,6 @@
+### v1.8.2
+* Fix Dread Lamp particles spawning at the wrong location in the world
+
 ### v1.8.1
 * Slightly improved the Feral Flare Lantern Bounding Box
 * Improved compatibility with Lycanites Mobs
