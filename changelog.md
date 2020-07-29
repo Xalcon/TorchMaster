@@ -1,3 +1,7 @@
+## v2.3.1-alpha
+- add aggresiveSpawnChecks configuration option. This will override the spawn checks of other mods if they returned "ALLOW" earlier in the chain.
+- Remove fatal logging of config changes on disk
+
 ### v2.3.0-alpha
  - Initial Port to MC 1.16
 

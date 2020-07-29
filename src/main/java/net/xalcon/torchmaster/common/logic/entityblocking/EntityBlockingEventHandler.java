@@ -8,6 +8,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -18,13 +19,13 @@ import net.xalcon.torchmaster.common.ModCaps;
 @Mod.EventBusSubscriber(modid = Torchmaster.MODID)
 public class EntityBlockingEventHandler
 {
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) throws InterruptedException
     {
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
         if (log) Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}", event.isSpawner(), event.getSpawnReason(), event.getEntity().getType().getRegistryName());
         event.getWorld().getWorld().getProfiler().startSection("torchmaster_checkspawn");
-        if(event.getResult() == Event.Result.ALLOW) return;
+        if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
 
         Entity entity = event.getEntity();
