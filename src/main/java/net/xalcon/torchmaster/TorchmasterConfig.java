@@ -40,6 +40,7 @@ public class TorchmasterConfig
         public final ForgeConfigSpec.ConfigValue<Integer> feralFlareMinLightLevel;
         public final ForgeConfigSpec.ConfigValue<Integer> feralFlareLanternLightCountHardcap;
         public final ForgeConfigSpec.ConfigValue<Integer> frozenPearlDurability;
+        public final ForgeConfigSpec.ConfigValue<Boolean> aggressiveSpawnChecks;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> logSpawnChecks;
 
@@ -125,6 +126,11 @@ public class TorchmasterConfig
                 .translation("torchmaster.config.logSpawnChecks.description")
                 .define("logSpawnChecks", false);
 
+            aggressiveSpawnChecks = builder
+                .comment("Configures the spawn check to be more aggressive, effectivly overriding the CheckSpawn results of other mods")
+                .translation("torchmaster.config.aggressiveSpawnChecks.description")
+                .define("aggressiveSpawnChecks", false);
+
             builder.pop();
         }
     }
@@ -137,6 +143,6 @@ public class TorchmasterConfig
 
     @SubscribeEvent
     public static void onFileChange(final ModConfig.Reloading configEvent) {
-        Torchmaster.Log.fatal(CORE, "torchmaster config just got changed on the file system!");
+        Torchmaster.Log.debug(CORE, "torchmaster config just got changed on the file system!");
     }
 }
