@@ -1,3 +1,7 @@
+### v2.2.2
+ - add `aggresiveSpawnChecks` configuration option. This will override the spawn checks of other mods if they returned "ALLOW" earlier in the chain.
+ - Remove fatal logging of config changes on disk
+
 ### v2.2.1
  - Add missing Translations [thanks to ChloeDawn]
  - Do not log debug statements by default [thanks to ChloeDawn]
