@@ -1,3 +1,6 @@
+## v2.3.2-alpha
+- replace InvisibleLight Blocks from Feral Flare Lantern with actual light emitting Air Blocks. This should improve compatibility with other mods and MC itself.
+
 ## v2.3.1-alpha
 - add aggresiveSpawnChecks configuration option. This will override the spawn checks of other mods if they returned "ALLOW" earlier in the chain.
 - Remove fatal logging of config changes on disk
