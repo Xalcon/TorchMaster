@@ -59,7 +59,7 @@ public final class ModBlocks
             blockMegaTorch = new EntityBlockingLightBlock(Block.Properties
                     .create(Material.WOOD)
                     .hardnessAndResistance(1.0f, 1.0f)
-                    .func_235838_a_(blockState -> 15),
+                    .setLightLevel(blockState -> 15),
                 pos -> "MT_" +pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
                 MegatorchEntityBlockingLight::new, 1.0f, MegatorchEntityBlockingLight.SHAPE);
             blockMegaTorch.setRegistryName("megatorch");
@@ -69,7 +69,7 @@ public final class ModBlocks
             blockDreadLamp = new EntityBlockingLightBlock(Block.Properties
                 .create(Material.WOOD)
                 .hardnessAndResistance(1.0f, 1.0f)
-                .func_235838_a_(blockState -> 15),
+                .setLightLevel(blockState -> 15),
                 pos -> "DL_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
                 DreadLampEntityBlockingLight::new, 0.3f, DreadLampEntityBlockingLight.SHAPE);
             blockDreadLamp.setRegistryName("dreadlamp");
@@ -79,21 +79,17 @@ public final class ModBlocks
             blockFeralFlareLantern = new FeralFlareLanternBlock(Block.Properties
                 .create(Material.WOOD)
                 .hardnessAndResistance(1.0f, 1.0f)
-                .func_235838_a_(blockState -> 15));
+                .setLightLevel(blockState -> 15));
             blockFeralFlareLantern.setRegistryName("feral_flare_lantern");
             registry.register(blockFeralFlareLantern);
 
             /* Invisible light */
-            /*blockInvisibleLight = new InvisibleLightBlock(Block.Properties
-                .create(Material.AIR)
-                .hardnessAndResistance(0f, 0f)
-                .func_235838_a_(blockState -> 15));*/
             blockInvisibleLight = new AirBlock(AbstractBlock.Properties
                 .create(Material.AIR)
-                .func_235838_a_(blockstate -> 15) // get lightlevel
+                .setLightLevel(blockState -> 15)
                 .doesNotBlockMovement()
                 .noDrops()
-                .func_235859_g_()); // isAir()
+                .setAir());
             blockInvisibleLight.setRegistryName("invisible_light");
             registry.register(blockInvisibleLight);
 

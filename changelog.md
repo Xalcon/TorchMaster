@@ -1,3 +1,6 @@
+## v2.3.3-alpha
+- Update to MC 1.16.2 (Forge 33.0.0)
+
 ## v2.3.2-alpha
 - replace InvisibleLight Blocks from Feral Flare Lantern with actual light emitting Air Blocks. This should improve compatibility with other mods and MC itself.
 

@@ -95,8 +95,8 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
         }
     }
 
-    @Override // func_230337_a_ == read()
-    public void func_230337_a_(BlockState blockState, CompoundNBT nbt)
+    @Override
+    public void read(BlockState blockState, CompoundNBT nbt)
     {
         this.childLights.clear();
         if(nbt.getTagId("lights") == Constants.NBT.TAG_INT_ARRAY)
@@ -108,7 +108,7 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
         }
         this.ticks = nbt.getInt("ticks");
         this.useLineOfSight = nbt.getBoolean("useLoS");
-        super.func_230337_a_(blockState, nbt);
+        super.read(blockState, nbt);
     }
 
     @Override

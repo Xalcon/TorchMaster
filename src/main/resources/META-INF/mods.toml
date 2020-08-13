@@ -9,6 +9,8 @@ modLoader="javafml" #mandatory
 loaderVersion="[28,)" #mandatory (26 is current forge version)
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/Xalcon/TorchMaster/issues/" #optional
+# license
+license="MIT"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
@@ -29,7 +31,6 @@ credits="" #optional
 authors="xalcon" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Bla? TODO: Add desc
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.torchmaster]] #optional

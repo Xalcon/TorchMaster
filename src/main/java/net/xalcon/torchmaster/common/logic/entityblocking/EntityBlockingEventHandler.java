@@ -24,7 +24,6 @@ public class EntityBlockingEventHandler
     {
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
         if (log) Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}", event.isSpawner(), event.getSpawnReason(), event.getEntity().getType().getRegistryName());
-        event.getWorld().getWorld().getProfiler().startSection("torchmaster_checkspawn");
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
 
@@ -44,7 +43,6 @@ public class EntityBlockingEventHandler
                 if (log) Torchmaster.Log.debug("Allowed spawn of {}", event.getEntity().getType().getRegistryName());
             }
         });
-        event.getWorld().getWorld().getProfiler().endSection();
     }
 
     /*@SubscribeEvent
