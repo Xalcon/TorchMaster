@@ -1,5 +1,7 @@
 package net.xalcon.torchmaster.common;
 
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -13,7 +15,6 @@ import net.minecraftforge.registries.ObjectHolder;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.blocks.EntityBlockingLightBlock;
 import net.xalcon.torchmaster.common.blocks.FeralFlareLanternBlock;
-import net.xalcon.torchmaster.common.blocks.InvisibleLightBlock;
 import net.xalcon.torchmaster.common.items.TMItemBlock;
 import net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp.DreadLampEntityBlockingLight;
 import net.xalcon.torchmaster.common.logic.entityblocking.megatorch.MegatorchEntityBlockingLight;
@@ -44,7 +45,7 @@ public final class ModBlocks
     public static TileEntityType<FeralFlareLanternTileEntity> tileFeralFlareLantern;
 
     @ObjectHolder("invisible_light")
-    public static InvisibleLightBlock blockInvisibleLight;
+    public static AirBlock blockInvisibleLight;
 
     @Mod.EventBusSubscriber(bus = Bus.MOD, modid = Torchmaster.MODID)
     private static class RegistryEvents
@@ -83,12 +84,20 @@ public final class ModBlocks
             registry.register(blockFeralFlareLantern);
 
             /* Invisible light */
-            blockInvisibleLight = new InvisibleLightBlock(Block.Properties
+            /*blockInvisibleLight = new InvisibleLightBlock(Block.Properties
                 .create(Material.AIR)
                 .hardnessAndResistance(0f, 0f)
-                .func_235838_a_(blockState -> 15));
+                .func_235838_a_(blockState -> 15));*/
+            blockInvisibleLight = new AirBlock(AbstractBlock.Properties
+                .create(Material.AIR)
+                .func_235838_a_(blockstate -> 15) // get lightlevel
+                .doesNotBlockMovement()
+                .noDrops()
+                .func_235859_g_()); // isAir()
             blockInvisibleLight.setRegistryName("invisible_light");
             registry.register(blockInvisibleLight);
+
+
         }
 
         @SubscribeEvent
