@@ -6,7 +6,8 @@ tile.torchmaster.feral_flare_lantern.name=Linterna de Llamarada Salvaje
 
 item.torchmaster.frozen_pearl.name=Perla Congelada
 
-tile.torchmaster.mega_torch.tooltip=Previene la generación de Mounstros, en un cierto radio de bloques. (4x4)
+tile.torchmaster.mega_torch.lit.tooltip=Previene la generación de Mounstros, en un cierto radio de bloques. (4x4)
+tile.torchmaster.mega_torch.unlit.tooltip=Previene la generación de Mounstros, en un cierto radio de bloques. (4x4)
 tile.torchmaster.terrain_lighter.tooltip=Automáticamente coloca antorchas, necesita antorchas y señales de redstone.
 tile.torchmaster.dread_lamp.tooltip=Previene la generación de Mobs Pasivos, en un cierto radio de bloques. (4x4)
 tile.torchmaster.feral_flare_lantern.tooltip=Ilumina lentamente un gran área de bloques, si es removido, lentamente las luces se apagan.

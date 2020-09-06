@@ -6,7 +6,8 @@ tile.torchmaster.feral_flare_lantern.name=Lâmpada Arcana
 
 item.torchmaster.frozen_pearl.name=Pérola Congelada
 
-tile.torchmaster.mega_torch.tooltip=Previne o aparecimento natural de monstros hostis em um raio decente ao redor da tocha.
+tile.torchmaster.mega_torch.lit.tooltip=Previne o aparecimento natural de monstros hostis em um raio decente ao redor da tocha.
+tile.torchmaster.mega_torch.unlit.tooltip=Previne o aparecimento natural de monstros hostis em um raio decente ao redor da tocha.
 tile.torchmaster.terrain_lighter.tooltip=Coloca tochas automaticamente. Precisa de tochas, combustível e um sinal redstone.
 tile.torchmaster.dread_lamp.tooltip=Previne o aparecimento natural de animais passivos, como lulas, morcegos ou jaguatiricas em um grande raio ao redor da lâmpada.
 tile.torchmaster.feral_flare_lantern.tooltip=Lentamente ilumina uma grande área. A remoção da lanterna faz com que as luzes sumam lentamente.

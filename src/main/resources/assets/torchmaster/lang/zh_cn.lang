@@ -3,8 +3,8 @@ tile.torchmaster.mega_torch.unlit.name=熄灭的巨型火炬
 tile.torchmaster.terrain_lighter.name=区域火把放置器
 tile.torchmaster.dread_lamp.name=恐惧之灯
 
-tile.torchmaster.mega_torch_lit.tooltip=在火炬的工作范围内防止敌对怪物的生成。
-tile.torchmaster.mega_torch_unlit.tooltip=熄灭的火炬，\n需要§e§l点亮§r才能继续使用。
+tile.torchmaster.mega_torch.lit.tooltip=在火炬的工作范围内防止敌对怪物的生成。
+tile.torchmaster.mega_torch.unlit.tooltip=熄灭的火炬，\n需要§e§l点亮§r才能继续使用。
 tile.torchmaster.terrain_lighter.tooltip=自动在一定范围内放置火把，需要火把、燃料和红石信号驱动。
 tile.torchmaster.dread_lamp.tooltip=在恐惧之灯的工作范围内防止中立生物的生成，如鱿鱼、蝙蝠或者豹猫。
 

@@ -6,7 +6,8 @@ tile.torchmaster.feral_flare_lantern.name=Полевой яркий фонарь
 
 item.torchmaster.frozen_pearl.name=Ледяная жемчужина
 
-tile.torchmaster.mega_torch.tooltip=Предотвращает естественный спаун враждебных монстров в приличном радиусе вокруг факела.
+tile.torchmaster.mega_torch.lit.tooltip=Предотвращает естественный спаун враждебных монстров в приличном радиусе вокруг факела.
+tile.torchmaster.mega_torch.unlit.tooltip=Предотвращает естественный спаун враждебных монстров в приличном радиусе вокруг факела.
 tile.torchmaster.terrain_lighter.tooltip=Автоматически размещает факелы. Требует факелы, топливо и сигнал редстоуна.
 tile.torchmaster.dread_lamp.tooltip=Предотвращает естественный спаун пассивных животных, таких как спруты, летучие мыши или оцелоты в большом радиусе вокруг лампы.
 tile.torchmaster.feral_flare_lantern.tooltip=Медленно освещает большую площадь. Удаление фонаря приводит к тому, что огни медленно распадаются.
