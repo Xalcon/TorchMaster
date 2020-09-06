@@ -1,3 +1,6 @@
+### v1.8.4
+* Fix missing tooltip translations for mega torches
+
 ### v1.8.2
 * Fix Dread Lamp particles spawning at the wrong location in the world
 
