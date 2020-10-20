@@ -73,7 +73,7 @@ public class EntityBlockingEventHandler
 
             for(ServerWorld world : Torchmaster.server.getWorlds())
             {
-                world.getProfiler().startSection("torchmaster_" + world.func_234923_W_().func_240901_a_());
+                world.getProfiler().startSection("torchmaster_" + world.getDimensionKey().getLocation());
                 world.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg -> reg.onGlobalTick(world));
                 world.getProfiler().endSection();
             }
