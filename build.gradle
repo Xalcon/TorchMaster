@@ -128,3 +128,10 @@ publishing {
         }
     }
 }
+
+task versionTxt()  {
+    doLast {
+        new File(projectDir, "build/libs/version.txt").text = """$version"""
+        new File(projectDir, "build/libs/artifact.txt").text = """${archivesBaseName}-${version}.jar"""
+    }
+}
