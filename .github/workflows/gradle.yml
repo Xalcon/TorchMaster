@@ -31,9 +31,9 @@ jobs:
       run: echo "::set-out name=ARTIFACT_NAME=`basename \`cat ./build/libs/artifact.txt\``"
       id: get-artifact-name
     - name: test
-      run: echo "Version: ${{ steps.get-artifact-name.outputs.VERSION_NUMBER }}"
+      run: echo "Version is ${{ steps.get-artifact-name.outputs.VERSION_NUMBER }}"
     - name: test2
-      run: echo "Artifact: ${{ steps.get-version-number.outputs.ARTIFACT_NAME }}"
+      run: echo "Artifact is ${{ steps.get-version-number.outputs.ARTIFACT_NAME }}"
     #- name: Create Release
     #  id: create_release
     #  uses: actions/create-release@v1
