@@ -23,7 +23,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew versionTxt
+      run: ./gradlew build versionTxt
     - name: get version number
       run: echo "::set-out name=VERSION_NUMBER=`basename \`cat ./build/libs/version.txt\``"
       id: get-version-number
