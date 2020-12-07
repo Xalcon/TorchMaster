@@ -24,16 +24,13 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build versionTxt
-    - name: get version number
-      run: echo "::set-out name=VERSION_NUMBER=`basename \`cat ./build/libs/version.txt\``"
-      id: get-version-number
-    - name: get artifact name
-      run: echo "::set-out name=ARTIFACT_NAME=`basename \`cat ./build/libs/artifact.txt\``"
-      id: get-artifact-name
+    - name: get build info
+      run: echo "::set-out name=VERSION_NUMBER::`basename \`cat ./build/libs/version.txt\``,ARTIFACT_NAME::`basename \`cat ./build/libs/artifact.txt\``"
+      id: get-build-info
     - name: test
-      run: echo "Version is ${{ steps.get-artifact-name.outputs.VERSION_NUMBER }}"
+      run: echo "Version is ${{ steps.get-build-info.outputs.VERSION_NUMBER }}"
     - name: test2
-      run: echo "Artifact is ${{ steps.get-version-number.outputs.ARTIFACT_NAME }}"
+      run: echo "Artifact is ${{ steps.get-build-info.outputs.ARTIFACT_NAME }}"
     #- name: Create Release
     #  id: create_release
     #  uses: actions/create-release@v1
