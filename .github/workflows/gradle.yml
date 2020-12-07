@@ -23,35 +23,39 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build versionTxt
+      run: ./gradlew versionTxt
     - name: get version number
       run: echo "::set-out name=VERSION_NUMBER=`basename \`cat ./build/libs/version.txt\``"
       id: get-version-number
     - name: get artifact name
       run: echo "::set-out name=ARTIFACT_NAME=`basename \`cat ./build/libs/artifact.txt\``"
       id: get-artifact-name
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ steps.get-version-number.outputs.VERSION_NUMBER }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
-        draft: true
-        prerelease: false
-    - name: Upload Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build/lib/${{ steps.get-artifact-name.outputs.ARTIFACT_NAME }}
-        asset_name: ${{ steps.get-artifact-name.outputs.ARTIFACT_NAME }}
-        asset_content_type: application/java-archive
+    - name: test
+      run: echo "Version: ${{ steps.get-artifact-name.outputs.VERSION_NUMBER }}"
+    - name: test2
+      run: echo "Artifact: ${{ steps.get-version-number.outputs.ARTIFACT_NAME }}"
+    #- name: Create Release
+    #  id: create_release
+    #  uses: actions/create-release@v1
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    #  with:
+    #    tag_name: ${{ github.ref }}
+    #    release_name: Release ${{ steps.get-version-number.outputs.VERSION_NUMBER }}
+    #    body: |
+    #      Changes in this Release
+    #      - First Change
+    #      - Second Change
+    #    draft: true
+    #    prerelease: false
+    #- name: Upload Release Asset
+    #  id: upload-release-asset 
+    #  uses: actions/upload-release-asset@v1
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #  with:
+    #    upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+    #    asset_path: "./build/lib/${{ steps.get-artifact-name.outputs.ARTIFACT_NAME }}"
+    #    asset_name: "${{ steps.get-artifact-name.outputs.ARTIFACT_NAME }}"
+    #    asset_content_type: application/java-archive
 
