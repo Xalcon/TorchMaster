@@ -35,10 +35,7 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ steps.get-build-info.outputs.artifactversion }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
+        body_path: changelog.md
         draft: true
         prerelease: false
     - name: Upload Release Asset
