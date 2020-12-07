@@ -25,7 +25,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build versionTxt
     - name: get build info
-      run: echo "::set-out name=artifactversion::`basename \`cat ./build/libs/version.txt\``" && echo "::set-out name=artifactname::`basename \`cat ./build/libs/artifact.txt\``"
+      run: echo "::set-output name=artifactversion::`basename \`cat ./build/libs/version.txt\``" && echo "::set-output name=artifactname::`basename \`cat ./build/libs/artifact.txt\``"
       id: get-build-info
     - name: test
       run: echo "Version is ${{ steps.get-build-info.outputs.artifactversion }}"
