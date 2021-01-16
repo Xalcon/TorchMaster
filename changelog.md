@@ -1,3 +1,6 @@
+## v2.3.6
+- Update to MC 1.16.5
+
 ## v2.3.5-alpha
 - Update to MC 1.16.4
 
