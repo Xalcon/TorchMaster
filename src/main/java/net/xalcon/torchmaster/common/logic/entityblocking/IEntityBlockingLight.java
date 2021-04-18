@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 public interface IEntityBlockingLight
 {
-    boolean shouldBlockEntity(Entity entity);
+    boolean shouldBlockEntity(Entity entity, BlockPos pos);
     String getLightSerializerKey();
 
     String getName();

@@ -22,10 +22,10 @@ public class DreadLampEntityBlockingLight implements IEntityBlockingLight
     }
 
     @Override
-    public boolean shouldBlockEntity(Entity entity)
+    public boolean shouldBlockEntity(Entity entity, BlockPos pos)
     {
         return Torchmaster.DreadLampFilterRegistry.containsEntity(entity.getType().getRegistryName())
-            && DistanceLogics.Cubic.isPositionInRange(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ, pos, TorchmasterConfig.GENERAL.dreadLampRadius.get());
+            && DistanceLogics.Cubic.isPositionInRange(pos.getX(), pos.getY(), pos.getZ(), this.pos, TorchmasterConfig.GENERAL.dreadLampRadius.get());
     }
 
     @Override

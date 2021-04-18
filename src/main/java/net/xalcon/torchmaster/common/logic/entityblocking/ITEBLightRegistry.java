@@ -10,7 +10,7 @@ import net.xalcon.torchmaster.common.commands.TorchInfo;
 
 public interface ITEBLightRegistry extends INBTSerializable<CompoundNBT>
 {
-    boolean shouldBlockEntity(Entity entity);
+    boolean shouldBlockEntity(Entity entity, BlockPos pos);
 
     /**
      * Warning: The IEntityBlockingLight instance should not be directly attached to any chunk data!
