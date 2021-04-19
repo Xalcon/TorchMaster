@@ -6,6 +6,8 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ mc/1.16 ]
+    paths:
+      - 'changelog.md'
 
 jobs:
   build:
