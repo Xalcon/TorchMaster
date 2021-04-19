@@ -2,6 +2,7 @@ package net.xalcon.torchmaster.common.logic.entityblocking;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -29,10 +30,12 @@ public class EntityBlockingEventHandler
 
         Entity entity = event.getEntity();
         World world = entity.getEntityWorld();
+        
+        BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
 
         world.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg ->
         {
-            if(reg.shouldBlockEntity(entity))
+            if(reg.shouldBlockEntity(entity, pos))
             {
                 event.setResult(Event.Result.DENY);
                 if (log) Torchmaster.Log.debug("Blocking spawn of {}", event.getEntity().getType().getRegistryName());

@@ -157,12 +157,12 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
         }
 
         @Override
-        public boolean shouldBlockEntity(Entity entity)
+        public boolean shouldBlockEntity(Entity entity, BlockPos pos)
         {
             for(HashMap.Entry<String, IEntityBlockingLight> lightEntry : lights.entrySet())
             {
                 IEntityBlockingLight light = lightEntry.getValue();
-                if(light.shouldBlockEntity(entity))
+                if(light.shouldBlockEntity(entity, pos))
                     return true;
             }
             return false;

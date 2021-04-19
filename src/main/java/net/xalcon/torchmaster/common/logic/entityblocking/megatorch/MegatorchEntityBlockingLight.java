@@ -24,10 +24,10 @@ public class MegatorchEntityBlockingLight implements IEntityBlockingLight
     }
 
     @Override
-    public boolean shouldBlockEntity(Entity entity)
+    public boolean shouldBlockEntity(Entity entity, BlockPos pos)
     {
         return Torchmaster.MegaTorchFilterRegistry.containsEntity(entity.getType().getRegistryName())
-            && DistanceLogics.Cubic.isPositionInRange(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ, pos, TorchmasterConfig.GENERAL.megaTorchRadius.get());
+            && DistanceLogics.Cubic.isPositionInRange(pos.getX(), pos.getY(), pos.getZ(), this.pos, TorchmasterConfig.GENERAL.megaTorchRadius.get());
     }
 
     @Override
