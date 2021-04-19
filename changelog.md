@@ -1,3 +1,6 @@
+## v2.3.7
+- Fix phantoms not being blocked. Thanks to shroomdog27
+
 ## v2.3.6
 - Update to MC 1.16.5
 
