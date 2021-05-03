@@ -1,3 +1,6 @@
+## v2.3.8
+- Improve compatibility with Apotheosis, may break compat with other mods if the mod is "doing it wrong" #150
+
 ## v2.3.7
 - Fix phantoms not being blocked by shroomdog27
 - Add kr-kr Translation by myoun
