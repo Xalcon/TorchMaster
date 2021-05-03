@@ -8,6 +8,8 @@ on:
     branches: [ mc/1.16 ]
     paths:
       - 'changelog.md'
+      - 'build.properties' 
+      - '.github/workflows/gradle.yml'
 
 jobs:
   build:
