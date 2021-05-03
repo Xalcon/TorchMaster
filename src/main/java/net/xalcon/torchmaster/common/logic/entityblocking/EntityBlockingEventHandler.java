@@ -20,7 +20,7 @@ import net.xalcon.torchmaster.common.ModCaps;
 @Mod.EventBusSubscriber(modid = Torchmaster.MODID)
 public class EntityBlockingEventHandler
 {
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.HIGHER)
     public static void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) throws InterruptedException
     {
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
