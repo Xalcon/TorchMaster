@@ -4,12 +4,12 @@
 name: Java CI with Gradle
 
 on:
+  workflow_dispatch:
   push:
     branches: [ mc/1.16 ]
     paths:
       - 'changelog.md'
       - 'build.properties' 
-      - '.github/workflows/gradle.yml'
 
 jobs:
   build:
