@@ -1,3 +1,6 @@
+## v3.0.0-beta
+- Upgrade to Minecraft 1.17.1
+
 ## v2.3.8
 - Improve compatibility with Apotheosis, may break compat with other mods if the mod is "doing it wrong" #150
 

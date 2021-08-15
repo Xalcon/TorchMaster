@@ -11,9 +11,9 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.tiles.FeralFlareLanternTileEntity;
 
 import javax.annotation.Nullable;
@@ -67,18 +67,12 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return null; // TODO: create block entity
+        return new FeralFlareLanternTileEntity(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return null; // TODO: create ticker
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> GameEventListener getListener(Level level, T blockEntity) {
-        return null; // TODO: do I need this?
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return type == ModBlocks.tileFeralFlareLantern ? FeralFlareLanternTileEntity::dispatchTickBlockEntity : null;
     }
 }

@@ -6,7 +6,7 @@ name: Java CI with Gradle
 on:
   workflow_dispatch:
   push:
-    branches: [ mc/1.16 ]
+    branches: [ mc/1.17 ]
     paths:
       - 'changelog.md'
       - 'build.properties' 

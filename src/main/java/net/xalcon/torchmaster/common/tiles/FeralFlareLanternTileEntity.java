@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,16 +31,10 @@ public class FeralFlareLanternTileEntity extends BlockEntity
     private boolean useLineOfSight;
     private List<BlockPos> childLights = new ArrayList<>();
 
-    public FeralFlareLanternTileEntity(BlockEntityType<?> p_155228_, BlockPos p_155229_, BlockState p_155230_) {
-        super(p_155228_, p_155229_, p_155230_);
+    public FeralFlareLanternTileEntity(BlockPos pos, BlockState state)
+    {
+        super(ModBlocks.tileFeralFlareLantern, pos, state);
     }
-
-    // public FeralFlareLanternTileEntity()
-    // {
-    //     super(ModBlocks.tileFeralFlareLantern);
-    // }
-
-
 
     // @Override
     public void tick()
@@ -101,7 +96,11 @@ public class FeralFlareLanternTileEntity extends BlockEntity
         }
     }
 
-
+    public static <T extends BlockEntity> void dispatchTickBlockEntity(Level level, BlockPos pos, BlockState state, T blockEntity)
+    {
+        if(blockEntity instanceof FeralFlareLanternTileEntity)
+            ((FeralFlareLanternTileEntity)blockEntity).tick();
+    }
 
     @Override
     public void load(CompoundTag nbt)
