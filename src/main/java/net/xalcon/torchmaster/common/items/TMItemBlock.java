@@ -25,6 +25,6 @@ public class TMItemBlock extends BlockItem
     {
         super.appendHoverText(stack, world, tooltip, flag);
         if(TorchmasterConfig.GENERAL.beginnerTooltips.get())
-            tooltip.add(new TranslatableComponent(this.getName(stack) + ".tooltip"));
+            tooltip.add(new TranslatableComponent(this.getDescriptionId(stack) + ".tooltip"));
     }
 }

@@ -1,3 +1,6 @@
+## v3.0.1-beta
+- fix beginner tooltips
+
 ## v3.0.0-beta
 - Upgrade to Minecraft 1.17.1
 
