@@ -1,10 +1,10 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public interface ILightSerializer
 {
-    CompoundNBT serializeLight(String lightKey, IEntityBlockingLight light);
-    IEntityBlockingLight deserializeLight(String lightKey, CompoundNBT nbt);
+    CompoundTag serializeLight(String lightKey, IEntityBlockingLight light);
+    IEntityBlockingLight deserializeLight(String lightKey, CompoundTag nbt);
     String getSerializerKey();
 }

@@ -1,6 +1,6 @@
 package net.xalcon.torchmaster.common;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.xalcon.torchmaster.Torchmaster;
 
@@ -52,7 +52,7 @@ public class EntityFilterRegistry
 					}
 					break;
 				default:
-					Torchmaster.Log.warn("  Invalid block list prefix: '{}', only + and - are valid prefixes");
+					Torchmaster.Log.warn("  Invalid block list prefix: '{}', only + and - are valid prefixes", prefix);
 					break;
 			}
 		}

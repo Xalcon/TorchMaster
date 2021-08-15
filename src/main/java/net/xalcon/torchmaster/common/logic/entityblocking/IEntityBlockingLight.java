@@ -1,8 +1,8 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 public interface IEntityBlockingLight
 {
@@ -15,8 +15,8 @@ public interface IEntityBlockingLight
     /**
      * Called frequently for cleanup purposes
      * Use this to check if the light should be removed from the registry, i.e. because a block no longer exists, etc
-     * @param world the world
+     * @param level the world
      * @return true if this instance should be removed from the registry, otherwise false.
      */
-    boolean cleanupCheck(World world);
+    boolean cleanupCheck(Level level);
 }

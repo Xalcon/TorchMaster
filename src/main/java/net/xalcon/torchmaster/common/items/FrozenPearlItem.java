@@ -1,16 +1,13 @@
 package net.xalcon.torchmaster.common.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.ModBlocks;
 
@@ -19,15 +16,15 @@ import java.util.List;
 
 public class FrozenPearlItem extends Item
 {
-    public FrozenPearlItem(Properties properties)
+    public FrozenPearlItem(Item.Properties properties)
     {
         super(properties);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
+    public ActionResult<ItemStack> onItemRightClick(Level world, Player player, InteractionHand hand)
     {
-        BlockPos.Mutable checkPos = new BlockPos.Mutable(0, 0, 0);
+        BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos(0, 0, 0);
         BlockPos pos = new BlockPos(player.getPositionVec());
         ItemStack itemStack = player.getHeldItem(hand);
         world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.7f, 0.6f, true);

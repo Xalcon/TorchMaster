@@ -1,12 +1,8 @@
 package net.xalcon.torchmaster.common;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -101,13 +97,13 @@ public final class ModBlocks
         {
             IForgeRegistry<Item> registry = event.getRegistry();
 
-            itemMegaTorch = new TMItemBlock(blockMegaTorch, new Item.Properties().group(TorchmasterItemGroup.INSTANCE));
+            itemMegaTorch = new TMItemBlock(blockMegaTorch, new Item.Properties().tab(TorchmasterItemGroup.INSTANCE));
             registry.register(itemMegaTorch);
 
-            itemDreadLamp = new TMItemBlock(blockDreadLamp, new Item.Properties().group(TorchmasterItemGroup.INSTANCE));
+            itemDreadLamp = new TMItemBlock(blockDreadLamp, new Item.Properties().tab(TorchmasterItemGroup.INSTANCE));
             registry.register(itemDreadLamp);
 
-            itemFeralFlareLantern = new TMItemBlock(blockFeralFlareLantern, new Item.Properties().group(TorchmasterItemGroup.INSTANCE));
+            itemFeralFlareLantern = new TMItemBlock(blockFeralFlareLantern, new Item.Properties().tab(TorchmasterItemGroup.INSTANCE));
             registry.register(itemFeralFlareLantern);
         }
 

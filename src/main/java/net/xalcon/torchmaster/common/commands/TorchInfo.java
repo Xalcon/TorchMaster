@@ -1,6 +1,6 @@
 package net.xalcon.torchmaster.common.commands;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class TorchInfo
 {

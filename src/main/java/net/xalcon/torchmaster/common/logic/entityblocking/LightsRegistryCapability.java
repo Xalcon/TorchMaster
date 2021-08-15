@@ -1,11 +1,10 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -16,11 +15,10 @@ import net.xalcon.torchmaster.common.commands.TorchInfo;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
-public class LightsRegistryCapability implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT>
+public class LightsRegistryCapability implements ICapabilityProvider, ICapabilitySerializable<CompoundTag>
 {
     private ITEBLightRegistry container = new RegistryContainer();
     /**
@@ -45,13 +43,13 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
     }
 
     @Override
-    public CompoundNBT serializeNBT()
+    public CompoundTag serializeNBT()
     {
         return container.serializeNBT();
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt)
+    public void deserializeNBT(CompoundTag nbt)
     {
         container.deserializeNBT(nbt);
     }
@@ -61,9 +59,9 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
         private HashMap<String, IEntityBlockingLight> lights = new HashMap<>();
 
         @Override
-        public CompoundNBT serializeNBT()
+        public CompoundTag serializeNBT()
         {
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
 
             ILightSerializer serializer = null;
             String cachedSerializerKey = null;
@@ -94,7 +92,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
 
                 try
                 {
-                    CompoundNBT lightNbt = serializer.serializeLight(lightKey, light);
+                    CompoundTag lightNbt = serializer.serializeLight(lightKey, light);
                     if(lightNbt == null)
                     {
                         Torchmaster.Log.error("Unable to serialize light '{}', the serializer '{}' returned null", lightKey, serializerKey);
@@ -114,15 +112,15 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT nbt)
+        public void deserializeNBT(CompoundTag nbt)
         {
             lights.clear();
             ILightSerializer serializer = null;
             String cachedSerializerKey = null;
 
-            for(String lightKey : nbt.keySet())
+            for(String lightKey : nbt.getAllKeys())
             {
-                CompoundNBT lightNbt = nbt.getCompound(lightKey);
+                CompoundTag lightNbt = nbt.getCompound(lightKey);
                 String serializerKey = lightNbt.getString("lightSerializerKey");
 
                 if(!serializerKey.equals(cachedSerializerKey))
@@ -192,12 +190,12 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
         private int tickCounter;
 
         @Override
-        public void onGlobalTick(World world)
+        public void onGlobalTick(Level level)
         {
             if(tickCounter++ < 200)
                 return;
             tickCounter = 0;
-            lights.entrySet().removeIf(l -> l.getValue().cleanupCheck(world));
+            lights.entrySet().removeIf(l -> l.getValue().cleanupCheck(level));
         }
 
         @Override

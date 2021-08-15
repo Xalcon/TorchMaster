@@ -1,10 +1,9 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -28,10 +27,10 @@ public class EntityBlockingEventHandler
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
 
-        Entity entity = event.getEntity();
-        World world = entity.getEntityWorld();
+        var entity = event.getEntity();
+        var world = entity.getCommandSenderWorld();
         
-        BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
+        var pos = new BlockPos(event.getX(), event.getY(), event.getZ());
 
         world.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg ->
         {
@@ -61,7 +60,7 @@ public class EntityBlockingEventHandler
     }*/
 
     @SubscribeEvent
-    public static void onWorldAttachCapabilityEvent(AttachCapabilitiesEvent<World> event)
+    public static void onWorldAttachCapabilityEvent(AttachCapabilitiesEvent<Level> event)
     {
         event.addCapability(new ResourceLocation(Torchmaster.MODID, "registry"), new LightsRegistryCapability());
     }
@@ -74,11 +73,11 @@ public class EntityBlockingEventHandler
         {
             if(Torchmaster.server == null) return;
 
-            for(ServerWorld world : Torchmaster.server.getWorlds())
+            for(ServerLevel level : Torchmaster.server.getAllLevels())
             {
-                world.getProfiler().startSection("torchmaster_" + world.getDimensionKey().getLocation());
-                world.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg -> reg.onGlobalTick(world));
-                world.getProfiler().endSection();
+                level.getProfiler().push("torchmaster_" + level.dimension().getRegistryName());
+                level.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg -> reg.onGlobalTick(level));
+                level.getProfiler().pop();
             }
         }
     }

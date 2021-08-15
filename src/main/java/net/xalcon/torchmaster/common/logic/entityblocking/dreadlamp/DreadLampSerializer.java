@@ -1,11 +1,9 @@
 package net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.xalcon.torchmaster.common.logic.entityblocking.IEntityBlockingLight;
 import net.xalcon.torchmaster.common.logic.entityblocking.ILightSerializer;
-import net.xalcon.torchmaster.common.logic.entityblocking.megatorch.MegatorchEntityBlockingLight;
-import net.xalcon.torchmaster.common.logic.entityblocking.megatorch.MegatorchSerializer;
 
 public class DreadLampSerializer implements ILightSerializer
 {
@@ -15,7 +13,7 @@ public class DreadLampSerializer implements ILightSerializer
     private DreadLampSerializer() { }
 
     @Override
-    public CompoundNBT serializeLight(String lightKey, IEntityBlockingLight ilight)
+    public CompoundTag serializeLight(String lightKey, IEntityBlockingLight ilight)
     {
         if(ilight == null)
             throw new IllegalArgumentException("Unable to serialize null");
@@ -25,16 +23,16 @@ public class DreadLampSerializer implements ILightSerializer
 
         DreadLampEntityBlockingLight light = (DreadLampEntityBlockingLight) ilight;
 
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.put("pos", NBTUtil.writeBlockPos(light.getPos()));
+        var nbt = new CompoundTag();
+        nbt.put("pos", NbtUtils.writeBlockPos(light.getPos()));
 
         return nbt;
     }
 
     @Override
-    public IEntityBlockingLight deserializeLight(String lightKey, CompoundNBT nbt)
+    public IEntityBlockingLight deserializeLight(String lightKey, CompoundTag nbt)
     {
-        return new DreadLampEntityBlockingLight(NBTUtil.readBlockPos(nbt.getCompound("pos")));
+        return new DreadLampEntityBlockingLight(NbtUtils.readBlockPos(nbt.getCompound("pos")));
     }
 
     @Override

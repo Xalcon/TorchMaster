@@ -1,30 +1,15 @@
 package net.xalcon.torchmaster.common.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.xalcon.torchmaster.common.tiles.FeralFlareLanternTileEntity;
 
 import javax.annotation.Nullable;
 
 public class FeralFlareLanternBlock extends DirectionalBlock
 {
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
-
+    //protected static final VoxelShape SHAPE = Block.makeCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+//
     public FeralFlareLanternBlock(Properties properties)
     {
         super(properties);
@@ -71,7 +56,7 @@ public class FeralFlareLanternBlock extends DirectionalBlock
     {
         return new FeralFlareLanternTileEntity();
     }
-    
+
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moving)
     {

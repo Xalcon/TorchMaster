@@ -1,6 +1,6 @@
 package net.xalcon.torchmaster.common;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,7 +20,7 @@ public class ModItems
         @SubscribeEvent
         public static void onRegisterItems(RegistryEvent.Register<Item> event)
         {
-            itemFrozenPearl = new FrozenPearlItem(new Item.Properties().group(TorchmasterItemGroup.INSTANCE));
+            itemFrozenPearl = new FrozenPearlItem(new Item.Properties().tab(TorchmasterItemGroup.INSTANCE));
             itemFrozenPearl.setRegistryName("frozen_pearl");
             event.getRegistry().register(itemFrozenPearl);
         }

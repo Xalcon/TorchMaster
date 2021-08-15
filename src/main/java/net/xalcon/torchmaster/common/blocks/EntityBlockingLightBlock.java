@@ -1,13 +1,10 @@
 package net.xalcon.torchmaster.common.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.xalcon.torchmaster.common.ModCaps;
@@ -19,7 +16,7 @@ import java.util.function.Function;
 
 public class EntityBlockingLightBlock extends Block
 {
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    protected static final VoxelShape SHAPE =  Block.box(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
 
     private Function<BlockPos, String> keyFactory;
     private Function<BlockPos, IEntityBlockingLight> lightFactory;
@@ -54,7 +51,6 @@ public class EntityBlockingLightBlock extends Block
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean moving)
     {
         super.onBlockAdded(state, world, pos, oldState, moving);
-
         world.getCapability(ModCaps.TEB_REGISTRY)
         .ifPresent(reg ->
         {

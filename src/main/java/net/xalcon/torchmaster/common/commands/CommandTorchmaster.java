@@ -3,21 +3,16 @@ package net.xalcon.torchmaster.common.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.ModCaps;
-import net.xalcon.torchmaster.common.logic.entityblocking.ITEBLightRegistry;
 
 public class CommandTorchmaster
 {
@@ -28,8 +23,21 @@ public class CommandTorchmaster
                 @Override
                 public int execute(CommandContext<CommandSource> ctx)
                 {
+                    ctx.getSource()
                     CommandSource source = ctx.getSource();
-                    MinecraftServer server = source.getServer();
+                    MinecraftServer server = null;
+                    if(source instanceof MinecraftServer)
+                    {
+                        server = (MinecraftServer)source;
+                    }
+                    else if(source instanceof Entity)
+                    {
+                        server = ((Entity)source).getServer();
+                    }
+                    else
+                    {
+                        throw new RuntimeException("Unknown command source: " + source.getClass().getName());
+                    }
                     Torchmaster.Log.info("#################################");
                     Torchmaster.Log.info("# Torchmaster Torch Dump Start  #");
                     Torchmaster.Log.info("#################################");
@@ -46,7 +54,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Torch Dump End    #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendFeedback(new TranslationTextComponent(Torchmaster.MODID + ".command.torch_dump.completed"), false);
+                    source.sendMessage(new TranslationTextComponent(Torchmaster.MODID + ".command.torch_dump.completed"), false);
                     return 0;
                 }
             },
@@ -74,7 +82,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Entity Dump End   #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendFeedback(new TranslationTextComponent(Torchmaster.MODID + ".command.entity_dump.completed"), false);
+                    source.sendMessage(new TranslationTextComponent(Torchmaster.MODID + ".command.entity_dump.completed"), false);
                     return 0;
                 }
             };
@@ -86,7 +94,7 @@ public class CommandTorchmaster
             this.translationKey = translationKey;
         }
 
-        public abstract int execute(CommandContext<CommandSource> ctx);
+        public abstract int execute(CommandContext<CommandSourceStack> ctx);
 
         public String getTranslationKey()
         {
@@ -96,14 +104,14 @@ public class CommandTorchmaster
 
     public static void register(CommandDispatcher<CommandSource> dispatcher)
     {
-        LiteralArgumentBuilder<CommandSource> command = Commands.literal("torchmaster");
+        LiteralArgumentBuilder<CommandSourceStack> command = Commands.literal("torchmaster");
         for (SubCommands subCommand : SubCommands.values())
         {
             command.then(Commands.literal(subCommand.getTranslationKey()).executes(subCommand::execute));
         }
 
         dispatcher.register(
-            (LiteralArgumentBuilder) ((LiteralArgumentBuilder) command.requires((cmdSrc) -> cmdSrc.hasPermissionLevel(2)))
+            (LiteralArgumentBuilder) ((LiteralArgumentBuilder) command.requires((cmdSrc) -> cmdSrc.hasPermission(2)))
                 .executes((ctx) ->
                 {
                     return 0;

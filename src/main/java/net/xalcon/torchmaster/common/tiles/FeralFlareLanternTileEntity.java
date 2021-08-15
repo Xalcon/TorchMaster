@@ -1,21 +1,14 @@
 package net.xalcon.torchmaster.common.tiles;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.LightType;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.ModBlocks;
 
@@ -23,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FeralFlareLanternTileEntity extends TileEntity implements ITickableTileEntity
+public class FeralFlareLanternTileEntity extends BlockEntity implements ITickableTileEntity
 {
     private FakePlayer fakePlayer;
     private int ticks;
@@ -38,46 +31,46 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
     @Override
     public void tick()
     {
-        if(this.world.isRemote || ++this.ticks % TorchmasterConfig.GENERAL.feralFlareTickRate.get() != 0) return;
+        if(this.level.isClientSide || ++this.ticks % TorchmasterConfig.GENERAL.feralFlareTickRate.get() != 0) return;
         if(this.childLights.size() > TorchmasterConfig.GENERAL.feralFlareLanternLightCountHardcap.get()) return;
         ticks = 0;
 
         if(fakePlayer == null)
         {
-            fakePlayer = FakePlayerFactory.get((ServerWorld)world, new GameProfile(UUID.fromString("2282ab80-e482-11e9-81b4-2a2ae2dbcce4"), "TorchMasterFeralFlareLantern"));
+            fakePlayer = FakePlayerFactory.get((ServerLevel) level, new GameProfile(UUID.fromString("2282ab80-e482-11e9-81b4-2a2ae2dbcce4"), "TorchMasterFeralFlareLantern"));
         }
 
         int radius = TorchmasterConfig.GENERAL.feralFlareRadius.get();
         int diameter = radius * 2;
 
-        int x = (radius - this.world.rand.nextInt(diameter)) + this.pos.getX();
-        int y = (radius - this.world.rand.nextInt(diameter)) + this.pos.getY();
-        int z = (radius - this.world.rand.nextInt(diameter)) + this.pos.getZ();
+        int x = (radius - this.level.random.nextInt(diameter)) + this.pos.getX();
+        int y = (radius - this.level.random.nextInt(diameter)) + this.pos.getY();
+        int z = (radius - this.level.random.nextInt(diameter)) + this.pos.getZ();
 
         // limit height - lower bounds
         if (y < 3) y = 3;
 
         // limit height - upper bounds
         BlockPos targetPos = new BlockPos(x, y, z);
-        BlockPos surfaceHeight = this.world.getHeight(Heightmap.Type.WORLD_SURFACE, targetPos);
+        BlockPos surfaceHeight = this.level.getHeight(Heightmap.Types.WORLD_SURFACE, targetPos);
         if (targetPos.getY() > surfaceHeight.getY() + 4)
             targetPos = surfaceHeight.up(4);
 
         // dont try to place blocks outside of the world height
-        int worldHeightCap = world.getHeight();
+        int worldHeightCap = level.getHeight();
         if(targetPos.getY() > worldHeightCap)
             targetPos = new BlockPos(targetPos.getX(), worldHeightCap - 1, targetPos.getZ());
 
-        if(!this.world.isBlockLoaded(targetPos)) return;
+        if(!this.level.isBlockLoaded(targetPos)) return;
 
-        if (this.world.isAirBlock(targetPos) && this.world.getLightFor(LightType.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
+        if (this.level.isAirBlock(targetPos) && this.level.getLightFor(LightType.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
         {
             if(this.useLineOfSight)
             {
                 Vector3d start = new Vector3d(targetPos.getX(), targetPos.getY(), targetPos.getZ()).add(0.5, 0.5, 0.5);
                 Vector3d end = new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()).add(0.5, 0.5, 0.5);
                 RayTraceContext rtxCtx = new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, fakePlayer);
-                BlockRayTraceResult rtResult = world.rayTraceBlocks(rtxCtx);
+                BlockRayTraceResult rtResult = level.rayTraceBlocks(rtxCtx);
 
                 if(rtResult.getType() == RayTraceResult.Type.BLOCK)
                 {
@@ -87,7 +80,7 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
                 }
             }
 
-            if(this.world.setBlockState(targetPos, ModBlocks.blockInvisibleLight.getDefaultState(), 3))
+            if(this.level.setBlockState(targetPos, ModBlocks.blockInvisibleLight.getDefaultState(), 3))
             {
                 this.childLights.add(targetPos);
                 this.markDirty();
@@ -140,7 +133,7 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
     public void removeChildLights()
     {
         if(this.world.isRemote) return;
-        for(BlockPos pos : this.childLights)
+        for(var pos : this.childLights)
         {
             if (this.world.getBlockState(pos).getBlock() == ModBlocks.blockInvisibleLight)
             {
@@ -163,6 +156,6 @@ public class FeralFlareLanternTileEntity extends TileEntity implements ITickable
         int x = (byte)((pos >> 16) & 0xFF);
         int y = (byte)((pos >> 8) & 0xFF);
         int z = (byte)(pos & 0xFF);
-        return origin.add(x, y, z);
+        return origin.offset(x, y, z);
     }
 }

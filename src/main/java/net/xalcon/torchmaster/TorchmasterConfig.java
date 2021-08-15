@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.minecraftforge.fml.Logging.CORE;
-import static net.minecraftforge.fml.loading.LogMarkers.FORGEMOD;
+import static net.minecraftforge.fml.Logging.FORGEMOD;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TorchmasterConfig

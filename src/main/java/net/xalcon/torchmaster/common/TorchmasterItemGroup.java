@@ -1,10 +1,10 @@
 package net.xalcon.torchmaster.common;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.xalcon.torchmaster.Torchmaster;
 
-public class TorchmasterItemGroup extends ItemGroup
+public class TorchmasterItemGroup extends CreativeModeTab
 {
     public final static TorchmasterItemGroup INSTANCE = new TorchmasterItemGroup();
 
@@ -14,8 +14,7 @@ public class TorchmasterItemGroup extends ItemGroup
     }
 
     @Override
-    public ItemStack createIcon()
-    {
+    public ItemStack makeIcon() {
         return new ItemStack(ModBlocks.itemMegaTorch);
     }
 }

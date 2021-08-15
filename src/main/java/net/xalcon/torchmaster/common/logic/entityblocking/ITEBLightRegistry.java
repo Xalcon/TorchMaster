@@ -1,14 +1,13 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.xalcon.torchmaster.common.commands.TorchInfo;
 
-public interface ITEBLightRegistry extends INBTSerializable<CompoundNBT>
+public interface ITEBLightRegistry extends INBTSerializable<CompoundTag>
 {
     boolean shouldBlockEntity(Entity entity, BlockPos pos);
 
@@ -28,7 +27,7 @@ public interface ITEBLightRegistry extends INBTSerializable<CompoundNBT>
     void unregisterLight(String lightKey);
     IEntityBlockingLight getLight(String lightKey);
 
-    void onGlobalTick(World world);
+    void onGlobalTick(Level level);
 
     TorchInfo[] getEntries();
 }
