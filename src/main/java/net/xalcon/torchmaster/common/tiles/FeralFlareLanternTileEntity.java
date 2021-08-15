@@ -5,10 +5,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
@@ -38,7 +41,7 @@ public class FeralFlareLanternTileEntity extends BlockEntity
 
 
 
-    @Override
+    // @Override
     public void tick()
     {
         if(this.level.isClientSide || ++this.ticks % TorchmasterConfig.GENERAL.feralFlareTickRate.get() != 0) return;
@@ -62,9 +65,9 @@ public class FeralFlareLanternTileEntity extends BlockEntity
 
         // limit height - upper bounds
         BlockPos targetPos = new BlockPos(x, y, z);
-        BlockPos surfaceHeight = this.level.getHeight(Heightmap.Types.WORLD_SURFACE, targetPos);
-        if (targetPos.getY() > surfaceHeight.getY() + 4)
-            targetPos = surfaceHeight.up(4);
+        int surfaceHeight = this.level.getHeight(Heightmap.Types.WORLD_SURFACE, targetPos.getX(), targetPos.getZ());
+        if (targetPos.getY() > surfaceHeight + 4)
+            targetPos = targetPos.atY(surfaceHeight).above(4);
 
         // dont try to place blocks outside of the world height
         int worldHeightCap = level.getHeight();
@@ -73,33 +76,35 @@ public class FeralFlareLanternTileEntity extends BlockEntity
 
         if(!this.level.isLoaded(targetPos)) return;
 
-        if (this.level.isAirBlock(targetPos) && this.level.getLightFor(LightType.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
+        if (this.level.isEmptyBlock(targetPos) && this.level.getBrightness(LightLayer.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
         {
             if(this.useLineOfSight)
             {
                 Vec3 start = new Vec3(targetPos.getX(), targetPos.getY(), targetPos.getZ()).add(0.5, 0.5, 0.5);
                 Vec3 end = new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()).add(0.5, 0.5, 0.5);
-                RayTraceContext rtxCtx = new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, fakePlayer);
-                BlockRayTraceResult rtResult = level.rayTraceBlocks(rtxCtx);
+                ClipContext rtxCtx = new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, fakePlayer);
+                BlockHitResult rtResult = level.clip(rtxCtx);
 
-                if(rtResult.getType() == RayTraceResult.Type.BLOCK)
+                if(rtResult.getType() == BlockHitResult.Type.BLOCK)
                 {
-                    BlockPos hitPos = rtResult.getPos();
-                    if(!(hitPos.getX() == this.pos.getX() && hitPos.getY() == this.pos.getY() && hitPos.getZ() == this.pos.getZ()))
+                    BlockPos hitPos = rtResult.getBlockPos();
+                    if(!(hitPos.getX() == this.worldPosition.getX() && hitPos.getY() == this.worldPosition.getY() && hitPos.getZ() == this.worldPosition.getZ()))
                         return;
                 }
             }
 
-            if(this.level.setBlock(targetPos, ModBlocks.blockInvisibleLight.getDefaultState(), 3))
+            if(this.level.setBlock(targetPos, ModBlocks.blockInvisibleLight.defaultBlockState(), 3))
             {
                 this.childLights.add(targetPos);
-                this.markDirty();
+                this.setChanged();
             }
         }
     }
 
+
+
     @Override
-    public void read(BlockState blockState, CompoundTag nbt)
+    public void load(CompoundTag nbt)
     {
         this.childLights.clear();
         if(nbt.getTagType("lights") == Constants.NBT.TAG_INT_ARRAY)
@@ -111,11 +116,11 @@ public class FeralFlareLanternTileEntity extends BlockEntity
         }
         this.ticks = nbt.getInt("ticks");
         this.useLineOfSight = nbt.getBoolean("useLoS");
-        super.read(blockState, nbt);
+        super.load(nbt);
     }
 
     @Override
-    public CompoundTag write(CompoundTag nbt)
+    public CompoundTag save(CompoundTag nbt)
     {
         List<Integer> childLightsEncoded = new ArrayList<>(this.childLights.size());
         for(BlockPos child : this.childLights)
@@ -124,15 +129,15 @@ public class FeralFlareLanternTileEntity extends BlockEntity
         nbt.put("lights", new IntArrayTag(childLightsEncoded));
         nbt.putInt("ticks", this.ticks);
         nbt.putBoolean("useLoS", this.useLineOfSight);
-        return super.write(nbt);
+        return super.save(nbt);
     }
 
     public void setUseLineOfSight(boolean state)
     {
         this.useLineOfSight = state;
-        this.markDirty();
-        BlockState blockState = this.world.getBlockState(this.pos);
-        this.level.notifyBlockUpdate(this.pos, blockState, blockState, 0);
+        this.setChanged();
+        BlockState blockState = this.level.getBlockState(this.worldPosition);
+        this.level.sendBlockUpdated(this.worldPosition, blockState, blockState, 0);
     }
 
     public boolean shouldUseLineOfSight()

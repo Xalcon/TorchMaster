@@ -3,9 +3,7 @@ package net.xalcon.torchmaster.common;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.xalcon.torchmaster.common.logic.GenericNBTStorage;
 import net.xalcon.torchmaster.common.logic.entityblocking.ITEBLightRegistry;
-import net.xalcon.torchmaster.common.logic.entityblocking.LightsRegistryCapability;
 
 public class ModCaps
 {
@@ -14,6 +12,6 @@ public class ModCaps
 
     public static void registerModCaps()
     {
-        CapabilityManager.INSTANCE.register(ITEBLightRegistry.class, new GenericNBTStorage<>(), LightsRegistryCapability.getDefaultFactory());
+        CapabilityManager.INSTANCE.register(ITEBLightRegistry.class);
     }
 }

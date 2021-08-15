@@ -37,11 +37,6 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
         return LazyOptional.empty();
     }
 
-    public static Callable<ITEBLightRegistry> getDefaultFactory()
-    {
-        return RegistryContainer::new;
-    }
-
     @Override
     public CompoundTag serializeNBT()
     {

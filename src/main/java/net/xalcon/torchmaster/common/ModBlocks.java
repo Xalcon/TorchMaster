@@ -110,7 +110,8 @@ public final class ModBlocks
         @SubscribeEvent
         public static void onRegisterTileEntites(RegistryEvent.Register<BlockEntityType<?>> event)
         {
-            event.getRegistry().register(BlockEntityType.Builder.of(FeralFlareLanternTileEntity::new, blockFeralFlareLantern).build(null).setRegistryName(blockFeralFlareLantern.getRegistryName()));
+            // TODO: Implement BlockEntity
+            //event.getRegistry().register(BlockEntityType.Builder.of(FeralFlareLanternTileEntity::new, blockFeralFlareLantern).build(null).setRegistryName(blockFeralFlareLantern.getRegistryName()));
         }
     }
 

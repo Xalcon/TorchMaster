@@ -1,5 +1,6 @@
 package net.xalcon.torchmaster;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -61,8 +62,7 @@ public class Torchmaster
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
-        Log.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
-        RenderTypeLookup.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.getCutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.cutout());
     }
 
     @SubscribeEvent
