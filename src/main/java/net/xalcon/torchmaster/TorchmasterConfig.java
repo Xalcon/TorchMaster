@@ -1,16 +1,11 @@
 package net.xalcon.torchmaster;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static net.minecraftforge.fml.Logging.CORE;
-import static net.minecraftforge.fml.Logging.FORGEMOD;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TorchmasterConfig
@@ -133,16 +128,5 @@ public class TorchmasterConfig
 
             builder.pop();
         }
-    }
-
-
-    @SubscribeEvent
-    public static void onLoad(final ModConfig.Loading configEvent) {
-        Torchmaster.Log.debug(FORGEMOD, "Loaded torchmaster config file {}", configEvent.getConfig().getFileName());
-    }
-
-    @SubscribeEvent
-    public static void onFileChange(final ModConfig.Reloading configEvent) {
-        Torchmaster.Log.debug(CORE, "torchmaster config just got changed on the file system!");
     }
 }

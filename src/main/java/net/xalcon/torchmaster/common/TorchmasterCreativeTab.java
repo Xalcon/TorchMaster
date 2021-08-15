@@ -4,11 +4,11 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.xalcon.torchmaster.Torchmaster;
 
-public class TorchmasterItemGroup extends CreativeModeTab
+public class TorchmasterCreativeTab extends CreativeModeTab
 {
-    public final static TorchmasterItemGroup INSTANCE = new TorchmasterItemGroup();
+    public final static TorchmasterCreativeTab INSTANCE = new TorchmasterCreativeTab();
 
-    private TorchmasterItemGroup()
+    private TorchmasterCreativeTab()
     {
         super(Torchmaster.MODID);
     }

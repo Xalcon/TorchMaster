@@ -1,12 +1,12 @@
 package net.xalcon.torchmaster.common.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.xalcon.torchmaster.TorchmasterConfig;
 
 import javax.annotation.Nullable;
@@ -21,10 +21,10 @@ public class TMItemBlock extends BlockItem
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag)
     {
-        super.addInformation(stack, world, tooltip, flag);
+        super.appendHoverText(stack, world, tooltip, flag);
         if(TorchmasterConfig.GENERAL.beginnerTooltips.get())
-            tooltip.add(new TranslationTextComponent(this.getTranslationKey(stack) + ".tooltip"));
+            tooltip.add(new TranslatableComponent(this.getName(stack) + ".tooltip"));
     }
 }

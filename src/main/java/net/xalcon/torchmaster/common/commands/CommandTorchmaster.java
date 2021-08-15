@@ -7,6 +7,7 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
@@ -21,31 +22,18 @@ public class CommandTorchmaster
         DUMP_TORCHES("torchdump")
             {
                 @Override
-                public int execute(CommandContext<CommandSource> ctx)
+                public int execute(CommandContext<CommandSourceStack> ctx)
                 {
-                    ctx.getSource()
-                    CommandSource source = ctx.getSource();
-                    MinecraftServer server = null;
-                    if(source instanceof MinecraftServer)
-                    {
-                        server = (MinecraftServer)source;
-                    }
-                    else if(source instanceof Entity)
-                    {
-                        server = ((Entity)source).getServer();
-                    }
-                    else
-                    {
-                        throw new RuntimeException("Unknown command source: " + source.getClass().getName());
-                    }
+                    var source = ctx.getSource();
+                    MinecraftServer server = source.getServer();
                     Torchmaster.Log.info("#################################");
                     Torchmaster.Log.info("# Torchmaster Torch Dump Start  #");
                     Torchmaster.Log.info("#################################");
-                    for(World world: server.getWorlds())
+                    for(var level: server.getAllLevels())
                     {
-                        world.getCapability(ModCaps.TEB_REGISTRY, Direction.DOWN).ifPresent(container ->
+                        level.getCapability(ModCaps.TEB_REGISTRY, Direction.DOWN).ifPresent(container ->
                         {
-                            Torchmaster.Log.info("Torches in dimension {}:", world.getDimensionKey().getLocation());
+                            Torchmaster.Log.info("Torches in dimension {}:", level.dimension().getRegistryName());
                             for(TorchInfo torch: container.getEntries())
                                 Torchmaster.Log.info("  {} @ {}", torch.getName(), torch.getPos());
                         });
@@ -54,16 +42,16 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Torch Dump End    #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendMessage(new TranslationTextComponent(Torchmaster.MODID + ".command.torch_dump.completed"), false);
+                    source.sendSuccess(new TranslatableComponent(Torchmaster.MODID + ".command.torch_dump.completed"), false);
                     return 0;
                 }
             },
         DUMP_ENTITIES("entitydump")
             {
                 @Override
-                public int execute(CommandContext<CommandSource> ctx)
+                public int execute(CommandContext<CommandSourceStack> ctx)
                 {
-                    CommandSource source = ctx.getSource();
+                    var source = ctx.getSource();
                     Torchmaster.Log.info("#################################");
                     Torchmaster.Log.info("# Torchmaster Entity Dump Start #");
                     Torchmaster.Log.info("#################################");
@@ -82,7 +70,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Entity Dump End   #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendMessage(new TranslationTextComponent(Torchmaster.MODID + ".command.entity_dump.completed"), false);
+                    source.sendSuccess(new TranslatableComponent(Torchmaster.MODID + ".command.entity_dump.completed"), false);
                     return 0;
                 }
             };
@@ -102,7 +90,7 @@ public class CommandTorchmaster
         }
     }
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher)
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
         LiteralArgumentBuilder<CommandSourceStack> command = Commands.literal("torchmaster");
         for (SubCommands subCommand : SubCommands.values())

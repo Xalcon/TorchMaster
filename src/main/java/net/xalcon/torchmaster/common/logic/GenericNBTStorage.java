@@ -1,6 +1,8 @@
 package net.xalcon.torchmaster.common.logic;
 
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -16,9 +18,9 @@ public class GenericNBTStorage<T extends INBTSerializable<CompoundTag>> implemen
     }
 
     @Override
-    public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt)
+    public void readNBT(Capability<T> capability, T instance, Direction side, Tag nbt)
     {
-        if(nbt instanceof CompoundNBT)
-            instance.deserializeNBT((CompoundNBT) nbt);
+        if(nbt instanceof CompoundTag)
+            instance.deserializeNBT((CompoundTag) nbt);
     }
 }

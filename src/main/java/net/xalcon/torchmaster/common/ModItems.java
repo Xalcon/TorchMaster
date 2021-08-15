@@ -20,7 +20,7 @@ public class ModItems
         @SubscribeEvent
         public static void onRegisterItems(RegistryEvent.Register<Item> event)
         {
-            itemFrozenPearl = new FrozenPearlItem(new Item.Properties().tab(TorchmasterItemGroup.INSTANCE));
+            itemFrozenPearl = new FrozenPearlItem(new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
             itemFrozenPearl.setRegistryName("frozen_pearl");
             event.getRegistry().register(itemFrozenPearl);
         }

@@ -3,6 +3,7 @@ package net.xalcon.torchmaster;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -65,10 +66,9 @@ public class Torchmaster
     }
 
     @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event)
+    public void onRegisterCommands(RegisterCommandsEvent event)
     {
-        server = event.getServer();
-        CommandTorchmaster.register(server.getCommandManager().getDispatcher());
+        CommandTorchmaster.register(event.getDispatcher());
     }
 
     @SubscribeEvent

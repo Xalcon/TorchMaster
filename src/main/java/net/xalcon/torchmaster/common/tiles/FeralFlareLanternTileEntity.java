@@ -2,10 +2,14 @@ package net.xalcon.torchmaster.common.tiles;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -16,17 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FeralFlareLanternTileEntity extends BlockEntity implements ITickableTileEntity
+public class FeralFlareLanternTileEntity extends BlockEntity
 {
     private FakePlayer fakePlayer;
     private int ticks;
     private boolean useLineOfSight;
     private List<BlockPos> childLights = new ArrayList<>();
 
-    public FeralFlareLanternTileEntity()
-    {
-        super(ModBlocks.tileFeralFlareLantern);
+    public FeralFlareLanternTileEntity(BlockEntityType<?> p_155228_, BlockPos p_155229_, BlockState p_155230_) {
+        super(p_155228_, p_155229_, p_155230_);
     }
+
+    // public FeralFlareLanternTileEntity()
+    // {
+    //     super(ModBlocks.tileFeralFlareLantern);
+    // }
+
+
 
     @Override
     public void tick()
@@ -43,9 +53,9 @@ public class FeralFlareLanternTileEntity extends BlockEntity implements ITickabl
         int radius = TorchmasterConfig.GENERAL.feralFlareRadius.get();
         int diameter = radius * 2;
 
-        int x = (radius - this.level.random.nextInt(diameter)) + this.pos.getX();
-        int y = (radius - this.level.random.nextInt(diameter)) + this.pos.getY();
-        int z = (radius - this.level.random.nextInt(diameter)) + this.pos.getZ();
+        int x = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getX();
+        int y = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getY();
+        int z = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getZ();
 
         // limit height - lower bounds
         if (y < 3) y = 3;
@@ -61,14 +71,14 @@ public class FeralFlareLanternTileEntity extends BlockEntity implements ITickabl
         if(targetPos.getY() > worldHeightCap)
             targetPos = new BlockPos(targetPos.getX(), worldHeightCap - 1, targetPos.getZ());
 
-        if(!this.level.isBlockLoaded(targetPos)) return;
+        if(!this.level.isLoaded(targetPos)) return;
 
         if (this.level.isAirBlock(targetPos) && this.level.getLightFor(LightType.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
         {
             if(this.useLineOfSight)
             {
-                Vector3d start = new Vector3d(targetPos.getX(), targetPos.getY(), targetPos.getZ()).add(0.5, 0.5, 0.5);
-                Vector3d end = new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()).add(0.5, 0.5, 0.5);
+                Vec3 start = new Vec3(targetPos.getX(), targetPos.getY(), targetPos.getZ()).add(0.5, 0.5, 0.5);
+                Vec3 end = new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()).add(0.5, 0.5, 0.5);
                 RayTraceContext rtxCtx = new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.ANY, fakePlayer);
                 BlockRayTraceResult rtResult = level.rayTraceBlocks(rtxCtx);
 
@@ -80,7 +90,7 @@ public class FeralFlareLanternTileEntity extends BlockEntity implements ITickabl
                 }
             }
 
-            if(this.level.setBlockState(targetPos, ModBlocks.blockInvisibleLight.getDefaultState(), 3))
+            if(this.level.setBlock(targetPos, ModBlocks.blockInvisibleLight.getDefaultState(), 3))
             {
                 this.childLights.add(targetPos);
                 this.markDirty();
@@ -89,13 +99,13 @@ public class FeralFlareLanternTileEntity extends BlockEntity implements ITickabl
     }
 
     @Override
-    public void read(BlockState blockState, CompoundNBT nbt)
+    public void read(BlockState blockState, CompoundTag nbt)
     {
         this.childLights.clear();
-        if(nbt.getTagId("lights") == Constants.NBT.TAG_INT_ARRAY)
+        if(nbt.getTagType("lights") == Constants.NBT.TAG_INT_ARRAY)
         {
             BlockPos origin = new BlockPos(nbt.getInt("x"), nbt.getInt("y"),nbt.getInt("z"));
-            int[] lightsEncoded = ((IntArrayNBT) nbt.get("lights")).getIntArray();
+            int[] lightsEncoded = ((IntArrayTag) nbt.get("lights")).getAsIntArray();
             for(int encodedLight : lightsEncoded)
                 this.childLights.add(decodePosition(origin, encodedLight));
         }
@@ -105,13 +115,13 @@ public class FeralFlareLanternTileEntity extends BlockEntity implements ITickabl
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt)
+    public CompoundTag write(CompoundTag nbt)
     {
         List<Integer> childLightsEncoded = new ArrayList<>(this.childLights.size());
         for(BlockPos child : this.childLights)
-            childLightsEncoded.add(encodePosition(this.pos, child));
+            childLightsEncoded.add(encodePosition(this.worldPosition, child));
 
-        nbt.put("lights", new IntArrayNBT(childLightsEncoded));
+        nbt.put("lights", new IntArrayTag(childLightsEncoded));
         nbt.putInt("ticks", this.ticks);
         nbt.putBoolean("useLoS", this.useLineOfSight);
         return super.write(nbt);
@@ -122,7 +132,7 @@ public class FeralFlareLanternTileEntity extends BlockEntity implements ITickabl
         this.useLineOfSight = state;
         this.markDirty();
         BlockState blockState = this.world.getBlockState(this.pos);
-        this.world.notifyBlockUpdate(this.pos, blockState, blockState, 0);
+        this.level.notifyBlockUpdate(this.pos, blockState, blockState, 0);
     }
 
     public boolean shouldUseLineOfSight()
@@ -132,12 +142,12 @@ public class FeralFlareLanternTileEntity extends BlockEntity implements ITickabl
 
     public void removeChildLights()
     {
-        if(this.world.isRemote) return;
+        if(this.level.isClientSide) return;
         for(var pos : this.childLights)
         {
-            if (this.world.getBlockState(pos).getBlock() == ModBlocks.blockInvisibleLight)
+            if (this.level.getBlockState(pos).getBlock() == ModBlocks.blockInvisibleLight)
             {
-                this.world.removeBlock(pos, false);
+                this.level.removeBlock(pos, false);
             }
         }
         this.childLights.clear();

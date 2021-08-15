@@ -2,8 +2,11 @@ package net.xalcon.torchmaster.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -32,47 +35,43 @@ public class EntityBlockingLightBlock extends Block
         this.shape = shape;
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
-    {
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter blockGetter, BlockPos pos, CollisionContext ctx) {
         return this.shape;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+    public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
     {
         double d0 = (double)pos.getX() + 0.5f;
         double d1 = (double)pos.getY() + this.flameOffsetY;
         double d2 = (double)pos.getZ() + 0.5f;
-        worldIn.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0f, 0.0f, 0.0f);
-        worldIn.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0f, 0.0f, 0.0f);
+        level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0f, 0.0f, 0.0f);
+        level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0f, 0.0f, 0.0f);
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean moving)
-    {
-        super.onBlockAdded(state, world, pos, oldState, moving);
+    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean moving) {
+        super.onPlace(state, world, pos, oldState, moving);
         world.getCapability(ModCaps.TEB_REGISTRY)
-        .ifPresent(reg ->
-        {
-            //String lightKey = pos.getX() + "_" + pos.getY() + "_" + pos.getZ();
-            reg.registerLight(this.keyFactory.apply(pos), this.lightFactory.apply(pos));
-        });
+            .ifPresent(reg ->
+            {
+                reg.registerLight(this.keyFactory.apply(pos), this.lightFactory.apply(pos));
+            });
     }
 
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter getter, BlockPos pos) {
         return true;
     }
 
-
     @Override
-    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState oldState, boolean moving)
-    {
+    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean moving) {
         world.getCapability(ModCaps.TEB_REGISTRY)
-        .ifPresent(reg ->
-        {
-            //String lightKey = pos.getX() + "_" + pos.getY() + "_" + pos.getZ();
-            reg.unregisterLight(this.keyFactory.apply(pos));
-        });
-        super.onReplaced(state, world, pos, oldState, moving);
+            .ifPresent(reg ->
+            {
+                reg.unregisterLight(this.keyFactory.apply(pos));
+            });
+        super.onRemove(state, world, pos, oldState, moving);
     }
 }
