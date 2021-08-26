@@ -1,3 +1,6 @@
+## v3.0.2-beta
+- added it-it translations, provided by Github Oondanomala
+
 ## v3.0.1-beta
 - fix beginner tooltips
 
