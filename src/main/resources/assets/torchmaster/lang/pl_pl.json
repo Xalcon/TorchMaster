@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "Mega pochodnia",
+    "block.torchmaster.megatorch.tooltip": "Zapobiega naturalnemu pojawianiu się potworów w dużym zasięgu dookoła pochodni",
+    "block.torchmaster.dreadlamp": "Lampa strachu",
+    "block.torchmaster.dreadlamp.tooltip": "Zapobiega naturalnemu pojawianiu się zwierząt w dużym zasięgu dookoła lampy",
+    "block.torchmaster.feral_flare_lantern": "Dzika latarnia",
+    "block.torchmaster.feral_flare_lantern.tooltip": "Stawia niewidzialne światełka",
+    "block.torchmaster.invisible_light": "Niewidzialne światełko",
+    "item.torchmaster.frozen_pearl": "Zamrożona perła",
+    "item.torchmaster.frozen_pearl.tooltip": "Usuwa niewidzialne światełka pozostałe po zniszczeniu latarni",
+    "command.torchmaster.torch_list.completed": "Pochodnie zostały zrzucone do pliku log",
+    "command.torchmaster.entity_dump.completed": "Istoty zostały zrzucone do pliku log",
+    "itemGroup.torchmaster": "Torchmaster"
+}
