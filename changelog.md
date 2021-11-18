@@ -1,3 +1,6 @@
+### v1.8.5
+* Tweak Feral Flare Lantern logic to hopefully avoid chunk loading issues
+
 ### v1.8.4
 * Fix missing tooltip translations for mega torches
 
