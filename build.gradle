@@ -95,7 +95,7 @@ if(new File("$System.env.confidental_properties").exists()) {
     curse_api_key=props.curse_api_key
 }
 
-build.dependsOn signJar
+// build.dependsOn signJar
 
 def static getBuildNumber() {
     return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
@@ -110,5 +110,12 @@ curseforge {
         changelog = new File('changelog.md')
         releaseType = "$System.env.release_type" != "null" ? "$System.env.release_type" : 'alpha'
         mainArtifact jar
+    }
+}
+
+task versionTxt()  {
+    doLast {
+        new File(projectDir, "build/libs/version.txt").text = """$version"""
+        new File(projectDir, "build/libs/artifact.txt").text = """${archivesBaseName}-${version}.jar"""
     }
 }
