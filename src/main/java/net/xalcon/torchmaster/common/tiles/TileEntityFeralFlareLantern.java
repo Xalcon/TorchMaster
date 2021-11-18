@@ -93,6 +93,8 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
 
         // limit height - upper bounds
         BlockPos targetPos = new BlockPos(x, y, z);
+        if(!this.world.isBlockLoaded(targetPos)) return;
+        
         BlockPos precipitationHeight = this.world.getPrecipitationHeight(targetPos);
         if (targetPos.getY() > precipitationHeight.getY() + 4)
             targetPos = precipitationHeight.up(4);
@@ -102,7 +104,6 @@ public class TileEntityFeralFlareLantern extends TileEntity implements ITickable
         if(targetPos.getY() > worldHeightCap)
             targetPos = new BlockPos(targetPos.getX(), worldHeightCap - 1, targetPos.getZ());
 
-        if(!this.world.isBlockLoaded(targetPos)) return;
         if (this.world.isAirBlock(targetPos) && this.world.getLightFor(EnumSkyBlock.BLOCK, targetPos) < TorchmasterConfig.feralFlareMinLightLevel)
         {
             if(this.useLineOfSight)
