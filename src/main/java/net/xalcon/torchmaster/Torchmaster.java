@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -14,11 +16,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 import net.xalcon.torchmaster.common.EntityFilterRegistry;
 import net.xalcon.torchmaster.common.ModBlocks;
-import net.xalcon.torchmaster.common.ModCaps;
 import net.xalcon.torchmaster.common.commands.CommandTorchmaster;
 import net.xalcon.torchmaster.compat.VanillaCompat;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +45,7 @@ public class Torchmaster
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        ModCaps.registerModCaps();
+        // ModCaps.registerModCaps();
     }
 
     private void postInit(final FMLLoadCompleteEvent event)
@@ -72,7 +71,14 @@ public class Torchmaster
     }
 
     @SubscribeEvent
-    public void onServerStopping(FMLServerStoppingEvent event) {
+    public void onServerStarted(ServerStartedEvent event)
+    {
+        server = event.getServer();
+    }
+
+    @SubscribeEvent
+    public void onServerStopping(ServerStoppedEvent event)
+    {
         server = null;
     }
 }

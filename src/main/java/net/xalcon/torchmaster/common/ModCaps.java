@@ -1,17 +1,20 @@
 package net.xalcon.torchmaster.common;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.xalcon.torchmaster.common.logic.entityblocking.ITEBLightRegistry;
 
 public class ModCaps
 {
-    @CapabilityInject(ITEBLightRegistry.class)
-    public static Capability<ITEBLightRegistry> TEB_REGISTRY = null;
+    // TODO!
+    public static Capability<ITEBLightRegistry> TEB_REGISTRY = CapabilityManager.get(new CapabilityToken<>(){});
 
-    public static void registerModCaps()
+    @SubscribeEvent()
+    public static void registerModCaps(RegisterCapabilitiesEvent event)
     {
-        CapabilityManager.INSTANCE.register(ITEBLightRegistry.class);
+        event.register(ITEBLightRegistry.class);
     }
 }

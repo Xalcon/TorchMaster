@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.xalcon.torchmaster.TorchmasterConfig;
@@ -106,7 +106,7 @@ public class FeralFlareLanternTileEntity extends BlockEntity
     public void load(CompoundTag nbt)
     {
         this.childLights.clear();
-        if(nbt.getTagType("lights") == Constants.NBT.TAG_INT_ARRAY)
+        if(nbt.getTagType("lights") == Tag.TAG_INT_ARRAY)
         {
             BlockPos origin = new BlockPos(nbt.getInt("x"), nbt.getInt("y"),nbt.getInt("z"));
             int[] lightsEncoded = ((IntArrayTag) nbt.get("lights")).getAsIntArray();
