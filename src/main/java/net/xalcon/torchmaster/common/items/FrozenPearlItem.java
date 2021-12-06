@@ -40,7 +40,7 @@ public class FrozenPearlItem extends Item
                 for(int z = -15; z <= 15; z++)
                 {
                     checkPos.set(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                    if(checkPos.getY() < 1) continue;
+                    // if(checkPos.getY() < 1) continue;
                     Block block = level.getBlockState(checkPos).getBlock();
                     if(block == ModBlocks.blockInvisibleLight)
                     {

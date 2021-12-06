@@ -5,6 +5,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -17,8 +21,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.ModBlocks;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +108,29 @@ public class FeralFlareLanternTileEntity extends BlockEntity
             ((FeralFlareLanternTileEntity)blockEntity).tick();
     }
 
+    //@Nullable
+    //@Override
+    //public Packet<ClientGamePacketListener> getUpdatePacket() {
+    //    return ClientboundBlockEntityDataPacket.create(this);
+    //}
+
+    //@Override
+    //public CompoundTag getUpdateTag() {
+    //    var tag = super.getUpdateTag();
+    //    tag.putBoolean("useLoS", useLineOfSight);
+    //    return tag;
+    //}
+
+    //@Override
+    //public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+    //    super.onDataPacket(net, pkt);
+    //}
+
+    //@Override
+    //public void handleUpdateTag(CompoundTag tag) {
+    //    super.handleUpdateTag(tag);
+    //}
+
     @Override
     public void load(CompoundTag nbt)
     {
@@ -133,10 +162,11 @@ public class FeralFlareLanternTileEntity extends BlockEntity
 
     public void setUseLineOfSight(boolean state)
     {
+        Torchmaster.Log.info("Current: {}, New: {}", useLineOfSight, state);
         this.useLineOfSight = state;
         this.setChanged();
         BlockState blockState = this.level.getBlockState(this.worldPosition);
-        this.level.sendBlockUpdated(this.worldPosition, blockState, blockState, 0);
+        this.level.sendBlockUpdated(this.worldPosition, blockState, blockState, 3);
     }
 
     public boolean shouldUseLineOfSight()
