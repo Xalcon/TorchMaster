@@ -1,3 +1,6 @@
+## v18.0.2-beta
+- Feral Flare Lantern can now place light blocks at y < 0 in non-superflat worlds (this one slipped through, sorry!)
+
 ## v18.0.1-beta
 - Feral Flare Lantern can now place light blocks at y < 0
 - Add support for the DoSpecialSpawn event

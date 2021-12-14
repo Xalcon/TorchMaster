@@ -61,9 +61,6 @@ public class FeralFlareLanternTileEntity extends BlockEntity
         int y = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getY();
         int z = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getZ();
 
-        // limit height - lower bounds
-        if (y < 3) y = 3;
-
         // limit height - upper bounds
         BlockPos targetPos = new BlockPos(x, y, z);
         int surfaceHeight = this.level.getHeight(Heightmap.Types.WORLD_SURFACE, targetPos.getX(), targetPos.getZ());

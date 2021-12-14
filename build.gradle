@@ -98,6 +98,9 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+    maven { // JEI
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
 }
 
 dependencies {
@@ -105,6 +108,9 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${forge_version}"
+
+    compileOnly fg.deobf("mezz.jei:jei-1.18:9.0.0.40:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18:9.0.0.40")
 
 }
 
