@@ -128,6 +128,20 @@ public class FeralFlareLanternTileEntity extends BlockEntity
     //    super.handleUpdateTag(tag);
     //}
 
+
+    @Override
+    protected void saveAdditional(CompoundTag nbt)
+    {
+        super.saveAdditional(nbt);
+        List<Integer> childLightsEncoded = new ArrayList<>(this.childLights.size());
+        for(BlockPos child : this.childLights)
+            childLightsEncoded.add(encodePosition(this.worldPosition, child));
+
+        nbt.put("lights", new IntArrayTag(childLightsEncoded));
+        nbt.putInt("ticks", this.ticks);
+        nbt.putBoolean("useLoS", this.useLineOfSight);
+    }
+
     @Override
     public void load(CompoundTag nbt)
     {
@@ -144,18 +158,17 @@ public class FeralFlareLanternTileEntity extends BlockEntity
         super.load(nbt);
     }
 
-    @Override
-    public CompoundTag save(CompoundTag nbt)
-    {
-        List<Integer> childLightsEncoded = new ArrayList<>(this.childLights.size());
-        for(BlockPos child : this.childLights)
-            childLightsEncoded.add(encodePosition(this.worldPosition, child));
-
-        nbt.put("lights", new IntArrayTag(childLightsEncoded));
-        nbt.putInt("ticks", this.ticks);
-        nbt.putBoolean("useLoS", this.useLineOfSight);
-        return super.save(nbt);
-    }
+    // @Override
+    // public CompoundTag save(CompoundTag nbt)
+    // {
+    //     List<Integer> childLightsEncoded = new ArrayList<>(this.childLights.size());
+    //     for(BlockPos child : this.childLights)
+    //         childLightsEncoded.add(encodePosition(this.worldPosition, child));
+    //     nbt.put("lights", new IntArrayTag(childLightsEncoded));
+    //     nbt.putInt("ticks", this.ticks);
+    //     nbt.putBoolean("useLoS", this.useLineOfSight);
+    //     return super.save(nbt);
+    // }
 
     public void setUseLineOfSight(boolean state)
     {
