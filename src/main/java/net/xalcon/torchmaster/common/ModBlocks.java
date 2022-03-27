@@ -3,6 +3,7 @@ package net.xalcon.torchmaster.common;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.event.RegistryEvent;
@@ -54,6 +55,7 @@ public final class ModBlocks
             /* Mega Torch */
             blockMegaTorch = new EntityBlockingLightBlock(Block.Properties
                     .of(Material.WOOD)
+                    .sound(SoundType.WOOD)
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15),
                 pos -> "MT_" +pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
@@ -63,7 +65,8 @@ public final class ModBlocks
 
             /* Dread Lamp */
             blockDreadLamp = new EntityBlockingLightBlock(Block.Properties
-                .of(Material.WOOD)
+                .of(Material.METAL)
+                .sound(SoundType.LANTERN)
                 .strength(1.0f, 1.0f)
                 .lightLevel(blockState -> 15),
                 pos -> "DL_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
@@ -73,7 +76,8 @@ public final class ModBlocks
 
             /* Feral Flare Lantern */
             blockFeralFlareLantern = new FeralFlareLanternBlock(Block.Properties
-                .of(Material.WOOD)
+                .of(Material.METAL)
+                .sound(SoundType.LANTERN)
                 .strength(1.0f, 1.0f)
                 .lightLevel(blockState -> 15));
             blockFeralFlareLantern.setRegistryName("feral_flare_lantern");
