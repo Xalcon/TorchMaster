@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "tochmaster:feral_flare_lantern",
+    "torchmaster:feral_flare_lantern",
     "torchmaster:dreadlamp"
   ]
 }
