@@ -1,7 +1,8 @@
 {
 	"__comment": "Designed by Xalcon with Cubik Studio - https://cubik.studio",
 	"textures": {
-		"tex": "torchmaster:block/feral_flare_lantern"
+		"tex": "torchmaster:block/feral_flare_lantern",
+		"particle": "torchmaster:block/feral_flare_lantern"
 	},
 	"parent": "block/block",
 	"elements": [ 	 
