@@ -34,7 +34,7 @@ jobs:
     - name: Create release with files
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: "${{ steps.get-build-info.outputs.artifactversion }}"
+        tag_name: "${{ github.ref }}-${{ steps.build.outputs.artifactversion }}"
         name: Release ${{ steps.build.outputs.artifactversion }}
         body_path: changelog.md
         draft: false
