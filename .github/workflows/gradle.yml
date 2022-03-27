@@ -31,11 +31,9 @@ jobs:
       id: get-build-info
     - name: Create release with files
       uses: softprops/action-gh-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: "${{ github.ref }}-${{ steps.get-build-info.outputs.artifactversion }}"
-        release_name: Release ${{ steps.get-build-info.outputs.artifactversion }}
+        name: Release ${{ steps.get-build-info.outputs.artifactversion }}
         body_path: changelog.md
         draft: false
         prerelease: false
