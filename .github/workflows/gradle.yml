@@ -42,4 +42,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_unmatched_files: true
         files: |
-          "${{ steps.build.outputs.artifactfullname }}"
+          ${{ steps.build.outputs.artifactfullname }}
