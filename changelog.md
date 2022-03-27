@@ -1,3 +1,9 @@
+## v18.0.4
+- Promote Mod to Release
+- Adjust block sounds to reflect their materials more closely
+- Add harvest tool for each block (Axe: Megatorch, Pickaxe: Feral Flare Lantern, Dread Lamp)
+- Fix breaking particales for Feral Flare Lantern
+
 ## v18.0.3-beta
 - Fix feral flare lantern not being able to remove light blocks after the chunk unloaded (i.e. world restart)
 
@@ -7,7 +13,7 @@
 ## v18.0.1-beta
 - Feral Flare Lantern can now place light blocks at y < 0
 - Add support for the DoSpecialSpawn event
-  - Piglins spawning from Nether Portals should now be blocked
+- Piglins spawning from Nether Portals should now be blocked
 
 ## v18.0.0-beta
 initial release for Minecraft 1.18
