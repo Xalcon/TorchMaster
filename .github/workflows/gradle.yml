@@ -30,11 +30,12 @@ jobs:
         echo "::set-output name=artifactversion::`basename \`cat ./build/libs/version.txt\``"
         echo "::set-output name=artifactname::`basename \`cat ./build/libs/artifact.txt\``"
         echo "::set-output name=artifactfullname::`realpath ./build/libs/\`cat ./build/libs/artifact.txt\``"
+        echo "::set-output name=mcversion::`basename ${{ github.ref }}`"
       id: build
     - name: Create release with files
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: "${{ github.ref }}-${{ steps.build.outputs.artifactversion }}"
+        tag_name: "${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
         name: Release ${{ steps.build.outputs.artifactversion }}
         body_path: changelog.md
         draft: false
