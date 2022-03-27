@@ -3,6 +3,9 @@
 - Adjust block sounds to reflect their materials more closely
 - Add harvest tool for each block (Axe: Megatorch, Pickaxe: Feral Flare Lantern, Dread Lamp)
 - Fix breaking particales for Feral Flare Lantern
+- Added locations for:
+  - PT_BR, PT_PT by vimino@github
+  - FR_FR by dracnis@github
 
 ## v18.0.3-beta
 - Fix feral flare lantern not being able to remove light blocks after the chunk unloaded (i.e. world restart)
