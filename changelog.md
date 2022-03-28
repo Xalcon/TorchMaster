@@ -1,3 +1,6 @@
+## v18.0.5
+- Fix a typo in the axe harvesting tags file
+
 ## v18.0.4
 - Promote Mod to Release
 - Adjust block sounds to reflect their materials more closely
