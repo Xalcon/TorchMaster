@@ -29,6 +29,12 @@ public class DreadLampEntityBlockingLight implements IEntityBlockingLight
     }
 
     @Override
+    public boolean shouldBlockVillageSiege(BlockPos pos)
+    {
+        return false;
+    }
+
+    @Override
     public String getLightSerializerKey()
     {
         return DreadLampSerializer.SERIALIZER_KEY;

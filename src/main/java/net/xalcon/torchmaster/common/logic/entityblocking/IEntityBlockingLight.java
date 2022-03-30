@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 public interface IEntityBlockingLight
 {
     boolean shouldBlockEntity(Entity entity, BlockPos pos);
+    boolean shouldBlockVillageSiege(BlockPos pos);
     String getLightSerializerKey();
 
     String getName();

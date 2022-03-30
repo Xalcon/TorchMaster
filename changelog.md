@@ -1,3 +1,7 @@
+## v18.1.0
+- Allow the Mega Torch to block Village Sieges. This feature will be moved to a dedicated block in a future release.
+- Upgrade to Minecraft 1.18.2
+
 ## v18.0.5
 - Fix a typo in the axe harvesting tags file
 

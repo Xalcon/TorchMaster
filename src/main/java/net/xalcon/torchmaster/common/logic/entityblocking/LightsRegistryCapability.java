@@ -162,6 +162,18 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
         }
 
         @Override
+        public boolean shouldBlockVillageSiege(BlockPos pos)
+        {
+            for(HashMap.Entry<String, IEntityBlockingLight> lightEntry : lights.entrySet())
+            {
+                IEntityBlockingLight light = lightEntry.getValue();
+                if(light.shouldBlockVillageSiege(pos))
+                    return true;
+            }
+            return false;
+        }
+
+        @Override
         public void registerLight(String lightKey, IEntityBlockingLight light)
         {
             if(lightKey == null) throw new IllegalArgumentException("lightKey must not be null");

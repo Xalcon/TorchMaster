@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.village.VillageSiegeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,6 +48,33 @@ public class EntityBlockingEventHandler
                 if (log) Torchmaster.Log.debug("Allowed spawn of {}", event.getEntity().getType().getRegistryName());
             }
         });
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onVillageSiegeEvent(VillageSiegeEvent event)
+    {
+        if(!TorchmasterConfig.GENERAL.blockVillageSieges.get()) return;
+        boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
+        if (log) Torchmaster.Log.debug("VillageSiegeEvent - Pos: {}", event.getAttemptedSpawnPos());
+        if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
+
+        var vec = event.getAttemptedSpawnPos();
+        var pos = new BlockPos(vec.x, vec.y, vec.z);
+        var world = event.getWorld();
+
+        world.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg ->
+        {
+            if(reg.shouldBlockVillageSiege(pos))
+            {
+                event.setResult(Event.Result.DENY);
+                if (log) Torchmaster.Log.debug("Blocking village siege @ {}", pos);
+            }
+            else
+            {
+                if (log) Torchmaster.Log.debug("Allowed village siege @ {}", pos);
+            }
+        });
+
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

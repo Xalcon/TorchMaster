@@ -29,6 +29,12 @@ public class MegatorchEntityBlockingLight implements IEntityBlockingLight
     }
 
     @Override
+    public boolean shouldBlockVillageSiege(BlockPos pos)
+    {
+        return DistanceLogics.Cubic.isPositionInRange(pos.getX(), pos.getY(), pos.getZ(), this.pos, TorchmasterConfig.GENERAL.megaTorchRadius.get());
+    }
+
+    @Override
     public String getLightSerializerKey()
     {
         return MegatorchSerializer.SERIALIZER_KEY;

@@ -25,6 +25,7 @@ public class TorchmasterConfig
         public final ForgeConfigSpec.ConfigValue<Boolean> beginnerTooltips;
         public final ForgeConfigSpec.ConfigValue<Boolean> blockOnlyNaturalSpawns;
         public final ForgeConfigSpec.ConfigValue<Boolean> lycanitesMobsBlockAll;
+        public final ForgeConfigSpec.ConfigValue<Boolean> blockVillageSieges;
         public final ForgeConfigSpec.ConfigValue<Integer> megaTorchRadius;
         public final ForgeConfigSpec.ConfigValue<Integer> dreadLampRadius;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> megaTorchEntityBlockListOverrides;
@@ -54,9 +55,14 @@ public class TorchmasterConfig
                 .define("blockOnlyNaturalSpawns", true);
 
             lycanitesMobsBlockAll = builder
-                .comment("If this setting is enabled, the mega torch will block all natural spawn attempts from Lycanites Mobs in its radius")
-                .translation("torchmaster.config.lycanitesMobsBlockAll.description")
-                .define("lycanitesMobsBlockAll", true);
+                    .comment("If this setting is enabled, the mega torch will block all natural spawn attempts from Lycanites Mobs in its radius")
+                    .translation("torchmaster.config.lycanitesMobsBlockAll.description")
+                    .define("lycanitesMobsBlockAll", true);
+
+            blockVillageSieges = builder
+                    .comment("If this setting is enabled, the mega torch will block village sieges from zombies")
+                    .translation("torchmaster.config.villagesiege.description")
+                    .define("blockVillageSieges", true);
 
             megaTorchRadius = builder
                 .comment("The radius of the mega torch in each direction (cube) with the torch at its center")
