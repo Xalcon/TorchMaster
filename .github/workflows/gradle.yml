@@ -53,6 +53,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         custom_tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
+        tag_prefix: ""
         
     - uses: Kir-Antipov/mc-publish@v2.1
       with:
