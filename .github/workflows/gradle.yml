@@ -21,8 +21,8 @@ on:
       - 'build.properties' 
 
 env:
-  CURSEFORGE_ID: ${{ fromJSON('["", 254268]')[github.event.inputs.deploy_curseforge == 'true'] }} 
-  MODRINTH_ID: ${{ fromJSON('["", Tl8ESrhX]')[github.event.inputs.deploy_modrinth == 'true'] }}
+  CURSEFORGE_ID: ${{ fromJSON('["", "254268"]')[github.event.inputs.deploy_curseforge == 'true'] }} 
+  MODRINTH_ID: ${{ fromJSON('["", "Tl8ESrhX"]')[github.event.inputs.deploy_modrinth == 'true'] }}
   JAVA_VERSION: 8
 
 jobs:
