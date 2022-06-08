@@ -45,7 +45,14 @@ jobs:
         echo "::set-output name=artifactname::`basename \`cat ./build/libs/artifact.txt\``"
         echo "::set-output name=artifactfullname::`realpath ./build/libs/\`cat ./build/libs/artifact.txt\``"
         echo "::set-output name=mcversion::`basename ${{ github.ref }}`"
+        echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
       id: build
+      
+    - uses: ncipollo/release-action@v1
+      with:
+        bodyFile: "changelog.md"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
       
     - uses: Kir-Antipov/mc-publish@v2.1
       with:
@@ -53,6 +60,7 @@ jobs:
         #modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
         #curseforge-id: ${{ env.CURSEFORGE_ID }} 
         #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+        github-commitish: "${{ steps.build.outputs.branch }}"
         github-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
         github-token: ${{ secrets.GITHUB_TOKEN }}
         files-primary: ${{ steps.build.outputs.artifactfullname }}
