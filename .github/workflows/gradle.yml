@@ -15,7 +15,7 @@ on:
         type: boolean
         default: false
   push:
-    branches: [ mc/1.18 ]
+    branches: [ mc/1.19 ]
     paths:
       - 'changelog.md'
       - 'build.properties' 
@@ -46,6 +46,15 @@ jobs:
         echo "::set-output name=artifactfullname::`realpath ./build/libs/\`cat ./build/libs/artifact.txt\``"
         echo "::set-output name=mcversion::`basename ${{ github.ref }}`"
         echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
+        if [[ `cat ./build/libs/version.txt` == *-alpha ]]
+        then
+          echo "::set-output name=releasetype::alpha"
+        elif [[ `cat ./build/libs/version.txt` == *-beta ]]
+        then
+          echo "::set-output name=releasetype::beta"
+        else
+          echo "::set-output name=releasetype::release"
+        fi
       id: build
       
     - uses: ncipollo/release-action@v1
@@ -56,22 +65,17 @@ jobs:
       
     - uses: Kir-Antipov/mc-publish@v2.1
       with:
-        #modrinth-id: ${{ env.MODRINTH_ID }}
-        #modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-        #curseforge-id: ${{ env.CURSEFORGE_ID }} 
-        #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-        github-commitish: "${{ steps.build.outputs.branch }}"
+        modrinth-id: ${{ env.MODRINTH_ID }}
+        modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+        curseforge-id: ${{ env.CURSEFORGE_ID }} 
+        curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
         github-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
         github-token: ${{ secrets.GITHUB_TOKEN }}
         files-primary: ${{ steps.build.outputs.artifactfullname }}
-        #files-secondary: build/libs/*-@(dev|sources).jar
-        name: Torchmaster ${{ steps.build.outputs.artifactversion }} for Minecraft ${{ steps.build.outputs.mcversion }}
+        name: torchmaster-${{ steps.build.outputs.artifactversion }}
         version: ${{ steps.build.outputs.artifactversion }}
-        version-type: release
+        version-type: ${{ steps.build.outputs.releasetype }}
         changelog-file: changelog.md
         loaders: forge
         game-versions: ${{ steps.build.outputs.mcversion }}
-        version-resolver: releasesIfAny
         java: ${{ env.JAVA_VERSION }}
-        retry-attempts: 2
-        retry-delay: 10000
