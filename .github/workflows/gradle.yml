@@ -61,7 +61,7 @@ jobs:
         github-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
         github-token: ${{ secrets.GITHUB_TOKEN }}
         files-primary: build/libs/!(*-@(dev|sources)).jar
-        files-secondary: build/libs/*-@(dev|sources).jar
+        #files-secondary: build/libs/*-@(dev|sources).jar
         name: Torchmaster ${{ steps.build.outputs.artifactversion }} for Minecraft ${{ steps.build.outputs.mcversion }}
         version: ${{ steps.build.outputs.artifactversion }}
         version-type: release
