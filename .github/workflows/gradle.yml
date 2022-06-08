@@ -49,11 +49,11 @@ jobs:
       
     - uses: Kir-Antipov/mc-publish@v2.1
       with:
-        modrinth-id: ${{ env.MODRINTH_ID }}
-        modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-        curseforge-id: ${{ env.CURSEFORGE_ID }} 
-        curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-        github-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
+        #modrinth-id: ${{ env.MODRINTH_ID }}
+        #modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+        #curseforge-id: ${{ env.CURSEFORGE_ID }} 
+        #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+        #wgithub-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
         github-token: ${{ secrets.GITHUB_TOKEN }}
         files-primary: build/libs/!(*-@(dev|sources)).jar
         #files-secondary: build/libs/*-@(dev|sources).jar
