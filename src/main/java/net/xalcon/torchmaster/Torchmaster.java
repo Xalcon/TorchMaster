@@ -18,6 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.xalcon.torchmaster.common.EntityFilterRegistry;
 import net.xalcon.torchmaster.common.ModBlocks;
+import net.xalcon.torchmaster.common.ModItems;
 import net.xalcon.torchmaster.common.commands.CommandTorchmaster;
 import net.xalcon.torchmaster.compat.VanillaCompat;
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +37,9 @@ public class Torchmaster
     public static final EntityFilterRegistry DreadLampFilterRegistry = new EntityFilterRegistry();
 
     public Torchmaster() {
+        ModBlocks.init();
+        ModItems.init();
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOWEST, this::postInit);
@@ -61,7 +65,7 @@ public class Torchmaster
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.blockDreadLamp, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.blockDreadLamp.get(), RenderType.cutout());
     }
 
     @SubscribeEvent

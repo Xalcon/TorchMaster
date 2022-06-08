@@ -1,3 +1,6 @@
+## v19.0.0-alpha
+- Initial port to MC 1.19
+
 ## v18.1.0
 - Allow the Mega Torch to block Village Sieges. This feature will be moved to a dedicated block in a future release.
 - Upgrade to Minecraft 1.18.2

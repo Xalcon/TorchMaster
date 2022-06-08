@@ -1,7 +1,6 @@
 package net.xalcon.torchmaster.common.items;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -17,7 +16,7 @@ public class TMItemBlock extends BlockItem
     public TMItemBlock(Block blockIn, Properties builder)
     {
         super(blockIn, builder);
-        this.setRegistryName(blockIn.getRegistryName());
+        // this.setRegistryName(blockIn.getRegistryName());
     }
 
     @Override
@@ -25,6 +24,6 @@ public class TMItemBlock extends BlockItem
     {
         super.appendHoverText(stack, world, tooltip, flag);
         if(TorchmasterConfig.GENERAL.beginnerTooltips.get())
-            tooltip.add(new TranslatableComponent(this.getDescriptionId(stack) + ".tooltip"));
+            tooltip.add(Component.translatable(this.getDescriptionId(stack) + ".tooltip"));
     }
 }

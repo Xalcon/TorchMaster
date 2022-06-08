@@ -2,7 +2,6 @@ package net.xalcon.torchmaster.common.items;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -42,7 +41,7 @@ public class FrozenPearlItem extends Item
                     checkPos.set(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
                     // if(checkPos.getY() < 1) continue;
                     Block block = level.getBlockState(checkPos).getBlock();
-                    if(block == ModBlocks.blockInvisibleLight)
+                    if(block == ModBlocks.blockInvisibleLight.get())
                     {
                         level.removeBlock(checkPos, false);
                         if(this.isDamageable(itemStack))
@@ -60,6 +59,6 @@ public class FrozenPearlItem extends Item
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
         if(TorchmasterConfig.GENERAL.beginnerTooltips.get())
-            tooltip.add(new TranslatableComponent(this.getDescriptionId(stack) + ".tooltip"));
+            tooltip.add(Component.translatable(this.getDescriptionId(stack) + ".tooltip"));
     }
 }

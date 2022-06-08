@@ -1,28 +1,24 @@
 package net.xalcon.torchmaster.common;
 
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.items.FrozenPearlItem;
 
-@ObjectHolder(Torchmaster.MODID)
 public class ModItems
 {
-    @ObjectHolder("frozen_pearl")
-    public static FrozenPearlItem itemFrozenPearl;
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torchmaster.MODID);
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Torchmaster.MODID)
-    private static class RegistryEvents
+    public static void init()
     {
-        @SubscribeEvent
-        public static void onRegisterItems(RegistryEvent.Register<Item> event)
-        {
-            itemFrozenPearl = new FrozenPearlItem(new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
-            itemFrozenPearl.setRegistryName("frozen_pearl");
-            event.getRegistry().register(itemFrozenPearl);
-        }
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        ITEMS.register(bus);
     }
+
+    public static RegistryObject<FrozenPearlItem> itemFrozenPearl = ITEMS.register("frozen_pearl",
+            () -> new FrozenPearlItem(new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE)));
 }

@@ -98,9 +98,6 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
-    maven { // JEI
-        url 'https://dvs1.progwml6.com/files/maven'
-    }
 }
 
 dependencies {
@@ -108,10 +105,6 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${forge_version}"
-
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.4.1.113:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.4.1.113")
-
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

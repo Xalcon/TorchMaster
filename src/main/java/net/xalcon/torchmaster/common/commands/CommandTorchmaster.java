@@ -3,14 +3,12 @@ package net.xalcon.torchmaster.common.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.Entity;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.ModCaps;
@@ -33,7 +31,7 @@ public class CommandTorchmaster
                     {
                         level.getCapability(ModCaps.TEB_REGISTRY, Direction.DOWN).ifPresent(container ->
                         {
-                            Torchmaster.Log.info("Torches in dimension {}:", level.dimension().getRegistryName());
+                            Torchmaster.Log.info("Torches in dimension {}:", level.dimension().registry());
                             for(TorchInfo torch: container.getEntries())
                                 Torchmaster.Log.info("  {} @ {}", torch.getName(), torch.getPos());
                         });
@@ -42,7 +40,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Torch Dump End    #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendSuccess(new TranslatableComponent(Torchmaster.MODID + ".command.torch_dump.completed"), false);
+                    source.sendSuccess(Component.translatable(Torchmaster.MODID + ".command.torch_dump.completed"), false);
                     return 0;
                 }
             },
@@ -70,7 +68,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Entity Dump End   #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendSuccess(new TranslatableComponent(Torchmaster.MODID + ".command.entity_dump.completed"), false);
+                    source.sendSuccess(Component.translatable(Torchmaster.MODID + ".command.entity_dump.completed"), false);
                     return 0;
                 }
             };

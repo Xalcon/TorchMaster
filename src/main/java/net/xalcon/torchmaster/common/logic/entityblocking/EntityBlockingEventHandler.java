@@ -26,7 +26,7 @@ public class EntityBlockingEventHandler
     public static void onCheckSpawn(LivingSpawnEvent.CheckSpawn event)
     {
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
-        if (log) Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}, Pos: {}/{}/{}", event.isSpawner(), event.getSpawnReason(), event.getEntity().getType().getRegistryName(), event.getX(), event.getY(), event.getZ());
+        if (log) Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}, Pos: {}/{}/{}", event.isSpawner(), event.getSpawnReason(), EntityType.getKey(event.getEntity().getType()), event.getX(), event.getY(), event.getZ());
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
 
@@ -40,12 +40,12 @@ public class EntityBlockingEventHandler
             if(reg.shouldBlockEntity(entity, pos))
             {
                 event.setResult(Event.Result.DENY);
-                if (log) Torchmaster.Log.debug("Blocking spawn of {}", event.getEntity().getType().getRegistryName());
+                if (log) Torchmaster.Log.debug("Blocking spawn of {}", EntityType.getKey(event.getEntity().getType()));
                 //event.getEntity().addTag("torchmaster_removed_spawn");
             }
             else
             {
-                if (log) Torchmaster.Log.debug("Allowed spawn of {}", event.getEntity().getType().getRegistryName());
+                if (log) Torchmaster.Log.debug("Allowed spawn of {}", EntityType.getKey(event.getEntity().getType()));
             }
         });
     }
@@ -81,7 +81,7 @@ public class EntityBlockingEventHandler
     public static void onDoSpecialSpawn(LivingSpawnEvent.SpecialSpawn event)
     {
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
-        if (log) Torchmaster.Log.debug("DoSpecialSpawn - Reason: {}, Type: {}, Pos: {}/{}/{}", event.getSpawnReason(), event.getEntity().getType().getRegistryName(), event.getX(), event.getY(), event.getZ());
+        if (log) Torchmaster.Log.debug("DoSpecialSpawn - Reason: {}, Type: {}, Pos: {}/{}/{}", event.getSpawnReason(), EntityType.getKey(event.getEntity().getType()), event.getX(), event.getY(), event.getZ());
         // Respect other mods decisions to allow a spawn if enabled in config
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         // check if non-natural spawns should be blocked
@@ -97,11 +97,11 @@ public class EntityBlockingEventHandler
             if(reg.shouldBlockEntity(entity, pos))
             {
                 event.setResult(Event.Result.DENY);
-                if (log) Torchmaster.Log.debug("Blocking spawn of {}", event.getEntity().getType().getRegistryName());
+                if (log) Torchmaster.Log.debug("Blocking spawn of {}", EntityType.getKey(event.getEntity().getType()));
             }
             else
             {
-                if (log) Torchmaster.Log.debug("Allowed spawn of {}", event.getEntity().getType().getRegistryName());
+                if (log) Torchmaster.Log.debug("Allowed spawn of {}", EntityType.getKey(event.getEntity().getType()));
             }
         });
     }
@@ -122,7 +122,7 @@ public class EntityBlockingEventHandler
 
             for(ServerLevel level : Torchmaster.server.getAllLevels())
             {
-                level.getProfiler().push("torchmaster_" + level.dimension().getRegistryName());
+                level.getProfiler().push("torchmaster_" + level.dimension().registry());
                 level.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg -> reg.onGlobalTick(level));
                 level.getProfiler().pop();
             }

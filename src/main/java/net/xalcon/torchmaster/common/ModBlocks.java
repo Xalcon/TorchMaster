@@ -1,16 +1,21 @@
 package net.xalcon.torchmaster.common;
 
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.RegistryObject;
 import net.xalcon.torchmaster.Torchmaster;
 import net.xalcon.torchmaster.common.blocks.EntityBlockingLightBlock;
 import net.xalcon.torchmaster.common.blocks.FeralFlareLanternBlock;
@@ -21,106 +26,66 @@ import net.xalcon.torchmaster.common.tiles.FeralFlareLanternTileEntity;
 
 import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
-@ObjectHolder(Torchmaster.MODID)
 public final class ModBlocks
 {
-    @ObjectHolder("megatorch")
-    public static EntityBlockingLightBlock blockMegaTorch;
-    @ObjectHolder("megatorch")
-    public static TMItemBlock itemMegaTorch;
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torchmaster.MODID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torchmaster.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Torchmaster.MODID);
 
-    @ObjectHolder("dreadlamp")
-    public static EntityBlockingLightBlock blockDreadLamp;
-    @ObjectHolder("dreadlamp")
-    public static TMItemBlock itemDreadLamp;
-
-    @ObjectHolder("feral_flare_lantern")
-    public static FeralFlareLanternBlock blockFeralFlareLantern;
-    @ObjectHolder("feral_flare_lantern")
-    public static TMItemBlock itemFeralFlareLantern;
-    @ObjectHolder("feral_flare_lantern")
-    public static BlockEntityType<FeralFlareLanternTileEntity> tileFeralFlareLantern;
-
-    @ObjectHolder("invisible_light")
-    public static AirBlock blockInvisibleLight;
-
-    @Mod.EventBusSubscriber(bus = Bus.MOD, modid = Torchmaster.MODID)
-    private static class RegistryEvents
-    {
-        @SubscribeEvent
-        public static void onRegisterBlocks(RegistryEvent.Register<Block> event)
-        {
-            IForgeRegistry<Block> registry = event.getRegistry();
-
-            /* Mega Torch */
-            blockMegaTorch = new EntityBlockingLightBlock(Block.Properties
+    public static RegistryObject<EntityBlockingLightBlock> blockMegaTorch = BLOCKS.register("megatorch", () ->
+            new EntityBlockingLightBlock(Block.Properties
                     .of(Material.WOOD)
                     .sound(SoundType.WOOD)
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15),
-                pos -> "MT_" +pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
-                MegatorchEntityBlockingLight::new, 1.0f, MegatorchEntityBlockingLight.SHAPE);
-            blockMegaTorch.setRegistryName("megatorch");
-            registry.register(blockMegaTorch);
+                    pos -> "MT_" +pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
+                    MegatorchEntityBlockingLight::new, 1.0f, MegatorchEntityBlockingLight.SHAPE));
+    public static RegistryObject<TMItemBlock> itemMegaTorch = fromBlock(blockMegaTorch,
+            new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
 
-            /* Dread Lamp */
-            blockDreadLamp = new EntityBlockingLightBlock(Block.Properties
-                .of(Material.METAL)
-                .sound(SoundType.LANTERN)
-                .strength(1.0f, 1.0f)
-                .lightLevel(blockState -> 15),
-                pos -> "DL_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
-                DreadLampEntityBlockingLight::new, 0.3f, DreadLampEntityBlockingLight.SHAPE);
-            blockDreadLamp.setRegistryName("dreadlamp");
-            registry.register(blockDreadLamp);
+    public static RegistryObject<EntityBlockingLightBlock> blockDreadLamp = BLOCKS.register("dreadlamp", () ->
+            new EntityBlockingLightBlock(Block.Properties
+                    .of(Material.METAL)
+                    .sound(SoundType.LANTERN)
+                    .strength(1.0f, 1.0f)
+                    .lightLevel(blockState -> 15),
+                    pos -> "DL_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
+                    DreadLampEntityBlockingLight::new, 0.3f, DreadLampEntityBlockingLight.SHAPE));
+    public static RegistryObject<TMItemBlock> itemDreadLamp = fromBlock(blockDreadLamp,
+            new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
 
-            /* Feral Flare Lantern */
-            blockFeralFlareLantern = new FeralFlareLanternBlock(Block.Properties
-                .of(Material.METAL)
-                .sound(SoundType.LANTERN)
-                .strength(1.0f, 1.0f)
-                .lightLevel(blockState -> 15));
-            blockFeralFlareLantern.setRegistryName("feral_flare_lantern");
-            registry.register(blockFeralFlareLantern);
-
-            /* Invisible light */
-            blockInvisibleLight = new AirBlock(Block.Properties
-                .of(Material.AIR)
-                .lightLevel(blockState -> 15)
-                .noCollission()
-                .noDrops()
-                .air());
-            blockInvisibleLight.setRegistryName("invisible_light");
-            registry.register(blockInvisibleLight);
-
-
-        }
-
-        @SubscribeEvent
-        public static void onRegisterItems(RegistryEvent.Register<Item> event)
-        {
-            IForgeRegistry<Item> registry = event.getRegistry();
-
-            itemMegaTorch = new TMItemBlock(blockMegaTorch, new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
-            registry.register(itemMegaTorch);
-
-            itemDreadLamp = new TMItemBlock(blockDreadLamp, new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
-            registry.register(itemDreadLamp);
-
-            itemFeralFlareLantern = new TMItemBlock(blockFeralFlareLantern, new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
-            registry.register(itemFeralFlareLantern);
-        }
-
-        @SubscribeEvent
-        public static void onRegisterTileEntites(RegistryEvent.Register<BlockEntityType<?>> event)
-        {
-            event.getRegistry().register(
+    public static RegistryObject<FeralFlareLanternBlock> blockFeralFlareLantern = BLOCKS.register("feral_flare_lantern", () ->
+            new FeralFlareLanternBlock(Block.Properties
+                    .of(Material.METAL)
+                    .sound(SoundType.LANTERN)
+                    .strength(1.0f, 1.0f)
+                    .lightLevel(blockState -> 15)));
+    public static RegistryObject<TMItemBlock> itemFeralFlareLantern = fromBlock(blockFeralFlareLantern,
+            new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
+    // @ObjectHolder("feral_flare_lantern")
+    public static RegistryObject<BlockEntityType<FeralFlareLanternTileEntity>> tileFeralFlareLantern =
+            BLOCK_ENTITIES.register("feral_flare_lantern", () ->
                     BlockEntityType.Builder
-                            .of(FeralFlareLanternTileEntity::new, blockFeralFlareLantern)
-                            .build(null)
-                            .setRegistryName(blockFeralFlareLantern.getRegistryName()));
-        }
+                            .of(FeralFlareLanternTileEntity::new, blockFeralFlareLantern.get())
+                            .build(null));
+
+    public static RegistryObject<AirBlock> blockInvisibleLight = BLOCKS.register("invisible_light", () ->
+            new AirBlock(Block.Properties
+                    .of(Material.AIR)
+                    .lightLevel(blockState -> 15)
+                    .noCollission()
+                    .air()));
+
+    public static void init()
+    {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        BLOCKS.register(bus);
+        ITEMS.register(bus);
     }
 
     private ModBlocks() {}
+
+    private static <B extends Block> RegistryObject<TMItemBlock> fromBlock(RegistryObject<B> block, Item.Properties properties) {
+        return ITEMS.register(block.getId().getPath(), () -> new TMItemBlock(block.get(), properties));
+    }
 }

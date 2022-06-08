@@ -2,6 +2,7 @@ package net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -24,7 +25,7 @@ public class DreadLampEntityBlockingLight implements IEntityBlockingLight
     @Override
     public boolean shouldBlockEntity(Entity entity, BlockPos pos)
     {
-        return Torchmaster.DreadLampFilterRegistry.containsEntity(entity.getType().getRegistryName())
+        return Torchmaster.DreadLampFilterRegistry.containsEntity(EntityType.getKey(entity.getType()))
             && DistanceLogics.Cubic.isPositionInRange(pos.getX(), pos.getY(), pos.getZ(), this.pos, TorchmasterConfig.GENERAL.dreadLampRadius.get());
     }
 
@@ -43,7 +44,7 @@ public class DreadLampEntityBlockingLight implements IEntityBlockingLight
     @Override
     public boolean cleanupCheck(Level level)
     {
-        return level.isLoaded(this.pos) && level.getBlockState(pos).getBlock() != ModBlocks.blockDreadLamp;
+        return level.isLoaded(this.pos) && level.getBlockState(pos).getBlock() != ModBlocks.blockDreadLamp.get();
     }
 
     @Override

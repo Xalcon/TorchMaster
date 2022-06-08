@@ -15,6 +15,6 @@ public class TorchmasterCreativeTab extends CreativeModeTab
 
     @Override
     public ItemStack makeIcon() {
-        return new ItemStack(ModBlocks.itemMegaTorch);
+        return new ItemStack(ModBlocks.itemMegaTorch.get());
     }
 }

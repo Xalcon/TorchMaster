@@ -39,7 +39,7 @@ public class FeralFlareLanternTileEntity extends BlockEntity
 
     public FeralFlareLanternTileEntity(BlockPos pos, BlockState state)
     {
-        super(ModBlocks.tileFeralFlareLantern, pos, state);
+        super(ModBlocks.tileFeralFlareLantern.get(), pos, state);
     }
 
     // @Override
@@ -91,7 +91,7 @@ public class FeralFlareLanternTileEntity extends BlockEntity
                 }
             }
 
-            if(this.level.setBlock(targetPos, ModBlocks.blockInvisibleLight.defaultBlockState(), 3))
+            if(this.level.setBlock(targetPos, ModBlocks.blockInvisibleLight.get().defaultBlockState(), 3))
             {
                 this.childLights.add(targetPos);
                 this.setChanged();
@@ -189,7 +189,7 @@ public class FeralFlareLanternTileEntity extends BlockEntity
         if(this.level.isClientSide) return;
         for(var pos : this.childLights)
         {
-            if (this.level.getBlockState(pos).getBlock() == ModBlocks.blockInvisibleLight)
+            if (this.level.getBlockState(pos).getBlock() == ModBlocks.blockInvisibleLight.get())
             {
                 this.level.removeBlock(pos, false);
             }
