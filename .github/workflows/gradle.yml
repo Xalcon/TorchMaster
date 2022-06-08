@@ -53,9 +53,9 @@ jobs:
         #modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
         #curseforge-id: ${{ env.CURSEFORGE_ID }} 
         #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-        #wgithub-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
+        github-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        files-primary: build/libs/!(*-@(dev|sources)).jar
+        files-primary: ${{ step.build.outputs.artifactfullname }}
         #files-secondary: build/libs/*-@(dev|sources).jar
         name: Torchmaster ${{ steps.build.outputs.artifactversion }} for Minecraft ${{ steps.build.outputs.mcversion }}
         version: ${{ steps.build.outputs.artifactversion }}
