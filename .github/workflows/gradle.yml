@@ -47,6 +47,11 @@ jobs:
         echo "::set-output name=mcversion::`basename ${{ github.ref }}`"
       id: build
       
+    - uses: rickstaa/action-create-tag@v1
+      with:
+        tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
+        message: "Torchmaster ${{ steps.build.outputs.artifactversion }} for Minecraft ${{ steps.build.outputs.mcversion }}"
+      
     - uses: Kir-Antipov/mc-publish@v2.1
       with:
         modrinth-id: ${{ env.MODRINTH_ID }}
