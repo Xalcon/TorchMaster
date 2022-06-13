@@ -81,6 +81,7 @@ public final class ModBlocks
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         BLOCKS.register(bus);
         ITEMS.register(bus);
+        BLOCK_ENTITIES.register(bus);
     }
 
     private ModBlocks() {}
