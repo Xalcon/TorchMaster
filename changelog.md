@@ -1,3 +1,6 @@
+## v19.0.1-beta
+- Fix crash when placing Feral Flare Lantern
+
 ## v19.0.0-alpha
 - Initial port to MC 1.19
 
