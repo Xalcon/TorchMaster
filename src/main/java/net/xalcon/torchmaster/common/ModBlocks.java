@@ -1,5 +1,6 @@
 package net.xalcon.torchmaster.common;
 
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.AirBlock;
@@ -28,9 +29,9 @@ import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 public final class ModBlocks
 {
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torchmaster.MODID);
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torchmaster.MODID);
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Torchmaster.MODID);
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registry.BLOCK_REGISTRY, Torchmaster.MODID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registry.ITEM_REGISTRY, Torchmaster.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registry.BLOCK_ENTITY_TYPE_REGISTRY, Torchmaster.MODID);
 
     public static RegistryObject<EntityBlockingLightBlock> blockMegaTorch = BLOCKS.register("megatorch", () ->
             new EntityBlockingLightBlock(Block.Properties
