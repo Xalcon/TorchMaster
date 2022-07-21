@@ -60,9 +60,9 @@ public class EntityBlockingEventHandler
 
         var vec = event.getAttemptedSpawnPos();
         var pos = new BlockPos(vec.x, vec.y, vec.z);
-        var world = event.getWorld();
+        var level = event.getLevel();
 
-        world.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg ->
+        level.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg ->
         {
             if(reg.shouldBlockVillageSiege(pos))
             {

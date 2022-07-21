@@ -36,7 +36,7 @@ public class EntityFilterRegistry
 				case '+':
 					if(!this.containsEntity(rl))
 					{
-						if(!ForgeRegistries.ENTITIES.containsKey(rl))
+						if(!ForgeRegistries.ENTITY_TYPES.containsKey(rl))
 						{
 							Torchmaster.Log.warn("  The entity '{}' does not exist, skipping", rl);
 							continue;

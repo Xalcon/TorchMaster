@@ -54,7 +54,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Entity Dump Start #");
                     Torchmaster.Log.info("#################################");
                     Torchmaster.Log.info("List of registered entities:");
-                    for(ResourceLocation loc: ForgeRegistries.ENTITIES.getKeys())
+                    for(ResourceLocation loc: ForgeRegistries.ENTITY_TYPES.getKeys())
                         Torchmaster.Log.info("  {}", loc);
 
                     Torchmaster.Log.info("Dread Lamp Registry Content:");

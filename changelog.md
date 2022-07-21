@@ -1,6 +1,6 @@
 ## v19.0.2-beta
-- fix crash with
-- 
+- fix crash on startup with more recent versions of forge
+
 ## v19.0.1-beta
 - Fix crash when placing Feral Flare Lantern
 
