@@ -15,9 +15,5 @@ public class TorchmasterFabric implements ModInitializer {
         // Use Fabric to bootstrap the Common mod.
         Constants.LOG.info("Hello Fabric world!");
         Torchmaster.init();
-        
-        // Some code like events require special initialization from the
-        // loader specific code.
-        ItemTooltipCallback.EVENT.register(Torchmaster::onItemTooltip);
     }
 }

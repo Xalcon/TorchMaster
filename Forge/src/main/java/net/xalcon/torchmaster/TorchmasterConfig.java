@@ -51,6 +51,30 @@ public class TorchmasterConfig
         {
             return TorchmasterConfig.GENERAL.megaTorchRadius.get();
         }
+
+        @Override
+        public boolean getLogSpawnChecks()
+        {
+            return TorchmasterConfig.GENERAL.logSpawnChecks.get();
+        }
+
+        @Override
+        public boolean getAggressiveSpawnChecks()
+        {
+            return TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get();
+        }
+
+        @Override
+        public boolean getBlockOnlyNaturalSpawns()
+        {
+            return TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get();
+        }
+
+        @Override
+        public boolean getBlockVillageSieges()
+        {
+            return TorchmasterConfig.GENERAL.blockVillageSieges.get();
+        }
     };
 
     static

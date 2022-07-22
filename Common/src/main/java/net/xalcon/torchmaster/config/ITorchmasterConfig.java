@@ -13,4 +13,12 @@ public interface ITorchmasterConfig
     int getDreadLampRadius();
 
     int getMegaTorchRadius();
+
+    boolean getLogSpawnChecks();
+
+    boolean getAggressiveSpawnChecks();
+
+    boolean getBlockOnlyNaturalSpawns();
+
+    boolean getBlockVillageSieges();
 }

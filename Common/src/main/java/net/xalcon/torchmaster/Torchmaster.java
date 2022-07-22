@@ -1,22 +1,14 @@
 package net.xalcon.torchmaster;
 
-import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
-import net.xalcon.torchmaster.config.ITorchmasterConfig;
+import net.xalcon.torchmaster.events.EventHandler;
 import net.xalcon.torchmaster.platform.Services;
-import org.apache.commons.lang3.NotImplementedException;
-
-import java.util.List;
 
 public class Torchmaster
 {
     public static final EntityFilterRegistry MegaTorchFilterRegistry = new EntityFilterRegistry();
     public static final EntityFilterRegistry DreadLampFilterRegistry = new EntityFilterRegistry();
+
+    public static final EventHandler EventHandler = new EventHandler();
 
     // This method serves as an initialization hook for the mod. The vanilla
     // game has no mechanism to load tooltip listeners so this must be
