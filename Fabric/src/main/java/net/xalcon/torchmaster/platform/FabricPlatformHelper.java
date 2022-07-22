@@ -3,6 +3,7 @@ package net.xalcon.torchmaster.platform;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.xalcon.torchmaster.Constants;
+import net.xalcon.torchmaster.LightRegistrySavedData;
 import net.xalcon.torchmaster.ModRegistry;
 import net.xalcon.torchmaster.config.ITorchmasterConfig;
 import net.xalcon.torchmaster.logic.entityblocking.IBlockingLightRegistry;
@@ -39,7 +41,14 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public Optional<IBlockingLightRegistry> getRegistryForLevel(Level level)
     {
-        // TODO: Implement this!
+        if(level instanceof ServerLevel serverLevel)
+        {
+            var savedData = serverLevel.getDataStorage().computeIfAbsent(LightRegistrySavedData::load, LightRegistrySavedData::new, LightRegistrySavedData.ID);
+            if(savedData != null)
+            {
+                return Optional.of(savedData.getRegistry());
+            }
+        }
         return Optional.empty();
     }
 
@@ -68,37 +77,37 @@ public class FabricPlatformHelper implements IPlatformHelper {
             @Override
             public int getFeralFlareTickRate()
             {
-                return 0;
+                return 3;
             }
 
             @Override
             public int getFeralFlareLanternLightCountHardcap()
             {
-                return 0;
+                return 255;
             }
 
             @Override
             public int getFeralFlareRadius()
             {
-                return 0;
+                return 16;
             }
 
             @Override
             public int getFeralFlareMinLightLevel()
             {
-                return 0;
+                return 3;
             }
 
             @Override
             public int getDreadLampRadius()
             {
-                return 0;
+                return 96;
             }
 
             @Override
             public int getMegaTorchRadius()
             {
-                return 0;
+                return 256;
             }
 
             @Override
@@ -110,19 +119,19 @@ public class FabricPlatformHelper implements IPlatformHelper {
             @Override
             public boolean getAggressiveSpawnChecks()
             {
-                return false;
+                return true;
             }
 
             @Override
             public boolean getBlockOnlyNaturalSpawns()
             {
-                return false;
+                return true;
             }
 
             @Override
             public boolean getBlockVillageSieges()
             {
-                return false;
+                return true;
             }
         };
     }
