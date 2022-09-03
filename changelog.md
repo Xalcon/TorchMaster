@@ -1,3 +1,6 @@
+## v19.2.0
+- Upgrade to MC 1.19.2
+
 ## v19.0.2-beta
 - fix crash on startup with more recent versions of forge
 
