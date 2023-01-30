@@ -2,8 +2,11 @@ package net.xalcon.torchmaster;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
@@ -43,6 +46,8 @@ public class Torchmaster
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOWEST, this::postInit);
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCreativeModeTabRegisterEvent);
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorchmasterConfig.spec, "torchmaster.toml");
     }
@@ -84,5 +89,21 @@ public class Torchmaster
     public void onServerStopping(ServerStoppedEvent event)
     {
         server = null;
+    }
+
+    public void onCreativeModeTabRegisterEvent(CreativeModeTabEvent.Register event)
+    {
+        var tab = event.registerCreativeModeTab(new ResourceLocation(Torchmaster.MODID, "creativetab"), builder ->
+        {
+           builder.m_257737_(() -> new ItemStack(ModBlocks.itemMegaTorch.get()));
+           builder.m_257501_((featureFlagSet, output, hasPermission) ->
+           {
+               output.m_246342_(new ItemStack(ModBlocks.itemMegaTorch.get()));
+               output.m_246342_(new ItemStack(ModBlocks.itemDreadLamp.get()));
+               output.m_246342_(new ItemStack(ModBlocks.itemFeralFlareLantern.get()));
+               output.m_246342_(new ItemStack(ModItems.itemFrozenPearl.get()));
+           });
+        });
+
     }
 }

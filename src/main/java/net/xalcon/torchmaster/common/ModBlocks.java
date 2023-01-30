@@ -1,6 +1,7 @@
 package net.xalcon.torchmaster.common;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.AirBlock;
@@ -29,9 +30,9 @@ import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 public final class ModBlocks
 {
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registry.BLOCK_REGISTRY, Torchmaster.MODID);
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registry.ITEM_REGISTRY, Torchmaster.MODID);
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registry.BLOCK_ENTITY_TYPE_REGISTRY, Torchmaster.MODID);
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torchmaster.MODID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Torchmaster.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Torchmaster.MODID);
 
     public static RegistryObject<EntityBlockingLightBlock> blockMegaTorch = BLOCKS.register("megatorch", () ->
             new EntityBlockingLightBlock(Block.Properties
@@ -42,7 +43,7 @@ public final class ModBlocks
                     pos -> "MT_" +pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
                     MegatorchEntityBlockingLight::new, 1.0f, MegatorchEntityBlockingLight.SHAPE));
     public static RegistryObject<TMItemBlock> itemMegaTorch = fromBlock(blockMegaTorch,
-            new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
+            new Item.Properties());
 
     public static RegistryObject<EntityBlockingLightBlock> blockDreadLamp = BLOCKS.register("dreadlamp", () ->
             new EntityBlockingLightBlock(Block.Properties
@@ -53,7 +54,7 @@ public final class ModBlocks
                     pos -> "DL_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
                     DreadLampEntityBlockingLight::new, 0.3f, DreadLampEntityBlockingLight.SHAPE));
     public static RegistryObject<TMItemBlock> itemDreadLamp = fromBlock(blockDreadLamp,
-            new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
+            new Item.Properties());
 
     public static RegistryObject<FeralFlareLanternBlock> blockFeralFlareLantern = BLOCKS.register("feral_flare_lantern", () ->
             new FeralFlareLanternBlock(Block.Properties
@@ -62,7 +63,7 @@ public final class ModBlocks
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15)));
     public static RegistryObject<TMItemBlock> itemFeralFlareLantern = fromBlock(blockFeralFlareLantern,
-            new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE));
+            new Item.Properties());
     // @ObjectHolder("feral_flare_lantern")
     public static RegistryObject<BlockEntityType<FeralFlareLanternTileEntity>> tileFeralFlareLantern =
             BLOCK_ENTITIES.register("feral_flare_lantern", () ->
@@ -80,6 +81,7 @@ public final class ModBlocks
     public static void init()
     {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
         BLOCKS.register(bus);
         ITEMS.register(bus);
         BLOCK_ENTITIES.register(bus);

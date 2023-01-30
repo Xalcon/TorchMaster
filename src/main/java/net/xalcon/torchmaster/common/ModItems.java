@@ -20,5 +20,5 @@ public class ModItems
     }
 
     public static RegistryObject<FrozenPearlItem> itemFrozenPearl = ITEMS.register("frozen_pearl",
-            () -> new FrozenPearlItem(new Item.Properties().tab(TorchmasterCreativeTab.INSTANCE)));
+            () -> new FrozenPearlItem(new Item.Properties()));
 }
