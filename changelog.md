@@ -1,3 +1,6 @@
+## v19.2.1
+- Upgrade to Mc 1.19.3
+
 ## v19.2.0
 - Upgrade to MC 1.19.2
 
