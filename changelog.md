@@ -1,3 +1,6 @@
+## v19.2.2
+- Fix non-intentional chunkloading via the feral flare lantern in some rare edge cases
+
 ## v19.2.1
 - Upgrade to Mc 1.19.3
 

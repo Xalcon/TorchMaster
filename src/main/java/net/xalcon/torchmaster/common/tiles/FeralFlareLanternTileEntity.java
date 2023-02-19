@@ -63,6 +63,9 @@ public class FeralFlareLanternTileEntity extends BlockEntity
 
         // limit height - upper bounds
         BlockPos targetPos = new BlockPos(x, y, z);
+
+        if(!this.level.isLoaded(targetPos)) return;
+
         int surfaceHeight = this.level.getHeight(Heightmap.Types.WORLD_SURFACE, targetPos.getX(), targetPos.getZ());
         if (targetPos.getY() > surfaceHeight + 4)
             targetPos = targetPos.atY(surfaceHeight).above(4);
@@ -71,8 +74,6 @@ public class FeralFlareLanternTileEntity extends BlockEntity
         int worldHeightCap = level.getHeight();
         if(targetPos.getY() > worldHeightCap)
             targetPos = new BlockPos(targetPos.getX(), worldHeightCap - 1, targetPos.getZ());
-
-        if(!this.level.isLoaded(targetPos)) return;
 
         if (this.level.isEmptyBlock(targetPos) && this.level.getBrightness(LightLayer.BLOCK, targetPos) < TorchmasterConfig.GENERAL.feralFlareMinLightLevel.get())
         {
