@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "Obrovská louč",
+    "block.torchmaster.megatorch.tooltip": "Zabraňuje přírodnímu spawnování zlých příšer ve velkém rozsahu kolem louče",
+    "block.torchmaster.dreadlamp": "Strašná lampa",
+    "block.torchmaster.dreadlamp.tooltip": "Zabraňuje přírodnímu spawnování přátelských zvířat jako jsou olihně, netopýři nebo oceloti ve velkém rozsahu kolem lampy",
+    "block.torchmaster.feral_flare_lantern": "Lucerna divokých světlic",
+    "block.torchmaster.feral_flare_lantern.tooltip": "Pokládá neviditelná světla",
+    "block.torchmaster.invisible_light": "Neviditelné světlo",
+    "item.torchmaster.frozen_pearl": "Zmrzlá perla",
+    "item.torchmaster.frozen_pearl.tooltip": "Odstraní zbytková světla z lucerny divokých světlic",
+    "command.torchmaster.torch_list.completed": "Louče byly vhozeny do výstupního souboru",
+    "command.torchmaster.entity_dump.completed": "Entity byly vhozeny do výstupního souboru",
+    "itemGroup.torchmaster": "Torchmaster"
+}
