@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "Mega Tocha",
+    "block.torchmaster.megatorch.tooltip": "Evita o nascimento natural de monstros hostis em um grande raio ao redor da tocha",
+    "block.torchmaster.dreadlamp": "Lâmpada do Medo",
+    "block.torchmaster.dreadlamp.tooltip": "Evita o nascimento natural de animais passivos como lulas, morcegos ou jaguatiricas em um grande raio ao redor da lâmpada",
+    "block.torchmaster.feral_flare_lantern": "Lanterna Sinalizadora Feroz",
+    "block.torchmaster.feral_flare_lantern.tooltip": "Coloca luzes invisíveis",
+    "block.torchmaster.invisible_light": "Luz Invisível",
+    "item.torchmaster.frozen_pearl": "Pérola Congelada",
+    "item.torchmaster.frozen_pearl.tooltip": "Limpa as luzes residuais de uma Lanterna Sinalizadora Feroz",
+    "command.torchmaster.torch_list.completed": "As tochas foram despejadas no arquivo de log",
+    "command.torchmaster.entity_dump.completed": "As entidades foram despejadas no arquivo de log",
+    "itemGroup.torchmaster": "Torchmaster"
+}
