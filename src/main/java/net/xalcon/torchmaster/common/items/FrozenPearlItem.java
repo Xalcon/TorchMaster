@@ -29,7 +29,7 @@ public class FrozenPearlItem extends Item
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos(0, 0, 0);
-        BlockPos pos = new BlockPos(player.position());
+        BlockPos pos = player.blockPosition();
         ItemStack itemStack = player.getItemInHand(hand);
         level.playSound(player, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 0.7f, 0.6f);
         for(int x = -15; x <= 15; x++)

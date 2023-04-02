@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
@@ -38,6 +39,8 @@ public class Torchmaster
 
     public static final EntityFilterRegistry MegaTorchFilterRegistry = new EntityFilterRegistry();
     public static final EntityFilterRegistry DreadLampFilterRegistry = new EntityFilterRegistry();
+
+    private static CreativeModeTab CreativeModeTab;
 
     public Torchmaster() {
         ModBlocks.init();
@@ -93,10 +96,11 @@ public class Torchmaster
 
     public void onCreativeModeTabRegisterEvent(CreativeModeTabEvent.Register event)
     {
-        var tab = event.registerCreativeModeTab(new ResourceLocation(Torchmaster.MODID, "creativetab"), builder ->
+        CreativeModeTab = event.registerCreativeModeTab(new ResourceLocation(Torchmaster.MODID, "creativetab"), builder ->
         {
            builder.m_257737_(() -> new ItemStack(ModBlocks.itemMegaTorch.get()));
-           builder.m_257501_((featureFlagSet, output, hasPermission) ->
+
+           builder.m_257501_((displayParameters, output) ->
            {
                output.m_246342_(new ItemStack(ModBlocks.itemMegaTorch.get()));
                output.m_246342_(new ItemStack(ModBlocks.itemDreadLamp.get()));
@@ -104,6 +108,5 @@ public class Torchmaster
                output.m_246342_(new ItemStack(ModItems.itemFrozenPearl.get()));
            });
         });
-
     }
 }
