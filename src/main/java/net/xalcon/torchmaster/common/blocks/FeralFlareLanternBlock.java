@@ -2,9 +2,13 @@ package net.xalcon.torchmaster.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -62,6 +66,34 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
             ((FeralFlareLanternTileEntity) te).removeChildLights();
 
         super.onRemove(state, world, pos, oldState, moving);
+    }
+
+
+
+    @Override
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
+    {
+        var te = level.getBlockEntity(pos);
+        if(te instanceof FeralFlareLanternTileEntity)
+            ((FeralFlareLanternTileEntity) te).removeChildLights();
+        super.destroy(level, pos, state);
+    }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable BlockEntity te, ItemStack itemStack)
+    {
+        if(te instanceof FeralFlareLanternTileEntity)
+            ((FeralFlareLanternTileEntity) te).removeChildLights();
+        super.playerDestroy(level, player, pos, state, te, itemStack);
+    }
+
+    @Override
+    public void wasExploded(Level level, BlockPos pos, Explosion explosion)
+    {
+        var te = level.getBlockEntity(pos);
+        if(te instanceof FeralFlareLanternTileEntity)
+            ((FeralFlareLanternTileEntity) te).removeChildLights();
+        super.wasExploded(level, pos, explosion);
     }
 
     @Nullable
