@@ -1,3 +1,8 @@
+## v19.2.90
+- Limit MC Version to 1.19.2 for the Torchmaster 19.2.x version line. Use 19.4.x+ for MC 1.19.4+
+- Backport chunk loading bugfix from 1.19.3 Version of Torchmaster
+- Improve Invisible Light removal when Feral Flare Lantern is removed without player interaction
+
 ## v19.2.0
 - Upgrade to MC 1.19.2
 
