@@ -1,3 +1,6 @@
+## v18.2.0
+- Improve Invisible Light removal when Feral Flare Lantern is removed without player interaction
+
 ## v18.1.0
 - Allow the Mega Torch to block Village Sieges. This feature will be moved to a dedicated block in a future release.
 - Upgrade to Minecraft 1.18.2
