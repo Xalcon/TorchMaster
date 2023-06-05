@@ -63,6 +63,9 @@ public class FeralFlareLanternTileEntity extends BlockEntity
 
         // limit height - upper bounds
         BlockPos targetPos = new BlockPos(x, y, z);
+
+        if(!this.level.isLoaded(targetPos)) return;
+
         int surfaceHeight = this.level.getHeight(Heightmap.Types.WORLD_SURFACE, targetPos.getX(), targetPos.getZ());
         if (targetPos.getY() > surfaceHeight + 4)
             targetPos = targetPos.atY(surfaceHeight).above(4);
