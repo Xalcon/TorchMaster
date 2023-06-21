@@ -42,19 +42,18 @@ jobs:
       id: gradle_build
       run: |
         ./gradlew build versionTxt
-        echo "::set-output name=artifactversion::`basename \`cat ./build/libs/version.txt\``"
-        echo "::set-output name=artifactname::`basename \`cat ./build/libs/artifact.txt\``"
-        echo "::set-output name=artifactfullname::`realpath ./build/libs/\`cat ./build/libs/artifact.txt\``"
-        echo "::set-output name=mcversion::`basename ${{ github.ref }}`"
-        echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
+        echo "artifactversion=`basename \`cat ./build/libs/version.txt\``" >> $GITHUB_OUTPUT
+        echo "artifactname=`basename \`cat ./build/libs/artifact.txt\``" >> $GITHUB_OUTPUT
+        echo "artifactfullname=`realpath ./build/libs/\`cat ./build/libs/artifact.txt\``" >> $GITHUB_OUTPUT
+        echo "mcversion=`basename ${{ github.ref }}`"
         if [[ `cat ./build/libs/version.txt` == *-alpha ]]
         then
-          echo "::set-output name=releasetype::alpha"
+          echo "releasetype=alpha" >> $GITHUB_OUTPUT
         elif [[ `cat ./build/libs/version.txt` == *-beta ]]
         then
-          echo "::set-output name=releasetype::beta"
+          echo "releasetype=beta" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=releasetype::release"
+          echo "releasetype=release" >> $GITHUB_OUTPUT
         fi
 
     - name: Create Github Release
@@ -75,7 +74,7 @@ jobs:
       with:
         modrinth-id: "Tl8ESrhX"
         modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-        files-primary: ${{ steps.build.outputs.artifactfullname }}
+        files: ${{ steps.build.outputs.artifactfullname }}
         name: torchmaster-${{ steps.build.outputs.artifactversion }}
         version: ${{ steps.build.outputs.artifactversion }}
         version-type: ${{ steps.build.outputs.releasetype }}
@@ -91,7 +90,7 @@ jobs:
       with:
         curseforge-id: "254268"
         curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-        files-primary: ${{ steps.build.outputs.artifactfullname }}
+        files: ${{ steps.build.outputs.artifactfullname }}
         name: torchmaster-${{ steps.build.outputs.artifactversion }}
         version: ${{ steps.build.outputs.artifactversion }}
         version-type: ${{ steps.build.outputs.releasetype }}
