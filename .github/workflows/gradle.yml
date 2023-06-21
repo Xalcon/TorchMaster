@@ -14,14 +14,13 @@ on:
         description: 'Deploy to Modrinth'
         type: boolean
         default: false
-  push:
-    branches: [ mc/1.19 ]
-    paths:
-      - 'changelog.md'
-      - 'build.properties' 
+      create_github_release:
+        description: 'Create Github Release'
+        type: boolean
+        default: false
 
 env:
-  CURSEFORGE_ID: ${{ fromJSON('["", "254268"]')[github.event.inputs.deploy_curseforge == 'true'] }} 
+  CURSEFORGE_ID: ${{ fromJSON('["", "254268"]')[github.event.inputs.deploy_curseforge == 'true'] }}
   MODRINTH_ID: ${{ fromJSON('["", "Tl8ESrhX"]')[github.event.inputs.deploy_modrinth == 'true'] }}
   JAVA_VERSION: 17
 
@@ -32,13 +31,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up JDK
       uses: actions/setup-java@v1
       with:
         java-version: 1.${{ env.JAVA_VERSION }}
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
     - name: Build with Gradle
+      id: gradle_build
       run: |
         ./gradlew build versionTxt
         echo "::set-output name=artifactversion::`basename \`cat ./build/libs/version.txt\``"
@@ -55,22 +58,41 @@ jobs:
         else
           echo "::set-output name=releasetype::release"
         fi
-      id: build
       
-    - uses: ncipollo/release-action@v1
+    - name: Create Github Release
+      id: create_github_release
+      if: ${{ success("gradle_build") && github.event.inputs.create_github_release == 'true' }}
+      uses: ncipollo/release-action@v1
       with:
         bodyFile: "changelog.md"
         token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: "${{ steps.build.outputs.artifactfullname }}"
         tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
+
       
-    - uses: Kir-Antipov/mc-publish@v2.1
+    - name: Publish to Modrinth
+      id: publish_modrinth
+      if: ${{ success("gradle_build") && github.event.inputs.deploy_modrinth == 'true' }}
+      uses: Kir-Antipov/mc-publish@v3.3
       with:
         modrinth-id: ${{ env.MODRINTH_ID }}
         modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-        curseforge-id: ${{ env.CURSEFORGE_ID }} 
+        files-primary: ${{ steps.build.outputs.artifactfullname }}
+        name: torchmaster-${{ steps.build.outputs.artifactversion }}
+        version: ${{ steps.build.outputs.artifactversion }}
+        version-type: ${{ steps.build.outputs.releasetype }}
+        changelog-file: changelog.md
+        loaders: forge
+        game-versions: ${{ steps.build.outputs.mcversion }}
+        java: ${{ env.JAVA_VERSION }}
+
+    - name: Publish to Curseforge
+      id: publish_curseforge
+      if: ${{ success("gradle_build") && github.event.inputs.deploy_curseforge == 'true' }}
+      uses: Kir-Antipov/mc-publish@v3.3
+      with:
+        curseforge-id: ${{ env.CURSEFORGE_ID }}
         curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-        github-tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
-        github-token: ${{ secrets.GITHUB_TOKEN }}
         files-primary: ${{ steps.build.outputs.artifactfullname }}
         name: torchmaster-${{ steps.build.outputs.artifactversion }}
         version: ${{ steps.build.outputs.artifactversion }}

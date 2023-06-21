@@ -236,3 +236,10 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+
+task versionTxt()  {
+    doLast {
+        new File(projectDir, "build/libs/version.txt").text = """$version"""
+        new File(projectDir, "build/libs/artifact.txt").text = """${jar.archiveFileName.get()}"""
+    }
+}
