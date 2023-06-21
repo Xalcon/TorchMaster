@@ -20,8 +20,6 @@ on:
         default: false
 
 env:
-  CURSEFORGE_ID: ${{ fromJSON('["", "254268"]')[github.event.inputs.deploy_curseforge == 'true'] }}
-  MODRINTH_ID: ${{ fromJSON('["", "Tl8ESrhX"]')[github.event.inputs.deploy_modrinth == 'true'] }}
   JAVA_VERSION: 17
 
 jobs:
@@ -61,7 +59,7 @@ jobs:
       
     - name: Create Github Release
       id: create_github_release
-      if: ${{ needs.gradle_build.result == 'success' && github.event.inputs.create_github_release == 'true' }}
+      if: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.create_github_release == 'true' }}
       uses: ncipollo/release-action@v1
       with:
         bodyFile: "changelog.md"
@@ -72,10 +70,10 @@ jobs:
       
     - name: Publish to Modrinth
       id: publish_modrinth
-      if: ${{ needs.gradle_build.result == 'success' && github.event.inputs.deploy_modrinth == 'true' }}
+      if: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.deploy_modrinth == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
-        modrinth-id: ${{ env.MODRINTH_ID }}
+        modrinth-id: "Tl8ESrhX"
         modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
         files-primary: ${{ steps.build.outputs.artifactfullname }}
         name: torchmaster-${{ steps.build.outputs.artifactversion }}
@@ -88,10 +86,10 @@ jobs:
 
     - name: Publish to Curseforge
       id: publish_curseforge
-      if: ${{ needs.gradle_build.result == 'success' && github.event.inputs.deploy_curseforge == 'true' }}
+      if: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.deploy_curseforge == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
-        curseforge-id: ${{ env.CURSEFORGE_ID }}
+        curseforge-id: "254268"
         curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
         files-primary: ${{ steps.build.outputs.artifactfullname }}
         name: torchmaster-${{ steps.build.outputs.artifactversion }}
