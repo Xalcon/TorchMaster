@@ -56,6 +56,13 @@ jobs:
         else
           echo "::set-output name=releasetype::release"
         fi
+
+    - name: debug_print
+      run: |
+        echo "!cancelled() == ${{ !cancelled() }}"
+        echo "needs.gradle_build.result == '${{ needs.gradle_build.result }}'"
+        echo "github.event.inputs.create_github_release == '${{ github.event.inputs.create_github_release }}'"
+        echo "Result: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.create_github_release == 'true' }}"
       
     - name: Create Github Release
       id: create_github_release
