@@ -63,8 +63,8 @@ jobs:
       with:
         bodyFile: "changelog.md"
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: "${{ steps.build.outputs.artifactfullname }}"
-        tag: "mc${{ steps.build.outputs.mcversion }}-${{ steps.build.outputs.artifactversion }}"
+        artifacts: "${{ steps.gradle_build.outputs.artifactfullname }}"
+        tag: "mc${{ steps.gradle_build.outputs.mcversion }}-${{ steps.gradle_build.outputs.artifactversion }}"
 
       
     - name: Publish to Modrinth
@@ -74,13 +74,13 @@ jobs:
       with:
         modrinth-id: "Tl8ESrhX"
         modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-        files: ${{ steps.build.outputs.artifactfullname }}
-        name: torchmaster-${{ steps.build.outputs.artifactversion }}
-        version: ${{ steps.build.outputs.artifactversion }}
-        version-type: ${{ steps.build.outputs.releasetype }}
+        files: ${{ steps.gradle_build.outputs.artifactfullname }}
+        name: torchmaster-${{ steps.gradle_build.outputs.artifactversion }}
+        version: ${{ steps.gradle_build.outputs.artifactversion }}
+        version-type: ${{ steps.gradle_build.outputs.releasetype }}
         changelog-file: changelog.md
         loaders: forge
-        game-versions: ${{ steps.build.outputs.mcversion }}
+        game-versions: ${{ steps.gradle_build.outputs.mcversion }}
         java: ${{ env.JAVA_VERSION }}
 
     - name: Publish to Curseforge
@@ -90,11 +90,11 @@ jobs:
       with:
         curseforge-id: "254268"
         curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-        files: ${{ steps.build.outputs.artifactfullname }}
-        name: torchmaster-${{ steps.build.outputs.artifactversion }}
-        version: ${{ steps.build.outputs.artifactversion }}
-        version-type: ${{ steps.build.outputs.releasetype }}
+        files: ${{ steps.gradle_build.outputs.artifactfullname }}
+        name: torchmaster-${{ steps.gradle_build.outputs.artifactversion }}
+        version: ${{ steps.gradle_build.outputs.artifactversion }}
+        version-type: ${{ steps.gradle_build.outputs.releasetype }}
         changelog-file: changelog.md
         loaders: forge
-        game-versions: ${{ steps.build.outputs.mcversion }}
+        game-versions: ${{ steps.gradle_build.outputs.mcversion }}
         java: ${{ env.JAVA_VERSION }}
