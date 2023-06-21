@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -36,7 +36,7 @@ public final class ModBlocks
 
     public static RegistryObject<EntityBlockingLightBlock> blockMegaTorch = BLOCKS.register("megatorch", () ->
             new EntityBlockingLightBlock(Block.Properties
-                    .of(Material.WOOD)
+                    .of()
                     .sound(SoundType.WOOD)
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15),
@@ -47,7 +47,7 @@ public final class ModBlocks
 
     public static RegistryObject<EntityBlockingLightBlock> blockDreadLamp = BLOCKS.register("dreadlamp", () ->
             new EntityBlockingLightBlock(Block.Properties
-                    .of(Material.METAL)
+                    .of()
                     .sound(SoundType.LANTERN)
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15),
@@ -58,7 +58,7 @@ public final class ModBlocks
 
     public static RegistryObject<FeralFlareLanternBlock> blockFeralFlareLantern = BLOCKS.register("feral_flare_lantern", () ->
             new FeralFlareLanternBlock(Block.Properties
-                    .of(Material.METAL)
+                    .of()
                     .sound(SoundType.LANTERN)
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15)));
@@ -73,7 +73,7 @@ public final class ModBlocks
 
     public static RegistryObject<AirBlock> blockInvisibleLight = BLOCKS.register("invisible_light", () ->
             new AirBlock(Block.Properties
-                    .of(Material.AIR)
+                    .copy(Blocks.AIR)
                     .lightLevel(blockState -> 15)
                     .noCollission()
                     .air()));

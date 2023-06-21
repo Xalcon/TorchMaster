@@ -2,12 +2,12 @@ package net.xalcon.torchmaster;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
@@ -20,6 +20,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import net.xalcon.torchmaster.common.EntityFilterRegistry;
 import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.ModItems;
@@ -40,7 +42,19 @@ public class Torchmaster
     public static final EntityFilterRegistry MegaTorchFilterRegistry = new EntityFilterRegistry();
     public static final EntityFilterRegistry DreadLampFilterRegistry = new EntityFilterRegistry();
 
-    private static CreativeModeTab CreativeModeTab;
+    private static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+
+    public static final RegistryObject<CreativeModeTab> CreativeTab = CREATIVE_MODE_TABS.register("creative_tab", () -> CreativeModeTab.builder()
+            .withTabsBefore(CreativeModeTabs.COMBAT)
+            .icon(() -> ModBlocks.itemMegaTorch.get().getDefaultInstance())
+            .displayItems((parameters, output) -> {
+                output.accept(new ItemStack(ModBlocks.itemMegaTorch.get()));
+                output.accept(new ItemStack(ModBlocks.itemDreadLamp.get()));
+                output.accept(new ItemStack(ModBlocks.itemFeralFlareLantern.get()));
+                output.accept(new ItemStack(ModItems.itemFrozenPearl.get()));
+            })
+            .build()
+    );
 
     public Torchmaster() {
         ModBlocks.init();
@@ -50,7 +64,7 @@ public class Torchmaster
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOWEST, this::postInit);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCreativeModeTabRegisterEvent);
+        // FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCreativeModeTabRegisterEvent);
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorchmasterConfig.spec, "torchmaster.toml");
     }
@@ -94,7 +108,7 @@ public class Torchmaster
         server = null;
     }
 
-    public void onCreativeModeTabRegisterEvent(CreativeModeTabEvent.Register event)
+    /*public void onCreativeModeTabRegisterEvent(CreativeModeTabEvent.Register event)
     {
         CreativeModeTab = event.registerCreativeModeTab(new ResourceLocation(Torchmaster.MODID, "creativetab"), builder ->
         {
@@ -108,5 +122,5 @@ public class Torchmaster
                output.m_246342_(new ItemStack(ModItems.itemFrozenPearl.get()));
            });
         });
-    }
+    }*/
 }

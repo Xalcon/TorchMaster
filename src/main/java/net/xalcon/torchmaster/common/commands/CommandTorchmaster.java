@@ -40,7 +40,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Torch Dump End    #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendSuccess(Component.translatable(Torchmaster.MODID + ".command.torch_dump.completed"), false);
+                    source.sendSuccess(() -> Component.translatable(Torchmaster.MODID + ".command.torch_dump.completed"), false);
                     return 0;
                 }
             },
@@ -68,7 +68,7 @@ public class CommandTorchmaster
                     Torchmaster.Log.info("# Torchmaster Entity Dump End   #");
                     Torchmaster.Log.info("#################################");
 
-                    source.sendSuccess(Component.translatable(Torchmaster.MODID + ".command.entity_dump.completed"), false);
+                    source.sendSuccess(() -> Component.translatable(Torchmaster.MODID + ".command.entity_dump.completed"), false);
                     return 0;
                 }
             };
