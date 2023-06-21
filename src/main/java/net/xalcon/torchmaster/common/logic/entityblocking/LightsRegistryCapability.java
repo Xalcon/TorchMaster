@@ -99,7 +99,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
                 catch (Exception ex)
                 {
                     Torchmaster.Log.error("The serializer '{}' threw an error during serialization!", serializerKey);
-                    Torchmaster.Log.error(ex);
+                    Torchmaster.Log.error("Error", ex);
                 }
             }
 
@@ -144,7 +144,7 @@ public class LightsRegistryCapability implements ICapabilityProvider, ICapabilit
                 catch (Exception ex)
                 {
                     Torchmaster.Log.error("The serializer '{}' threw an error during deserialization!", serializerKey);
-                    Torchmaster.Log.error(ex);
+                    Torchmaster.Log.error("Error", ex);
                 }
             }
         }

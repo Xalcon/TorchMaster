@@ -1,5 +1,6 @@
 package net.xalcon.torchmaster;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.registries.Registries;
@@ -27,15 +28,14 @@ import net.xalcon.torchmaster.common.ModBlocks;
 import net.xalcon.torchmaster.common.ModItems;
 import net.xalcon.torchmaster.common.commands.CommandTorchmaster;
 import net.xalcon.torchmaster.compat.VanillaCompat;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Torchmaster.MODID)
 public class Torchmaster
 {
     public static final String MODID = "torchmaster";
-    public static final Logger Log = LogManager.getLogger();
+    public static final Logger Log = LogUtils.getLogger();
 
     public static MinecraftServer server;
 
@@ -60,11 +60,13 @@ public class Torchmaster
         ModBlocks.init();
         ModItems.init();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOWEST, this::postInit);
+        var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::doClientStuff);
+        modEventBus.addListener(EventPriority.LOWEST, this::postInit);
 
-        // FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCreativeModeTabRegisterEvent);
+        CREATIVE_MODE_TABS.register(modEventBus);
+
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorchmasterConfig.spec, "torchmaster.toml");
     }
