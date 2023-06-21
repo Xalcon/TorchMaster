@@ -26,8 +26,6 @@ import net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp.DreadLampEnt
 import net.xalcon.torchmaster.common.logic.entityblocking.megatorch.MegatorchEntityBlockingLight;
 import net.xalcon.torchmaster.common.tiles.FeralFlareLanternTileEntity;
 
-import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-
 public final class ModBlocks
 {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Torchmaster.MODID);
@@ -62,9 +60,7 @@ public final class ModBlocks
                     .sound(SoundType.LANTERN)
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15)));
-    public static RegistryObject<TMItemBlock> itemFeralFlareLantern = fromBlock(blockFeralFlareLantern,
-            new Item.Properties());
-    // @ObjectHolder("feral_flare_lantern")
+    public static RegistryObject<TMItemBlock> itemFeralFlareLantern = fromBlock(blockFeralFlareLantern, new Item.Properties());
     public static RegistryObject<BlockEntityType<FeralFlareLanternTileEntity>> tileFeralFlareLantern =
             BLOCK_ENTITIES.register("feral_flare_lantern", () ->
                     BlockEntityType.Builder

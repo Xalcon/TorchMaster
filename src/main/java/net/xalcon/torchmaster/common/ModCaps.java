@@ -9,12 +9,5 @@ import net.xalcon.torchmaster.common.logic.entityblocking.ITEBLightRegistry;
 
 public class ModCaps
 {
-    // TODO!
     public static Capability<ITEBLightRegistry> TEB_REGISTRY = CapabilityManager.get(new CapabilityToken<>(){});
-
-    @SubscribeEvent()
-    public static void registerModCaps(RegisterCapabilitiesEvent event)
-    {
-        event.register(ITEBLightRegistry.class);
-    }
 }

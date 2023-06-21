@@ -61,7 +61,6 @@ public class Torchmaster
         ModItems.init();
 
         var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);
         modEventBus.addListener(EventPriority.LOWEST, this::postInit);
 
@@ -69,11 +68,6 @@ public class Torchmaster
 
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TorchmasterConfig.spec, "torchmaster.toml");
-    }
-
-    private void setup(final FMLCommonSetupEvent event)
-    {
-        // ModCaps.registerModCaps();
     }
 
     private void postInit(final FMLLoadCompleteEvent event)
@@ -109,20 +103,4 @@ public class Torchmaster
     {
         server = null;
     }
-
-    /*public void onCreativeModeTabRegisterEvent(CreativeModeTabEvent.Register event)
-    {
-        CreativeModeTab = event.registerCreativeModeTab(new ResourceLocation(Torchmaster.MODID, "creativetab"), builder ->
-        {
-           builder.m_257737_(() -> new ItemStack(ModBlocks.itemMegaTorch.get()));
-
-           builder.m_257501_((displayParameters, output) ->
-           {
-               output.m_246342_(new ItemStack(ModBlocks.itemMegaTorch.get()));
-               output.m_246342_(new ItemStack(ModBlocks.itemDreadLamp.get()));
-               output.m_246342_(new ItemStack(ModBlocks.itemFeralFlareLantern.get()));
-               output.m_246342_(new ItemStack(ModItems.itemFrozenPearl.get()));
-           });
-        });
-    }*/
 }
