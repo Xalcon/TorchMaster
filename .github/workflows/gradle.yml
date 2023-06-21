@@ -57,16 +57,9 @@ jobs:
           echo "::set-output name=releasetype::release"
         fi
 
-    - name: debug_print
-      run: |
-        echo "!cancelled() == ${{ !cancelled() }}"
-        echo "needs.gradle_build.result == '${{ needs.gradle_build.result }}'"
-        echo "github.event.inputs.create_github_release == '${{ github.event.inputs.create_github_release }}'"
-        echo "Result: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.create_github_release == 'true' }}"
-      
     - name: Create Github Release
       id: create_github_release
-      if: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.create_github_release == 'true' }}
+      if: ${{ !cancelled() && steps.gradle_build.outcome == 'success' && github.event.inputs.create_github_release == 'true' }}
       uses: ncipollo/release-action@v1
       with:
         bodyFile: "changelog.md"
@@ -77,7 +70,7 @@ jobs:
       
     - name: Publish to Modrinth
       id: publish_modrinth
-      if: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.deploy_modrinth == 'true' }}
+      if: ${{ !cancelled() && steps.gradle_build.outcome == 'success' && github.event.inputs.deploy_modrinth == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
         modrinth-id: "Tl8ESrhX"
@@ -93,7 +86,7 @@ jobs:
 
     - name: Publish to Curseforge
       id: publish_curseforge
-      if: ${{ !cancelled() && needs.gradle_build.result == 'success' && github.event.inputs.deploy_curseforge == 'true' }}
+      if: ${{ !cancelled() && steps.gradle_build.outcome == 'success' && github.event.inputs.deploy_curseforge == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
         curseforge-id: "254268"
