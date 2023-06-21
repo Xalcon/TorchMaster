@@ -61,7 +61,7 @@ jobs:
       
     - name: Create Github Release
       id: create_github_release
-      if: ${{ success("gradle_build") && github.event.inputs.create_github_release == 'true' }}
+      if: ${{ needs.gradle_build.result == 'success' && github.event.inputs.create_github_release == 'true' }}
       uses: ncipollo/release-action@v1
       with:
         bodyFile: "changelog.md"
@@ -72,7 +72,7 @@ jobs:
       
     - name: Publish to Modrinth
       id: publish_modrinth
-      if: ${{ success("gradle_build") && github.event.inputs.deploy_modrinth == 'true' }}
+      if: ${{ needs.gradle_build.result == 'success' && github.event.inputs.deploy_modrinth == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
         modrinth-id: ${{ env.MODRINTH_ID }}
@@ -88,7 +88,7 @@ jobs:
 
     - name: Publish to Curseforge
       id: publish_curseforge
-      if: ${{ success("gradle_build") && github.event.inputs.deploy_curseforge == 'true' }}
+      if: ${{ needs.gradle_build.result == 'success' && github.event.inputs.deploy_curseforge == 'true' }}
       uses: Kir-Antipov/mc-publish@v3.3
       with:
         curseforge-id: ${{ env.CURSEFORGE_ID }}
