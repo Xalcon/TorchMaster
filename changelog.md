@@ -1,3 +1,7 @@
+## v20.1.1
+- Improve compatibility with Modded Spawners (i.e. EnderIO Spawners should no longer be blocked)
+- Improve Village Siege Blocking
+
 ## v20.1.0
 - Initial Port to Minecraft 1.20.1
 
