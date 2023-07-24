@@ -34,11 +34,7 @@ public class EntityBlockingEventHandler
         {
             if(event.getSpawnType() == MobSpawnType.SPAWNER)
             {
-                var spawner = event.getSpawner();
-                if(spawner != null && spawner.getSpawnerBlockEntity() instanceof SpawnerBlockEntity)
-                {
-                    return;
-                }
+                return;
             }
         }
 
@@ -80,6 +76,8 @@ public class EntityBlockingEventHandler
             if(reg.shouldBlockVillageSiege(pos))
             {
                 event.setResult(Event.Result.DENY);
+                if(event.isCancelable())
+                    event.setCanceled(true);
                 if (log) Torchmaster.Log.debug("Blocking village siege @ {}", pos);
             }
             else
