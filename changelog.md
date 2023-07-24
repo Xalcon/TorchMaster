@@ -1,3 +1,6 @@
+## v18.2.1
+- Improve Village Siege Handling
+
 ## v18.2.0
 - Improve Invisible Light removal when Feral Flare Lantern is removed without player interaction
 
