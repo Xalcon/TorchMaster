@@ -12,7 +12,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.ModBlocks;
 
@@ -40,7 +43,8 @@ public class FrozenPearlItem extends Item
                 {
                     checkPos.set(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
                     // if(checkPos.getY() < 1) continue;
-                    Block block = level.getBlockState(checkPos).getBlock();
+                    var state = level.getBlockState(checkPos);
+                    Block block = state.getBlock();
                     if(block == ModBlocks.blockInvisibleLight.get())
                     {
                         level.removeBlock(checkPos, false);
@@ -48,6 +52,13 @@ public class FrozenPearlItem extends Item
                             this.damageItem(itemStack, 1, player, (entity) -> entity.broadcastBreakEvent(hand));
                         if(itemStack.isEmpty())
                             return new InteractionResultHolder<>(InteractionResult.SUCCESS, ItemStack.EMPTY);
+                    }
+                    else if(state.isAir())
+                    {
+                        var ll = level.getBrightness(LightLayer.BLOCK, checkPos);
+                        var ll2 = state.getLightEmission(level, checkPos);
+                        if(ll2 > 0)
+                            player.sendSystemMessage(Component.literal(String.format("B: %s - @%d/%d/%d - L:%d", state, checkPos.getX(), checkPos.getY(), checkPos.getZ(), ll)));
                     }
                 }
             }
