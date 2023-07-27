@@ -27,8 +27,16 @@ public class EntityBlockingEventHandler
     {
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
         if (log) Torchmaster.Log.debug("CheckSpawn - IsSpawner: {}, Reason: {}, Type: {}, Pos: {}/{}/{}", event.isSpawner(), event.getSpawnReason(), EntityType.getKey(event.getEntity().getType()), event.getX(), event.getY(), event.getZ());
+        if(event.isCanceled()) return;
+
+        // Check if the spawn was intentional (i.e. player invoked), we dont block those
+        if(isIntentionalSpawn(event.getSpawnReason())) return;
+
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
-        if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get() && event.isSpawner()) return;
+        if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get())
+        {
+            if(isNaturalSpawn(event.getSpawnReason())) return;
+        }
 
         var entity = event.getEntity();
         var world = entity.getCommandSenderWorld();
@@ -128,6 +136,57 @@ public class EntityBlockingEventHandler
                 level.getCapability(ModCaps.TEB_REGISTRY).ifPresent(reg -> reg.onGlobalTick(level));
                 level.getProfiler().pop();
             }
+        }
+    }
+
+
+    private static boolean isIntentionalSpawn(MobSpawnType spawnType)
+    {
+        switch(spawnType)
+        {
+            case BREEDING:
+            case DISPENSER:
+            case BUCKET:
+            case CONVERSION:
+            case SPAWN_EGG:
+            case TRIGGERED:
+            case COMMAND:
+                return true;
+            case NATURAL:
+            case CHUNK_GENERATION:
+            case PATROL:
+            case SPAWNER:
+            case STRUCTURE:
+            case MOB_SUMMONED:
+            case REINFORCEMENT:
+            case JOCKEY:
+            default:
+                return false;
+        }
+    }
+
+    private static boolean isNaturalSpawn(MobSpawnType spawnType)
+    {
+        switch(spawnType)
+        {
+            case NATURAL:
+            case CHUNK_GENERATION:
+            case PATROL: // Patrol can be considered natural
+            default:
+                return true;
+            case BREEDING:
+            case CONVERSION:
+            case BUCKET:
+            case DISPENSER:
+            case SPAWNER:
+            case STRUCTURE:
+            case MOB_SUMMONED:
+            case JOCKEY:
+            case REINFORCEMENT:
+            case TRIGGERED:
+            case SPAWN_EGG:
+            case COMMAND:
+                return false;
         }
     }
 }

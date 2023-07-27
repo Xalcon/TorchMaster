@@ -1,3 +1,6 @@
+## v19.2.92
+- Improve blocking behavior for Mega Torch and Dread Lamp. Intentional Spawns (like Spawn Eggs, bucket placements, breeding) should no longer be blocked
+
 ## v19.2.91
 - Improve village siege handling
 
