@@ -1,7 +1,8 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Gradle Build
+run-name: Gradle Build ${{ github.ref_name }}
 
 on:
   workflow_dispatch:
@@ -42,17 +43,25 @@ jobs:
       id: gradle_build
       run: |
         ./gradlew build versionTxt
+        
+        echo "artifactversion=`basename \`cat ./build/libs/version.txt\``"
         echo "artifactversion=`basename \`cat ./build/libs/version.txt\``" >> $GITHUB_OUTPUT
+        echo "artifactname=`basename \`cat ./build/libs/artifact.txt\``"
         echo "artifactname=`basename \`cat ./build/libs/artifact.txt\``" >> $GITHUB_OUTPUT
+        echo "artifactfullname=`realpath ./build/libs/\`cat ./build/libs/artifact.txt\``"
         echo "artifactfullname=`realpath ./build/libs/\`cat ./build/libs/artifact.txt\``" >> $GITHUB_OUTPUT
         echo "mcversion=`basename ${{ github.ref }}`"
+        echo "mcversion=`basename ${{ github.ref }}`" >> $GITHUB_OUTPUT
         if [[ `cat ./build/libs/version.txt` == *-alpha ]]
         then
+          echo "releasetype=alpha"
           echo "releasetype=alpha" >> $GITHUB_OUTPUT
         elif [[ `cat ./build/libs/version.txt` == *-beta ]]
         then
+          echo "releasetype=beta"
           echo "releasetype=beta" >> $GITHUB_OUTPUT
         else
+          echo "releasetype=release"
           echo "releasetype=release" >> $GITHUB_OUTPUT
         fi
 
