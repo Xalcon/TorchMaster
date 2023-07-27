@@ -23,19 +23,70 @@ import net.xalcon.torchmaster.common.ModCaps;
 @Mod.EventBusSubscriber(modid = Torchmaster.MODID)
 public class EntityBlockingEventHandler
 {
+    private static boolean isIntentionalSpawn(MobSpawnType spawnType)
+    {
+        switch(spawnType)
+        {
+            case BREEDING:
+            case DISPENSER:
+            case BUCKET:
+            case CONVERSION:
+            case SPAWN_EGG:
+            case TRIGGERED:
+            case COMMAND:
+                return true;
+            case NATURAL:
+            case CHUNK_GENERATION:
+            case PATROL:
+            case SPAWNER:
+            case STRUCTURE:
+            case MOB_SUMMONED:
+            case REINFORCEMENT:
+            case JOCKEY:
+            default:
+                return false;
+        }
+    }
+
+    private static boolean isNaturalSpawn(MobSpawnType spawnType)
+    {
+        switch(spawnType)
+        {
+            case NATURAL:
+            case CHUNK_GENERATION:
+            case PATROL: // Patrol can be considered natural
+            default:
+                return true;
+            case BREEDING:
+            case CONVERSION:
+            case BUCKET:
+            case DISPENSER:
+            case SPAWNER:
+            case STRUCTURE:
+            case MOB_SUMMONED:
+            case JOCKEY:
+            case REINFORCEMENT:
+            case TRIGGERED:
+            case SPAWN_EGG:
+            case COMMAND:
+                return false;
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event)
     {
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
         if (log) Torchmaster.Log.debug("CheckSpawn - SpawnType: {}, EntityType: {}, Pos: {}/{}/{}", event.getSpawnType(), EntityType.getKey(event.getEntity().getType()), event.getX(), event.getY(), event.getZ());
         if(event.isSpawnCancelled()) return;
+
+        // Check if the spawn was intentional (i.e. player invoked), we dont block those
+        if(isIntentionalSpawn(event.getSpawnType())) return;
+
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get())
         {
-            if(event.getSpawnType() == MobSpawnType.SPAWNER)
-            {
-                return;
-            }
+            if(isNaturalSpawn(event.getSpawnType())) return;
         }
 
         var entity = event.getEntity();
