@@ -80,12 +80,13 @@ public class EntityBlockingEventHandler
         if(event.isSpawnCancelled()) return;
 
         // Check if the spawn was intentional (i.e. player invoked), we dont block those
-        if(isIntentionalSpawn(event.getSpawnType())) return;
+        if(isIntentionalSpawn(event.getSpawnType()))
+            return;
 
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get())
         {
-            if(isNaturalSpawn(event.getSpawnType())) return;
+            if(!isNaturalSpawn(event.getSpawnType())) return;
         }
 
         var entity = event.getEntity();
