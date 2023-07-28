@@ -86,7 +86,7 @@ public class EntityBlockingEventHandler
         if(!TorchmasterConfig.GENERAL.aggressiveSpawnChecks.get() && event.getResult() == Event.Result.ALLOW) return;
         if(TorchmasterConfig.GENERAL.blockOnlyNaturalSpawns.get())
         {
-            if(isNaturalSpawn(event.getSpawnType())) return;
+            if(!isNaturalSpawn(event.getSpawnType())) return;
         }
 
         var entity = event.getEntity();
