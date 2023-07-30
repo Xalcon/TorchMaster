@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -53,6 +54,7 @@ public class Torchmaster
                 output.accept(new ItemStack(ModBlocks.itemFeralFlareLantern.get()));
                 output.accept(new ItemStack(ModItems.itemFrozenPearl.get()));
             })
+            .title(Component.literal("Torchmaster"))
             .build()
     );
 
