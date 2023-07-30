@@ -2,6 +2,7 @@ package net.xalcon.torchmaster;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.CreativeModeTab;
@@ -107,6 +108,8 @@ public class Torchmaster
                output.m_246342_(new ItemStack(ModBlocks.itemFeralFlareLantern.get()));
                output.m_246342_(new ItemStack(ModItems.itemFrozenPearl.get()));
            });
+
+           builder.m_257941_(Component.literal("Torchmaster"));
         });
     }
 }
