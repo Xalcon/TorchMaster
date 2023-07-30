@@ -1,3 +1,6 @@
+## v19.4.4
+- Add missing Creative Tab Title
+
 ## v19.4.3
 - Fix Mega Torch and Dread Lamp not working since v19.4.2 - sorry about that >.<
 
