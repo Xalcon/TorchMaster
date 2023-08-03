@@ -46,7 +46,6 @@ public class Torchmaster
     private static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public static final RegistryObject<CreativeModeTab> CreativeTab = CREATIVE_MODE_TABS.register("creative_tab", () -> CreativeModeTab.builder()
-            .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> ModBlocks.itemMegaTorch.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(new ItemStack(ModBlocks.itemMegaTorch.get()));
