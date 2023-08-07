@@ -17,6 +17,7 @@ import net.xalcon.torchmaster.common.blocks.FeralFlareLanternBlock;
 import net.xalcon.torchmaster.common.items.TMItemBlock;
 import net.xalcon.torchmaster.common.logic.entityblocking.dreadlamp.DreadLampEntityBlockingLight;
 import net.xalcon.torchmaster.common.logic.entityblocking.megatorch.MegatorchEntityBlockingLight;
+import net.xalcon.torchmaster.common.tiles.MegatorchTileEntity;
 import net.xalcon.torchmaster.common.tiles.FeralFlareLanternTileEntity;
 
 import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -27,10 +28,14 @@ public final class ModBlocks
     @ObjectHolder("megatorch")
     public static EntityBlockingLightBlock blockMegaTorch;
     @ObjectHolder("megatorch")
+    public static BlockEntityType<MegatorchTileEntity> tileMegaTorch;
+    @ObjectHolder("megatorch")
     public static TMItemBlock itemMegaTorch;
 
     @ObjectHolder("dreadlamp")
     public static EntityBlockingLightBlock blockDreadLamp;
+    // @ObjectHolder("dreadlamp")
+    // public static MegatorchTileEntity tileDreadLamp;
     @ObjectHolder("dreadlamp")
     public static TMItemBlock itemDreadLamp;
 
@@ -114,11 +119,25 @@ public final class ModBlocks
         @SubscribeEvent
         public static void onRegisterTileEntites(RegistryEvent.Register<BlockEntityType<?>> event)
         {
-            event.getRegistry().register(
+            var registry = event.getRegistry();
+            registry.register(
                     BlockEntityType.Builder
                             .of(FeralFlareLanternTileEntity::new, blockFeralFlareLantern)
                             .build(null)
                             .setRegistryName(blockFeralFlareLantern.getRegistryName()));
+
+            registry.register(
+                    BlockEntityType.Builder
+                            .of(MegatorchTileEntity::new, blockMegaTorch)
+                            .build(null)
+                            .setRegistryName(blockMegaTorch.getRegistryName()));
+
+            // registry.register(
+            //         BlockEntityType.Builder
+            //                 .of(new MegatorchTileEntity::new, blockDreadLamp)
+            //                 .build(null)
+            //                 .setRegistryName(blockDreadLamp.getRegistryName()));
+            // );
         }
     }
 

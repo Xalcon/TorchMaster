@@ -1,11 +1,13 @@
 package net.xalcon.torchmaster;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TorchmasterConfig
@@ -18,6 +20,14 @@ public class TorchmasterConfig
         final Pair<General, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(General::new);
         spec = specPair.getRight();
         GENERAL = specPair.getLeft();
+
+        for (var entry : GENERAL.megatorchBurnoutFuelTypes.get())
+        {
+            var tokens = entry.split("@");
+            var item = new ResourceLocation(tokens[0]);
+            var fuel = Integer.parseInt(tokens[1]);
+            GENERAL.fuelMap.put(item, fuel);
+        }
     }
 
     public static class General
@@ -37,8 +47,17 @@ public class TorchmasterConfig
         public final ForgeConfigSpec.ConfigValue<Integer> feralFlareLanternLightCountHardcap;
         public final ForgeConfigSpec.ConfigValue<Integer> frozenPearlDurability;
         public final ForgeConfigSpec.ConfigValue<Boolean> aggressiveSpawnChecks;
-
         public final ForgeConfigSpec.ConfigValue<Boolean> logSpawnChecks;
+
+        public final ForgeConfigSpec.ConfigValue<Boolean> enableMegatorchBurnout;
+        public final ForgeConfigSpec.ConfigValue<Integer> megatorchBurnoutDataRefreshRate;
+        public final ForgeConfigSpec.ConfigValue<Integer> megatorchBurnoutWarningThreshold;
+        // TODO
+        public final ForgeConfigSpec.ConfigValue<Integer> megatorchBurnoutMaxFuel;
+        // TODO
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> megatorchBurnoutFuelTypes;
+
+        public final Map<ResourceLocation, Integer> fuelMap = new HashMap<>();
 
         private General(ForgeConfigSpec.Builder builder)
         {
@@ -131,6 +150,72 @@ public class TorchmasterConfig
                 .comment("Configures the spawn check to be more aggressive, effectivly overriding the CheckSpawn results of other mods")
                 .translation("torchmaster.config.aggressiveSpawnChecks.description")
                 .define("aggressiveSpawnChecks", false);
+
+            builder.pop();
+
+            builder.push("Megatorch Burnout");
+
+            enableMegatorchBurnout = builder
+                    .comment("Enable Megatorch Burnout. If enabled, a fuel item needs to be used on the torch to light it.")
+                    .translation("torchmaster.config.enableMegatorchBurnout")
+                    .define("enableMegatorchBurnout", false);
+
+            megatorchBurnoutDataRefreshRate = builder
+                    .comment("Defines the time in between updates that are sent to all clients in range in world ticks. 20 ticks = 1 second. Don't change this if you don't know what this is for. Low value may cause lag")
+                    .translation("torchmaster.config.megatorchBurnoutDataRefreshRate")
+                    .defineInRange("megatorchDataRefreshRate", 5 * 20, 1, 20 * 60);
+
+            megatorchBurnoutWarningThreshold = builder
+                    .comment("Amount of fuel left before the torch should indicate low fuel level warnings. Set to 0 to disable.")
+                    .translation("torchmaster.config.megatorchBurnoutWarningThreshold")
+                    .defineInRange("megatorchBurnoutWarningThreshold", 5 * 60 * 20, 0, Integer.MAX_VALUE);
+
+            megatorchBurnoutMaxFuel = builder
+                    .comment("Amount of fuel that can be stored in the torch. Fuel is used at a rate of 1 per tick.")
+                    .translation("torchmaster.config.megatorchBurnoutMaxFuel")
+                    .defineInRange("megatorchBurnoutMaxFuel", 8 * 60 * 60 * 20, 0, Integer.MAX_VALUE);
+
+            megatorchBurnoutFuelTypes = builder
+                    .comment("Map of fuel types. Use the format modname:itemname@fuel. I.e. minecraft:coal@72000 would give 1h worth of fuel when using a piece of coal")
+                    .translation("torchmaster.config.megatorchBurnoutFuelTypes")
+                    .defineList("megatorchBurnoutFuelTypes", List.of("minecraft:coal@72000", "minecraft:diamond@1728000"), o ->
+                    {
+                        var tokens = o.toString().split("@");
+
+                        if(tokens.length != 2)
+                        {
+                            Torchmaster.Log.error("Invalid fuel type definition: '{}'", o);
+                            return false;
+                        }
+                        if(tokens[0].trim().equals(""))
+                        {
+                            Torchmaster.Log.error("Invalid fuel type definition. Unable to parse item: '{}'", o);
+                            return false;
+                        }
+
+                        if(tokens[1].trim().equals(""))
+                        {
+                            Torchmaster.Log.error("Invalid fuel type definition. Unable to parse fuel: '{}'", o);
+                            return false;
+                        }
+
+                        var itemString = tokens[0];
+                        // Can't validate item on startup, items may not be registered yet
+                        // if(!ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemString)))
+                        // {
+                        //     Torchmaster.Log.error("Item not found in item registry: {}", itemString);
+                        //     return false;
+                        // }
+
+                        var fuelValue = Integer.parseInt(tokens[1]);
+                        if(fuelValue < 1)
+                        {
+                            Torchmaster.Log.error("Invalid fuel type definition. Fuel must be >0: '{}'", o);
+                            return false;
+                        }
+
+                        return true;
+                    });
 
             builder.pop();
         }
