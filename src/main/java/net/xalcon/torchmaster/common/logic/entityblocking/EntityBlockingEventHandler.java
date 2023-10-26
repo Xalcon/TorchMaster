@@ -75,33 +75,9 @@ public class EntityBlockingEventHandler
         }
     }
 
-    @SubscribeEvent
-    public static void onEntityJoinLevel(EntityJoinLevelEvent event)
-    {
-        var entity = event.getEntity();
-        if(!event.loadedFromDisk() && entity instanceof Mob mob)
-        {
-            var leashHolder = mob.getLeashHolder();
-            if(leashHolder != null)
-            {
-                Torchmaster.Log.info("Found leashed entity {} -> {}{{isAddedToWorld:{}}} @ {}", entity.getType(), leashHolder.getType(), leashHolder.position(), leashHolder.isAddedToWorld());
-                if(!leashHolder.isAddedToWorld())
-                {
-                    entity.setCustomName(Component.literal("ORPHAN"));
-                    entity.level().players().stream().findFirst().get().sendSystemMessage(Component.literal("Found leashed entity @ " + entity.position()));
-                }
-                else
-                {
-                    entity.setCustomName(Component.literal("PET"));
-                }
-            }
-        }
-    }
-
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event)
     {
-
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
         if (log) Torchmaster.Log.debug("CheckSpawn - SpawnType: {}, EntityType: {}, Pos: {}/{}/{}", event.getSpawnType(), EntityType.getKey(event.getEntity().getType()), event.getX(), event.getY(), event.getZ());
         if(event.isSpawnCancelled()) return;
