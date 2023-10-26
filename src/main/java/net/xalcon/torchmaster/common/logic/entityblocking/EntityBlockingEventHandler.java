@@ -1,13 +1,16 @@
 package net.xalcon.torchmaster.common.logic.entityblocking;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.village.VillageSiegeEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -72,9 +75,33 @@ public class EntityBlockingEventHandler
         }
     }
 
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event)
+    {
+        var entity = event.getEntity();
+        if(!event.loadedFromDisk() && entity instanceof Mob mob)
+        {
+            var leashHolder = mob.getLeashHolder();
+            if(leashHolder != null)
+            {
+                Torchmaster.Log.info("Found leashed entity {} -> {}{{isAddedToWorld:{}}} @ {}", entity.getType(), leashHolder.getType(), leashHolder.position(), leashHolder.isAddedToWorld());
+                if(!leashHolder.isAddedToWorld())
+                {
+                    entity.setCustomName(Component.literal("ORPHAN"));
+                    entity.level().players().stream().findFirst().get().sendSystemMessage(Component.literal("Found leashed entity @ " + entity.position()));
+                }
+                else
+                {
+                    entity.setCustomName(Component.literal("PET"));
+                }
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event)
     {
+
         boolean log = TorchmasterConfig.GENERAL.logSpawnChecks.get();
         if (log) Torchmaster.Log.debug("CheckSpawn - SpawnType: {}, EntityType: {}, Pos: {}/{}/{}", event.getSpawnType(), EntityType.getKey(event.getEntity().getType()), event.getX(), event.getY(), event.getZ());
         if(event.isSpawnCancelled()) return;
@@ -100,6 +127,7 @@ public class EntityBlockingEventHandler
             {
                 event.setResult(Event.Result.DENY);
                 event.setSpawnCancelled(true);
+                event.setCanceled(true);
                 if (log) Torchmaster.Log.debug("Blocking spawn of {}", EntityType.getKey(event.getEntity().getType()));
                 //event.getEntity().addTag("torchmaster_removed_spawn");
             }
