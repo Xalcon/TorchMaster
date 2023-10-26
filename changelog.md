@@ -1,3 +1,6 @@
+## v20.1.5
+- COMPAT: Improve Compatibility with other Mods which spawn additional entities in a group
+
 ## v20.1.4
 - Add missing creative tab title
 
