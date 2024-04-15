@@ -1,3 +1,6 @@
+## v20.1.6
+- COMPAT: Improve compatibility with CarryOn: Mobs should no longer despawn when dropped inside the working volume of a torch or lamp
+
 ## v20.1.5
 - COMPAT: Improve Compatibility with other Mods which spawn additional entities in a group
 

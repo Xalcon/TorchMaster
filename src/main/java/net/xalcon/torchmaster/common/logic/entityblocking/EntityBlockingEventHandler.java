@@ -36,6 +36,7 @@ public class EntityBlockingEventHandler
             case SPAWN_EGG:
             case TRIGGERED:
             case COMMAND:
+            case EVENT:
                 return true;
             case NATURAL:
             case CHUNK_GENERATION:
@@ -71,6 +72,7 @@ public class EntityBlockingEventHandler
             case TRIGGERED:
             case SPAWN_EGG:
             case COMMAND:
+            case EVENT:
                 return false;
         }
     }
