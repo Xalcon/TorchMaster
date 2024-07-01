@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=south": { "model": "torchmaster:block/feral_flare_lantern" },
+    "facing=north": { "model": "torchmaster:block/feral_flare_lantern" },
+    "facing=east": { "model": "torchmaster:block/feral_flare_lantern" },
+    "facing=west": { "model": "torchmaster:block/feral_flare_lantern" },
+    "facing=up": { "model": "torchmaster:block/feral_flare_lantern" },
+    "facing=down": { "model": "torchmaster:block/feral_flare_lantern" }
+  }
+}

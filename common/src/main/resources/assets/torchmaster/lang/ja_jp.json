@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "巨大松明",
+    "block.torchmaster.megatorch.tooltip": "松明の周りの大きな範囲で敵対的モンスターの自然なスポーンを防ぐ",
+    "block.torchmaster.dreadlamp": "恐れのランプ",
+    "block.torchmaster.dreadlamp.tooltip": "ランプの周りの大きな範囲でイカ、コウモリ、オセロットのような友好的動物の自然なスポーンを防ぐ",
+    "block.torchmaster.feral_flare_lantern": "野蛮なフレアランタン",
+    "block.torchmaster.feral_flare_lantern.tooltip": "透明な光源を設置する",
+    "block.torchmaster.invisible_light": "透明な光源",
+    "item.torchmaster.frozen_pearl": "フローズンパール",
+    "item.torchmaster.frozen_pearl.tooltip": "野蛮なフレアランタンから残った光源を消す",
+    "command.torchmaster.torch_list.completed": "松明はログファイルにダンプされました",
+    "command.torchmaster.entity_dump.completed": "エンティティはログファイルにダンプされました",
+    "itemGroup.torchmaster": "トーチマスター"
+}

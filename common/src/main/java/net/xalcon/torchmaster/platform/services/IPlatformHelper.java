@@ -1,5 +1,11 @@
 package net.xalcon.torchmaster.platform.services;
 
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.xalcon.torchmaster.platform.RegistryObject;
+
+import java.util.Collection;
+
 public interface IPlatformHelper {
 
     /**
@@ -33,4 +39,6 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    CreativeModeTab createCreativeModeTab(String name, Collection<RegistryObject<Item>> itemsToShow);
 }

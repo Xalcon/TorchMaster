@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "Мега смолоскип",
+    "block.torchmaster.megatorch.tooltip": "Запобігає природній появі монстрів у великому радіусі навколо смолоскипу",
+    "block.torchmaster.dreadlamp": "Ліхтар жаху",
+    "block.torchmaster.dreadlamp.tooltip": "Запобігає природній появі тварин, таких як спрути, кажачи чи оцелоти у великому радіусі навколо ліхтаря",
+    "block.torchmaster.feral_flare_lantern": "Ліхтар здичалих спалахів",
+    "block.torchmaster.feral_flare_lantern.tooltip": "Розміщує невидимі джерела світла",
+    "block.torchmaster.invisible_light": "Невидиме світло",
+    "item.torchmaster.frozen_pearl": "Заморожена перлина",
+    "item.torchmaster.frozen_pearl.tooltip": "Очищає залишкове світло з ліхтаря здичалих спалахів",
+    "command.torchmaster.torch_list.completed": "Смолоскипи було скинуто до файлу журналу",
+    "command.torchmaster.entity_dump.completed": "Сутності було скинуто до файлу журналу",
+    "itemGroup.torchmaster": "Torchmaster"
+}

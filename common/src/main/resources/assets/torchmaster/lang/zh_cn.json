@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "超级火把",
+    "block.torchmaster.megatorch.tooltip": "在这个火把周围一大片区域都不会刷出敌对怪物",
+    "block.torchmaster.dreadlamp": "恐惧灯",
+    "block.torchmaster.dreadlamp.tooltip": "在这个灯笼周围一大片区域都不会刷新出非敌对生物，比如鱿鱼。蝙蝠以及豹猫",
+    "block.torchmaster.feral_flare_lantern": "野火灯笼",
+    "block.torchmaster.feral_flare_lantern.tooltip": "光芒在无形中蔓延到周围",
+    "block.torchmaster.invisible_light": "无形光芒",
+    "item.torchmaster.frozen_pearl": "霜冻珍珠",
+    "item.torchmaster.frozen_pearl.tooltip": "清除野火灯笼发出的无形光芒",
+    "command.torchmaster.torch_list.completed": "本mod火把位置已被导出到日志文件",
+    "command.torchmaster.entity_dump.completed": "游戏已注册实体列表已被导出到日志文件",
+    "itemGroup.torchmaster": "不止火把"
+}

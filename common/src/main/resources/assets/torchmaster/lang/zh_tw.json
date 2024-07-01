@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "超級火把",
+    "block.torchmaster.megatorch.tooltip": "以火把為中心，大範圍防止敵對生物生成",
+    "block.torchmaster.dreadlamp": "顫慄燈",
+    "block.torchmaster.dreadlamp.tooltip": "以燈為中心，大範圍防止被動生物（如：魷魚、蝙蝠、山貓等）生成",
+    "block.torchmaster.feral_flare_lantern": "野焰燈籠",
+    "block.torchmaster.feral_flare_lantern.tooltip": "放置隱形的光源",
+    "block.torchmaster.invisible_light": "無形光源",
+    "item.torchmaster.frozen_pearl": "凍寒珍珠",
+    "item.torchmaster.frozen_pearl.tooltip": "清除來自野焰燈籠漫溢出的光",
+    "command.torchmaster.torch_list.completed": "火把已被輸出為 Log 檔案",
+    "command.torchmaster.entity_dump.completed": "實體已被輸出為 Log 檔案",
+    "itemGroup.torchmaster": "火把大師"
+}

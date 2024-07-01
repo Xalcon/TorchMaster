@@ -1,0 +1,14 @@
+{
+    "block.torchmaster.megatorch": "메가 횃불",
+    "block.torchmaster.megatorch.tooltip": "토치 주변 큰 반경에서 적대적 몬스터의 자연 스폰 방지.",
+    "block.torchmaster.dreadlamp": "드레드 조명",
+    "block.torchmaster.dreadlamp.tooltip": "조명 주변 큰 반경에서 친화적 몬스터의 자연 스폰 방지.",
+    "block.torchmaster.feral_flare_lantern": "페럴 플레어 랜턴",
+    "block.torchmaster.feral_flare_lantern.tooltip": "투명한 빛을 비춘다.",
+    "block.torchmaster.invisible_light": "투명한 빛",
+    "item.torchmaster.frozen_pearl": "언 페럴",
+    "item.torchmaster.frozen_pearl.tooltip": "페럴 플레어 랜턴의 빛을 지운다.",
+    "command.torchmaster.torch_list.completed": "로그 파일에 횃불이 덮어쓰여졌습니다.",
+    "command.torchmaster.entity_dump.completed": "엔티티가 로그 파일에 덮어쓰여졌습니다.",
+    "itemGroup.torchmaster": "토치마스터"
+}

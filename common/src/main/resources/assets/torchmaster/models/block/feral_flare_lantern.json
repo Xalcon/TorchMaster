@@ -1,0 +1,23 @@
+{
+	"__comment": "Designed by Xalcon with Cubik Studio - https://cubik.studio",
+	"textures": {
+		"tex": "torchmaster:block/feral_flare_lantern",
+		"particle": "torchmaster:block/feral_flare_lantern"
+	},
+	"parent": "block/block",
+	"elements": [ 	 
+		{
+			"__comment": "lantern",
+			"from": [ 4, 2, 4 ],
+			"to": [ 12, 14, 12 ],
+			"faces": {
+				"down": { "uv": [ 8, 0, 16, 8 ], "texture": "#tex" },
+				"up": { "uv": [ 8, 0, 16, 8 ], "texture": "#tex" },
+				"north": { "uv": [ 0, 0, 8, 12 ], "texture": "#tex" },
+				"south": { "uv": [ 0, 0, 8, 12 ], "texture": "#tex" },
+				"west": { "uv": [ 0, 0, 8, 12 ], "texture": "#tex" },
+				"east": { "uv": [ 0, 0, 8, 12 ], "texture": "#tex" }
+			}
+		}
+	]
+}

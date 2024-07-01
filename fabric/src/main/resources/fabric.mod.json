@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
             "net.xalcon.torchmaster.TorchmasterFabric"
+        ],
+        "client": [
+            "net.xalcon.torchmaster.TorchmasterFabricClient"
         ]
     },
     "mixins": [
