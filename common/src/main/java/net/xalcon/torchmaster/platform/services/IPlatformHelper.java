@@ -2,9 +2,12 @@ package net.xalcon.torchmaster.platform.services;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.xalcon.torchmaster.logic.EntityBlockingManager;
 import net.xalcon.torchmaster.platform.RegistryObject;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface IPlatformHelper {
 

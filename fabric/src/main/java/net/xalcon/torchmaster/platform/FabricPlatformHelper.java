@@ -2,14 +2,18 @@ package net.xalcon.torchmaster.platform;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.xalcon.torchmaster.ModRegistry;
+import net.xalcon.torchmaster.logic.EntityBlockingManager;
 import net.xalcon.torchmaster.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
