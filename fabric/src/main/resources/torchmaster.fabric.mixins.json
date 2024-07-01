@@ -6,7 +6,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
-    "MixinTitleScreen"
+    "NaturalSpawnerMixin"
   ],
   "server": [],
   "injectors": {

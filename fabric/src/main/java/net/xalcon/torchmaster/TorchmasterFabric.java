@@ -2,6 +2,7 @@ package net.xalcon.torchmaster;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.client.renderer.RenderType;
 
 public class TorchmasterFabric implements ModInitializer {
@@ -17,6 +18,10 @@ public class TorchmasterFabric implements ModInitializer {
         Torchmaster.LOG.info("Hello Fabric world!");
         Torchmaster.init();
 
+        ServerWorldEvents.LOAD.register((server, world) ->
+        {
+            Torchmaster.onWorldLoaded();
+        });
         // BlockRenderLayerMap.INSTANCE.putBlock(ModRegistry.blockDreadLamp.get(), RenderType.cutout());
     }
 

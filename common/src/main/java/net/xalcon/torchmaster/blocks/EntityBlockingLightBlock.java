@@ -1,8 +1,6 @@
 package net.xalcon.torchmaster.blocks;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
@@ -11,40 +9,39 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.xalcon.torchmaster.platform.Services;
+import net.xalcon.torchmaster.Torchmaster;
 
-import java.util.function.Function;
-
-public class SpawnControllingBlock extends Block
+public class EntityBlockingLightBlock extends Block
 {
-    private final LightType type;
+    private final LightType lightType;
 
-    public SpawnControllingBlock(Properties properties, LightType type)
+    public EntityBlockingLightBlock(Properties properties, LightType lightType)
     {
         super(properties);
-        this.type = type;
+        this.lightType = lightType;
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter blockGetter, BlockPos pos, CollisionContext ctx) {
-        return type.Shape;
+        return lightType.Shape;
     }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource randomSource)
     {
-        var x = type.FlameOffset.x + pos.getX();
-        var y = type.FlameOffset.y + pos.getY();
-        var z = type.FlameOffset.z + pos.getZ();
-
-        level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0f, 0.01f, 0.0f);
-        level.addParticle(ParticleTypes.FLAME, x, y, z, 0.0f, 0.0f, 0.0f);
+        double d0 = (double)pos.getX() + lightType.FlameOffset.x;
+        double d1 = (double)pos.getY() + lightType.FlameOffset.y;
+        double d2 = (double)pos.getZ() + lightType.FlameOffset.z;
+        level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0f, 0.0f, 0.0f);
+        level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0f, 0.0f, 0.0f);
     }
 
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean moving) {
         super.onPlace(state, level, pos, oldState, moving);
-        // TODO: REGISTER ON PLACE
+        Torchmaster.getRegistryForLevel(level)
+            .ifPresent(reg ->
+                    reg.registerLight(lightType.KeyFactory.apply(pos), lightType.LightFactory.apply(pos)));
     }
 
     @Override
@@ -54,7 +51,9 @@ public class SpawnControllingBlock extends Block
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean moving) {
-        // TODO: UNREGISTER ON REMOVE
+        Torchmaster.getRegistryForLevel(level)
+            .ifPresent(reg ->
+                    reg.unregisterLight(lightType.KeyFactory.apply(pos)));
         super.onRemove(state, level, pos, oldState, moving);
     }
 }

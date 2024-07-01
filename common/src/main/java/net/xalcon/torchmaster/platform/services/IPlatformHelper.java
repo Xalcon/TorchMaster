@@ -1,7 +1,13 @@
 package net.xalcon.torchmaster.platform.services;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.xalcon.torchmaster.config.ITorchmasterConfig;
 import net.xalcon.torchmaster.platform.RegistryObject;
 
 import java.util.Collection;
@@ -41,4 +47,12 @@ public interface IPlatformHelper {
     }
 
     CreativeModeTab createCreativeModeTab(String name, Collection<RegistryObject<Item>> itemsToShow);
+
+    @FunctionalInterface
+    interface BlockEntitySupplier<T extends BlockEntity> {
+        T create(BlockPos pos, BlockState state);
+    }
+    <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntitySupplier<T> supplier, Block... blocks);
+
+    ITorchmasterConfig getConfig();
 }
