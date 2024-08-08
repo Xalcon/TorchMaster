@@ -1,10 +1,64 @@
 {
-  "variants": {
-    "facing=south": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 90 },
-    "facing=north": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 270 },
-    "facing=east": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 270, "y": 90 },
-    "facing=west": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 90, "y": 90 },
-    "facing=up": { "model": "torchmaster:block/feral_flare_lantern_stand", "x": 180 },
-    "facing=down": { "model": "torchmaster:block/feral_flare_lantern_stand" }
-  }
+  "multipart": [
+    {
+      "apply": {
+        "model": "torchmaster:block/feral_flare_lantern"
+      }
+    },
+    {
+      "apply": {
+        "model": "torchmaster:block/feral_flare_lantern_stand",
+        "x": 90
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "torchmaster:block/feral_flare_lantern_stand",
+        "x": 270
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "torchmaster:block/feral_flare_lantern_stand",
+        "x": 270,
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "torchmaster:block/feral_flare_lantern_stand",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "torchmaster:block/feral_flare_lantern_stand",
+        "x": 180
+      },
+      "when": {
+        "facing": "up"
+      }
+    },
+    {
+      "apply": {
+        "model": "torchmaster:block/feral_flare_lantern_stand"
+      },
+      "when": {
+        "facing": "down"
+      }
+    }
+  ]
 }

@@ -25,8 +25,6 @@ import javax.annotation.Nullable;
 public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBlock {
 
     protected static final VoxelShape SHAPE_VERTICAL = Block.box(4.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12.0D);
-    protected static final VoxelShape SHAPE_HORIZONTAL = Block.box(2.0D, 4.0D, 4.0D, 14.0D, 12.0D, 12.0D);
-    protected static final VoxelShape SHAPE_HORIZONTAL_90 = Block.box(4.0D, 4.0D, 2.0D, 12.0D, 12.0D, 14.0D);
 
     public FeralFlareLanternBlock(Properties properties) {
         super(properties);
@@ -35,11 +33,7 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING).getAxis()) {
-            case X -> SHAPE_HORIZONTAL;
-            case Y -> SHAPE_VERTICAL;
-            case Z -> SHAPE_HORIZONTAL_90;
-        };
+        return SHAPE_VERTICAL;
     }
 
     @Override
