@@ -22,25 +22,23 @@ import net.xalcon.torchmaster.common.tiles.FeralFlareLanternTileEntity;
 
 import javax.annotation.Nullable;
 
-public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBlock
-{
-    protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBlock {
 
-    public FeralFlareLanternBlock(Properties properties)
-    {
+    protected static final VoxelShape SHAPE_VERTICAL = Block.box(4.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12.0D);
+
+    public FeralFlareLanternBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.SOUTH));
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.SOUTH));
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
-    {
-        return SHAPE;
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        return SHAPE_VERTICAL;
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
+        return this.defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
@@ -49,8 +47,7 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
-    {
+    public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
@@ -62,36 +59,32 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
     @Override
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean moving) {
         var te = world.getBlockEntity(pos);
-        if(te instanceof FeralFlareLanternTileEntity)
+        if (te instanceof FeralFlareLanternTileEntity)
             ((FeralFlareLanternTileEntity) te).removeChildLights();
 
         super.onRemove(state, world, pos, oldState, moving);
     }
 
 
-
     @Override
-    public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
-    {
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state) {
         var te = level.getBlockEntity(pos);
-        if(te instanceof FeralFlareLanternTileEntity)
+        if (te instanceof FeralFlareLanternTileEntity)
             ((FeralFlareLanternTileEntity) te).removeChildLights();
         super.destroy(level, pos, state);
     }
 
     @Override
-    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable BlockEntity te, ItemStack itemStack)
-    {
-        if(te instanceof FeralFlareLanternTileEntity)
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable BlockEntity te, ItemStack itemStack) {
+        if (te instanceof FeralFlareLanternTileEntity)
             ((FeralFlareLanternTileEntity) te).removeChildLights();
         super.playerDestroy(level, player, pos, state, te, itemStack);
     }
 
     @Override
-    public void wasExploded(Level level, BlockPos pos, Explosion explosion)
-    {
+    public void wasExploded(Level level, BlockPos pos, Explosion explosion) {
         var te = level.getBlockEntity(pos);
-        if(te instanceof FeralFlareLanternTileEntity)
+        if (te instanceof FeralFlareLanternTileEntity)
             ((FeralFlareLanternTileEntity) te).removeChildLights();
         super.wasExploded(level, pos, explosion);
     }
@@ -107,7 +100,6 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return type == ModBlocks.tileFeralFlareLantern.get() ? FeralFlareLanternTileEntity::dispatchTickBlockEntity : null;
     }
-
 
 
     //@Override

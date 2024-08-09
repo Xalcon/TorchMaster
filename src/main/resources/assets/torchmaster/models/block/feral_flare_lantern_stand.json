@@ -5,7 +5,7 @@
 		"particle": "torchmaster:block/feral_flare_lantern"
 	},
 	"parent": "block/block",
-	"elements": [ 	 
+	"elements": [
 		{
 			"__comment": "stand",
 			"from": [ 6, 0, 6 ],
