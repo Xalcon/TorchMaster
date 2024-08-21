@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.client.renderer.RenderType;
 
 public class TorchmasterFabric implements ModInitializer {
+    public static final net.xalcon.torchmaster.TorchmasterConfig CONFIG = net.xalcon.torchmaster.TorchmasterConfig.createAndLoad();
 
     @Override
     public void onInitialize() {

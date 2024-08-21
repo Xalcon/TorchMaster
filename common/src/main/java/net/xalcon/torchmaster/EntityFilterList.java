@@ -4,6 +4,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class EntityFilterList
@@ -26,7 +27,7 @@ public class EntityFilterList
 		this.list.add(entityName);
 	}
 
-	public void applyListOverrides(String[] overrides)
+	public void applyListOverrides(List<String> overrides)
 	{
 		for(String override: overrides)
 		{

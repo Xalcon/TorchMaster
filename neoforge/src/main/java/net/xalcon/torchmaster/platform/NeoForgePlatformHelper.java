@@ -14,6 +14,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 
 import java.util.Collection;
+import java.util.List;
 
 public class NeoForgePlatformHelper implements IPlatformHelper
 {
@@ -115,6 +116,18 @@ public class NeoForgePlatformHelper implements IPlatformHelper
             public boolean getBlockVillageSieges()
             {
                 return true;
+            }
+
+            @Override
+            public List<String> getMegaTorchEntityBlockListOverrides()
+            {
+                return List.of();
+            }
+
+            @Override
+            public List<String> getDreadLampEntityBlockListOverrides()
+            {
+                return List.of();
             }
         };
     }

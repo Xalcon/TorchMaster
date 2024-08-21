@@ -58,5 +58,8 @@ public class Torchmaster
 
         VanillaCompat.registerDreadLampEntities(DreadLampFilterRegistry);
         VanillaCompat.registerTorchEntities(MegaTorchFilterRegistry);
+
+        DreadLampFilterRegistry.applyListOverrides(Torchmaster.getConfig().getDreadLampEntityBlockListOverrides());
+        MegaTorchFilterRegistry.applyListOverrides(Torchmaster.getConfig().getMegaTorchEntityBlockListOverrides());
     }
 }

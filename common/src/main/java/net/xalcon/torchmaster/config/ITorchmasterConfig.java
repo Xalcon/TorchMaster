@@ -1,5 +1,7 @@
 package net.xalcon.torchmaster.config;
 
+import java.util.List;
+
 public interface ITorchmasterConfig
 {
     int getFeralFlareTickRate();
@@ -21,4 +23,7 @@ public interface ITorchmasterConfig
     boolean getBlockOnlyNaturalSpawns();
 
     boolean getBlockVillageSieges();
+
+    List<String> getMegaTorchEntityBlockListOverrides();
+    List<String> getDreadLampEntityBlockListOverrides();
 }

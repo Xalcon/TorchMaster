@@ -2,6 +2,15 @@ plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
 }
+
+repositories {
+    maven { url 'https://maven.wispforest.io' }
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.layered {
@@ -12,6 +21,17 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.0'
+
+    // owo config
+    modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+    // only if you plan to use owo-config
+    annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"
+
+    // include this if you don't want force your users to install owo
+    // sentinel will warn them and give the option to download it automatically
+    include "io.wispforest:owo-sentinel:${project.owo_version}"
+
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 loom {

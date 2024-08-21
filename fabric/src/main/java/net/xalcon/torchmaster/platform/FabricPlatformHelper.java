@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.xalcon.torchmaster.ModRegistry;
+import net.xalcon.torchmaster.TorchmasterOwOConfigWrapper;
 import net.xalcon.torchmaster.config.ITorchmasterConfig;
 import net.xalcon.torchmaster.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
@@ -53,68 +54,6 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public ITorchmasterConfig getConfig()
     {
-
-        return new ITorchmasterConfig()
-        {
-            @Override
-            public int getFeralFlareTickRate()
-            {
-                return 5;
-            }
-
-            @Override
-            public int getFeralFlareLanternLightCountHardcap()
-            {
-                return 255;
-            }
-
-            @Override
-            public int getFeralFlareRadius()
-            {
-                return 32;
-            }
-
-            @Override
-            public int getFeralFlareMinLightLevel()
-            {
-                return 7;
-            }
-
-            @Override
-            public int getDreadLampRadius()
-            {
-                return 64;
-            }
-
-            @Override
-            public int getMegaTorchRadius()
-            {
-                return 64;
-            }
-
-            @Override
-            public boolean shouldLogSpawnChecks()
-            {
-                return true;
-            }
-
-            @Override
-            public boolean getAggressiveSpawnChecks()
-            {
-                return false;
-            }
-
-            @Override
-            public boolean getBlockOnlyNaturalSpawns()
-            {
-                return true;
-            }
-
-            @Override
-            public boolean getBlockVillageSieges()
-            {
-                return true;
-            }
-        };
+        return TorchmasterOwOConfigWrapper.INSTANCE;
     }
 }

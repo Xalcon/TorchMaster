@@ -8,8 +8,7 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "sources": "https://github.com/Xalcon/TorchMaster"
     },
     "license": "${license}",
     "icon": "${mod_id}.png",
@@ -34,6 +33,14 @@
     },
     "suggests": {
         "another-mod": "*"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "torchmaster.curseforge": "https://www.curseforge.com/minecraft/mc-mods/torchmaster",
+                "torchmaster.modrinth": "https://modrinth.com/mod/torchmaster"
+            }
+        }
     }
 }
   
