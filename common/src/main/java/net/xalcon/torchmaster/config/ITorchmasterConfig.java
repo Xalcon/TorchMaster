@@ -16,8 +16,6 @@ public interface ITorchmasterConfig
 
     int getMegaTorchRadius();
 
-    boolean shouldLogSpawnChecks();
-
     boolean getAggressiveSpawnChecks();
 
     boolean getBlockOnlyNaturalSpawns();

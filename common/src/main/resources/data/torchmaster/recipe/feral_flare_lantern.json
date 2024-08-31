@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " I ",
+        "GgG",
+        " I "
+    ],
+    "key": {
+        "I": { "tag": "c:ingots/gold" },
+        "g": { "tag": "c:dusts/glowstone" },
+        "G": { "tag": "c:glass_blocks" }
+    },
+    "result": {
+        "id": "torchmaster:feral_flare_lantern"
+    }
+}

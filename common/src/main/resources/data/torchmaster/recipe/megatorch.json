@@ -7,11 +7,11 @@
     ],
     "key": {
         "T": { "item": "minecraft:torch" },
-        "D": { "item": "minecraft:diamond" },
-        "G": { "tag": "forge:storage_blocks/gold" },
+        "D": { "tag": "c:gems/diamond" },
+        "G": { "tag": "c:storage_blocks/gold" },
         "L": { "tag": "minecraft:logs" }
     },
     "result": {
-        "item": "torchmaster:megatorch"
+        "id": "torchmaster:megatorch"
     }
 }

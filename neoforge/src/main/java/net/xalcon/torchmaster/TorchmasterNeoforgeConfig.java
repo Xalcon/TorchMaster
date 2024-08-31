@@ -176,12 +176,6 @@ public class TorchmasterNeoforgeConfig
         }
 
         @Override
-        public boolean shouldLogSpawnChecks()
-        {
-            return GENERAL.logSpawnChecks.get();
-        }
-
-        @Override
         public boolean getAggressiveSpawnChecks()
         {
             return GENERAL.aggressiveSpawnChecks.get();

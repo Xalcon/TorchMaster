@@ -35,9 +35,13 @@ public class Torchmaster
     public static void init() {
         ModRegistry.initialize();
 
-        if(Torchmaster.getConfig().shouldLogSpawnChecks())
+        if(System.getProperty("torchmaster.enableDebugLogging", "0").equals("1"))
         {
             LogHax.enableDebugLogging(Torchmaster.LOG);
+        }
+        else
+        {
+            LogHax.disableDebugLogging(Torchmaster.LOG);
         }
     }
 

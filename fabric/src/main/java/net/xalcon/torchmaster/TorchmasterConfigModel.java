@@ -15,7 +15,7 @@ public class TorchmasterConfigModel
     @RangeConstraint(min = 1, max = 100, decimalPlaces = 0)
     public int feralFlareLanternTickRate = 2;
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-    @RangeConstraint(min = 0, max = 65535, decimalPlaces = 0)
+    @RangeConstraint(min = 0, max = 4096, decimalPlaces = 0)
     public int feralFlareLanternLightHardcap = 255;
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @RangeConstraint(min = 1, max = 256, decimalPlaces = 0)
@@ -29,10 +29,6 @@ public class TorchmasterConfigModel
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     @RangeConstraint(min = 0, max = 8192, decimalPlaces = 0)
     public int megaTorchRadius = 64;
-    @RestartRequired
-    public boolean shouldLogSpawnChecks = false;
-    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-    public boolean aggressiveSpawnChecks = false;
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     public boolean blockOnlyNaturalSpawns = true;
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)

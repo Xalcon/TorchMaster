@@ -30,4 +30,23 @@ public class LogHax
         }
         catch (Exception ignored) { }
     }
+
+    public static void disableDebugLogging(Logger logger)
+    {
+        try
+        {
+            var loggerField = Log4jLogger.class.getDeclaredField("logger");
+            loggerField.setAccessible(true);
+            var internalLogger = loggerField.get(logger);
+
+            if(internalLogger instanceof org.apache.logging.log4j.core.Logger log4jLogger)
+            {
+                if(log4jLogger.getLevel() != org.apache.logging.log4j.Level.INFO)
+                {
+                    log4jLogger.setLevel(org.apache.logging.log4j.Level.INFO);
+                }
+            }
+        }
+        catch (Exception ignored) { }
+    }
 }

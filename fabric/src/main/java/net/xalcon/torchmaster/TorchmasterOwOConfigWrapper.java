@@ -45,15 +45,9 @@ public class TorchmasterOwOConfigWrapper implements ITorchmasterConfig
     }
 
     @Override
-    public boolean shouldLogSpawnChecks()
-    {
-        return TorchmasterFabric.CONFIG.shouldLogSpawnChecks();
-    }
-
-    @Override
     public boolean getAggressiveSpawnChecks()
     {
-        return TorchmasterFabric.CONFIG.aggressiveSpawnChecks();
+        return true; // This is a forge only feature and has no effect on fabric, the result will be the same
     }
 
     @Override

@@ -4,10 +4,12 @@
   "package": "net.xalcon.torchmaster.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
-  "client": [
-    "NaturalSpawnerMixin"
+  "mixins": [
+    "NaturalSpawnerMixin",
+    "VillageSiegeInvoker",
+    "VillageSiegeMixin"
   ],
+  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1

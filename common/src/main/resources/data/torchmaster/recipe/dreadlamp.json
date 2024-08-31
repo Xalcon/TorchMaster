@@ -6,12 +6,12 @@
         "OBO"
     ],
     "key": {
-        "O": { "tag": "forge:obsidian" },
-        "P": { "tag": "forge:glass_panes" },
+        "O": { "item": "minecraft:obsidian" },
+        "P": { "tag": "c:glass_panes" },
         "G": { "item": "minecraft:glowstone" },
-        "B": { "tag": "forge:dyes/black" }
+        "B": { "tag": "c:dyes/black" }
     },
     "result": {
-        "item": "torchmaster:dreadlamp"
+        "id": "torchmaster:dreadlamp"
     }
 }
