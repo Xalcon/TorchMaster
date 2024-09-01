@@ -1,0 +1,16 @@
+name: Suggestion
+description: Submit a suggestion or improvement
+title: "[Suggestion]: "
+labels: ["enhancement"]
+projects: ["xalcon/Torchmaster"]
+assignees:
+  - Xalcon
+body:
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggestion
+      description: What is your suggestion!
+      placeholder: 
+    validations:
+      required: true
