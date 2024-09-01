@@ -45,6 +45,8 @@ loom {
     runs {
         client {
             client()
+            programArg("--username")
+            programArg("Xalcon")
             setConfigName('Fabric Client')
             ideConfigGenerated(true)
             runDir('runs/client')

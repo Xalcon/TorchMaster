@@ -92,6 +92,7 @@ public class ModRegistry
                 BlockBehaviour.Properties.of()
                         .lightLevel(state -> 15)
                         .noCollission()
+                        .replaceable()
                         .air()
                 )
         );
