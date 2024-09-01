@@ -4,7 +4,7 @@ title: "[Bug]: "
 labels: ["bug", "triage"]
 projects: ["xalcon/Torchmaster"]
 assignees:
-  - octocat
+  - Xalcon
 body:
   - type: markdown
     attributes:
