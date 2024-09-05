@@ -1,5 +1,4 @@
-## v21.0.2
-- Downgrade to MC 1.21 for fabric compatibility
+## v21.1.0
 - Improve blocking logic
 
 ## v21.0.1 
