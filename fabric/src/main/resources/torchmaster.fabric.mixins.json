@@ -7,7 +7,9 @@
   "mixins": [
     "NaturalSpawnerMixin",
     "VillageSiegeInvoker",
-    "VillageSiegeMixin"
+    "VillageSiegeMixin",
+    "SpawnUtilMixin",
+    "BaseSpawnerMixin"
   ],
   "client": [],
   "server": [],
