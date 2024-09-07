@@ -85,7 +85,7 @@ public class TorchmasterNeoforgeConfig
                             "Block zombies: \"+minecraft:zombie\"",
                             "Allow creepers: \"-minecraft:creeper\"")
                     .translation("torchmaster.config.megaTorch.blockListOverrides.description")
-                    .defineList("megaTorchEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
+                    .define("megaTorchEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
 
             dreadLampEntityBlockListOverrides = builder
                     .comment(
@@ -93,7 +93,7 @@ public class TorchmasterNeoforgeConfig
                             "Block squid: +minecraft:squid",
                             "Allow pigs: -minecraft:pig")
                     .translation("torchmaster.config.dreadLamp.blockListOverrides.description")
-                    .defineList("dreadLampEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
+                    .define("dreadLampEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
 
             feralFlareRadius = builder
                     .comment("The radius in which the feral flare should try to place lights")

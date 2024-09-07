@@ -39,8 +39,8 @@ public class TorchmasterNeoforge
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
-        ItemBlockRenderTypes.setRenderLayer(ModRegistry.blockDreadLamp.get(), RenderType.cutout());
+        // In neoforge, rendertype is configured via the model.json
+        // ItemBlockRenderTypes.setRenderLayer(ModRegistry.blockDreadLamp.get(), RenderType.cutout());
     }
 
 

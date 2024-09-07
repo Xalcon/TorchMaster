@@ -87,6 +87,7 @@ public class CommandTorchmaster
         }
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
     {
         LiteralArgumentBuilder<CommandSourceStack> command = Commands.literal("torchmaster");
@@ -97,9 +98,6 @@ public class CommandTorchmaster
 
         dispatcher.register(
             (LiteralArgumentBuilder) ((LiteralArgumentBuilder) command.requires((cmdSrc) -> cmdSrc.hasPermission(2)))
-                .executes((ctx) ->
-                {
-                    return 0;
-                }));
+                .executes((ctx) -> 0));
     }
 }
