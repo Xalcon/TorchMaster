@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -26,7 +27,7 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
     public FeralFlareLanternBlock(Properties properties)
     {
         super(properties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.SOUTH));
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.SOUTH));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
+        return this.defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
@@ -52,23 +53,21 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean moving)
     {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+        if(level.getBlockEntity(pos) instanceof FeralFlareLanternBlockEntity te)
+            te.removeChildLights();
+
+        super.onRemove(state, level, pos, oldState, moving);
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
-    }
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
+    {
+        if(level.getBlockEntity(pos) instanceof FeralFlareLanternBlockEntity te)
+            te.removeChildLights();
 
-    @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean moving) {
-        var te = world.getBlockEntity(pos);
-        if(te instanceof FeralFlareLanternBlockEntity)
-            ((FeralFlareLanternBlockEntity) te).removeChildLights();
-
-        super.onRemove(state, world, pos, oldState, moving);
+        super.destroy(level, pos, state);
     }
 
     @Nullable

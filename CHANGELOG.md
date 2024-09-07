@@ -2,6 +2,7 @@
 - Improve compatibility with other fabric mods
 - Re-enable mob spawn blocking during chunk generation inside blocking volumes
 - Fix spawn blocking of spawners not working when `blockOnlyNaturalSpawns` is set to `false`
+- Fix Feral Flare Lantern not rendering its stand
 
 ## v21.1.0
 - Improve blocking logic
