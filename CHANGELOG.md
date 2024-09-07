@@ -1,3 +1,8 @@
+## v21.1.1
+- Improve compatibility with other fabric mods
+- Re-enable mob spawn blocking during chunk generation inside blocking volumes
+- Fix spawn blocking of spawners not working when `blockOnlyNaturalSpawns` is set to `false`
+
 ## v21.1.0
 - Improve blocking logic
 - FIX: game should no longer crash when architectury is installed
