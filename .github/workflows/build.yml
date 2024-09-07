@@ -53,16 +53,25 @@ jobs:
           
           if [[ "$ARTIFACTVERSION" == *-alpha ]]
           then
-            echo "release_type=alpha"
-            echo "release_type=alpha" >> $GITHUB_OUTPUT
-          elif [[ "$ARTIFACTVERSION" == *-alpha ]]
+            RELEASE_TYPE=alpha
+          elif [[ "$ARTIFACTVERSION" == *-beta ]]
           then
-            echo "release_type=beta"
-            echo "release_type=beta" >> $GITHUB_OUTPUT
+            RELEASE_TYPE=beta
           else
-            echo "release_type=release"
-            echo "release_type=release" >> $GITHUB_OUTPUT
+            RELEASE_TYPE=release
           fi
+          echo "release_type=$RELEASE_TYPE"
+          echo "release_type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          
+          JSON=$(jq -n '$ARGS.named' \
+            --arg minecraft_version "$MCVERSION" \
+            --arg fabric_artifact_name $(basename "$ARTIFACT_PATH_FABRIC") \
+            --arg neoforge_artifact_name $(basename "$ARTIFACT_PATH_NEOFORGE") \
+            --arg artifact_version "$ARTIFACTVERSION" \
+            --arg release_type "$RELEASE_TYPE"
+          )
+          echo $JSON
+          echo $JSON > release-info.json
 
       - name: Create Github Release
         id: create_github_release
@@ -72,5 +81,5 @@ jobs:
           name: "Torchmaster ${{ steps.gradle_build.outputs.artifact_version }} MC${{ steps.gradle_build.outputs.artifact_full_path_fabric }}"
           bodyFile: "changelog.md"
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "${{ steps.gradle_build.outputs.artifact_full_path_fabric }},${{ steps.gradle_build.outputs.artifact_full_path_neoforge }}"
+          artifacts: "${{ steps.gradle_build.outputs.artifact_full_path_fabric }},${{ steps.gradle_build.outputs.artifact_full_path_neoforge }},release-info.json"
           tag: "mc${{ steps.gradle_build.outputs.minecraft_version }}-${{ steps.gradle_build.outputs.artifact_version }}"
