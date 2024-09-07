@@ -11,12 +11,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(BaseSpawner.class)
+@Mixin(value = BaseSpawner.class, priority = 100)
 public abstract class BaseSpawnerMixin
 {
     @Redirect(
-            method = "serverTick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;)V",
-            order = 2000,
+            method = "serverTick",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/Mob;checkSpawnRules(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z"

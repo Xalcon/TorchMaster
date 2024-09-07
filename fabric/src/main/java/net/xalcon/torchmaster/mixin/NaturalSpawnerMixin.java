@@ -30,50 +30,48 @@ public abstract class NaturalSpawnerMixin
     // without calling base, our hook will not be executed
     // If this happens, we will need to work something out
 
-    @Redirect(
-            method = "net/minecraft/world/level/NaturalSpawner.isValidPositionForMob(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Mob;D)Z",
-            order = 2000,
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/Mob;checkSpawnRules(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z"
-            )
-    )
-    private static boolean torchmaster_isValidPositionForMob_checkSpawnRules(Mob mob, LevelAccessor level, MobSpawnType mobSpawnType)
-    {
-        var container = new EventResultContainer(EventResult.DEFAULT);
-        TorchmasterEventHandler.onCheckSpawn(mobSpawnType, mob, mob.position(), container);
-        return switch(container.getResult())
-        {
-            case DEFAULT -> mob.checkSpawnRules(level, mobSpawnType);
-            case ALLOW -> true;
-            case DENY -> false;
-        };
-    }
-
-    // I'll keep this here as a potential fallback if the redirects cause more issues in the future
-    //@Inject(method = "isValidPositionForMob(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Mob;D)Z", at = @At("RETURN"), cancellable = true)
-    // private static void torchmaster_isValidPositionForMob_checkSpawnRules(ServerLevel level, Mob mob, double distance, CallbackInfoReturnable<Boolean> cir)
+    // It seems redirects are discouraged if compatibility is required.
+    // @Redirect(
+    //         method = "net/minecraft/world/level/NaturalSpawner.isValidPositionForMob(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Mob;D)Z",
+    //         at = @At(
+    //                 value = "INVOKE",
+    //                 target = "Lnet/minecraft/world/entity/Mob;checkSpawnRules(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z"
+    //         )
+    // )
+    // private static boolean torchmaster_isValidPositionForMob_checkSpawnRules(Mob mob, LevelAccessor level, MobSpawnType mobSpawnType)
     // {
-    //     if(cir.getReturnValueZ())
+    //     var container = new EventResultContainer(EventResult.DEFAULT);
+    //     TorchmasterEventHandler.onCheckSpawn(mobSpawnType, mob, mob.position(), container);
+    //     return switch(container.getResult())
     //     {
-    //         var container = new EventResultContainer(EventResult.DEFAULT);
-    //         TorchmasterEventHandler.onCheckSpawn(MobSpawnType.NATURAL, mob, mob.position(), container);
-    //         cir.setReturnValue(switch(container.getResult())
-    //         {
-    //             case DEFAULT, ALLOW -> true;
-    //             case DENY -> false;
-    //         });
-    //     }
+    //         case DEFAULT -> mob.checkSpawnRules(level, mobSpawnType);
+    //         case ALLOW -> true;
+    //         case DENY -> false;
+    //     };
     // }
 
-    @Redirect(
-            method = "spawnMobsForChunkGeneration(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/util/RandomSource;)V",
-            order = 2000,
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/Mob;checkSpawnRules(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z"
-            )
-    )
+    @Inject(method = "isValidPositionForMob(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Mob;D)Z", at = @At("RETURN"), cancellable = true)
+    private static void torchmaster_isValidPositionForMob_checkSpawnRules(ServerLevel level, Mob mob, double distance, CallbackInfoReturnable<Boolean> cir)
+    {
+        if(cir.getReturnValueZ())
+        {
+            var container = new EventResultContainer(EventResult.DEFAULT);
+            TorchmasterEventHandler.onCheckSpawn(MobSpawnType.NATURAL, mob, mob.position(), container);
+            cir.setReturnValue(switch(container.getResult())
+            {
+                case DEFAULT, ALLOW -> true;
+                case DENY -> false;
+            });
+        }
+    }
+
+    // @Redirect(
+    //         method = "spawnMobsForChunkGeneration(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/util/RandomSource;)V",
+    //         at = @At(
+    //                 value = "INVOKE",
+    //                 target = "Lnet/minecraft/world/entity/Mob;checkSpawnRules(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z"
+    //         )
+    // )
     private static boolean torchmaster_spawnMobsForChunkGeneration_checkSpawnRules(Mob mob, LevelAccessor level, MobSpawnType mobSpawnType)
     {
         var container = new EventResultContainer(EventResult.DEFAULT);

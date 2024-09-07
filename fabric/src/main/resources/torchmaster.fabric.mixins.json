@@ -8,8 +8,7 @@
     "NaturalSpawnerMixin",
     "VillageSiegeInvoker",
     "VillageSiegeMixin",
-    "SpawnUtilMixin",
-    "BaseSpawnerMixin"
+    "SpawnUtilMixin"
   ],
   "client": [],
   "server": [],
