@@ -6,8 +6,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "NaturalSpawnerMixin",
-    "VillageSiegeInvoker",
-    "VillageSiegeMixin"
+    "VillageSiegeMixin",
+    "BaseSpawnerMixin",
+    "SpawnUtilMixin"
   ],
   "client": [],
   "server": [],
