@@ -1,5 +1,7 @@
 ## v21.1.0
 - Improve blocking logic
+- FIX: game should no longer crash when architectury is installed
+- Known Issue: Mob spawning during chunk generation will not be blocked. (Fabric only) - a fix will be provided in a later version
 
 ## v21.0.1 
 - Fix invisible light blocks not being replaceable by other blocks ([#234](https://github.com/Xalcon/TorchMaster/issues/234))
