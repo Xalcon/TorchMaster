@@ -11,13 +11,12 @@ import net.xalcon.torchmaster.events.EventResultContainer;
 import net.xalcon.torchmaster.events.TorchmasterEventHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(SpawnUtil.class)
 public abstract class SpawnUtilMixin
 {
     @WrapOperation(
-            method = "trySpawnMob(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/entity/MobSpawnType;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;IIILnet/minecraft/util/SpawnUtil$Strategy;)Ljava/util/Optional",
+            method = "trySpawnMob",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/Mob;checkSpawnRules(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z"
