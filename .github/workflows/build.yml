@@ -47,7 +47,7 @@ jobs:
           echo "artifact_full_path_fabric=${ARTIFACT_PATH_FABRIC}"
           echo "artifact_full_path_fabric=${ARTIFACT_PATH_FABRIC}" >> $GITHUB_OUTPUT
           
-          ARTIFACT_PATH_NEOFORGE=$(realpath ./fabric/build/libs/torchmaster-neoforge-${MCVERSION}-${ARTIFACTVERSION}.jar)
+          ARTIFACT_PATH_NEOFORGE=$(realpath ./neoforge/build/libs/torchmaster-neoforge-${MCVERSION}-${ARTIFACTVERSION}.jar)
           echo "artifact_full_path_neoforge=${ARTIFACT_PATH_NEOFORGE}"
           echo "artifact_full_path_neoforge=${ARTIFACT_PATH_NEOFORGE}" >> $GITHUB_OUTPUT
           
@@ -78,8 +78,8 @@ jobs:
         if: ${{ !cancelled() && steps.gradle_build.outcome == 'success' && github.event.inputs.create_github_release == 'true' }}
         uses: ncipollo/release-action@v1
         with:
-          name: "Torchmaster ${{ steps.gradle_build.outputs.artifact_version }} MC${{ steps.gradle_build.outputs.artifact_full_path_fabric }}"
+          name: "Torchmaster ${{ steps.gradle_build.outputs.artifact_version }} MC${{ steps.gradle_build.outputs.minecraft_version }}"
           bodyFile: "CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "${{ steps.gradle_build.outputs.artifact_full_path_fabric }},${{ steps.gradle_build.outputs.artifact_full_path_neoforge }},release-info.json"
+          artifacts: "${{ steps.gradle_build.outputs.artifact_full_path_fabric }},${{ steps.gradle_build.outputs.artifact_full_path_neoforge }}"
           tag: "mc${{ steps.gradle_build.outputs.minecraft_version }}-${{ steps.gradle_build.outputs.artifact_version }}"
