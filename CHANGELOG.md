@@ -1,3 +1,6 @@
+## v21.1.2
+- Fix crash when spawning a warden in an ancient city on fabric mod loader
+
 ## v21.1.1
 - Improve compatibility with other fabric mods
 - Re-enable mob spawn blocking during chunk generation inside blocking volumes

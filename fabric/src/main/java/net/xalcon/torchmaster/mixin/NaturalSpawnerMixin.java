@@ -2,19 +2,13 @@ package net.xalcon.torchmaster.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.NaturalSpawner;
-import net.xalcon.torchmaster.events.EventResult;
-import net.xalcon.torchmaster.events.EventResultContainer;
-import net.xalcon.torchmaster.events.TorchmasterEventHandler;
+import net.xalcon.torchmaster.utils.MobWrapper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NaturalSpawner.class)
 public abstract class NaturalSpawnerMixin
@@ -39,7 +33,7 @@ public abstract class NaturalSpawnerMixin
     )
     private static boolean torchmaster_isValidPositionForMob_checkSpawnRules(Mob mob, LevelAccessor level, MobSpawnType mobSpawnType, Operation<Boolean> original)
     {
-        return mob_checkSpawnRules(mob, level, mobSpawnType, original);
+        return MobWrapper.checkSpawnRules(mob, level, mobSpawnType, original);
     }
 
     @WrapOperation(
@@ -51,22 +45,6 @@ public abstract class NaturalSpawnerMixin
     )
     private static boolean torchmaster_spawnMobsForChunkGeneration_checkSpawnRules(Mob mob, LevelAccessor level, MobSpawnType mobSpawnType, Operation<Boolean> original)
     {
-        return mob_checkSpawnRules(mob, level, mobSpawnType, original);
-    }
-
-    private static boolean mob_checkSpawnRules(Mob mob, LevelAccessor level, MobSpawnType mobSpawnType, Operation<Boolean> original)
-    {
-        var container = new EventResultContainer(EventResult.DEFAULT);
-        TorchmasterEventHandler.onCheckSpawn(mobSpawnType, mob, mob.position(), container);
-        return switch(container.getResult())
-        {
-            // Make sure we call the origínal and not mob.checkSpawnRules() directly
-            // otherwise we skip other mods down the chain (if any)
-            // We may still run into compat issues in cases where we deny or explicitly allow the spawn,
-            // but I'll look at those when necessary.
-            case DEFAULT -> original.call(mob, level, mobSpawnType);
-            case ALLOW -> true;
-            case DENY -> false;
-        };
+        return MobWrapper.checkSpawnRules(mob, level, mobSpawnType, original);
     }
 }
