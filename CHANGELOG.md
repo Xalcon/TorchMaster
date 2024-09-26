@@ -1,3 +1,10 @@
+## v21.0.3
+- Fix crash when spawning a warden in an ancient city on fabric mod loader
+- Improve compatibility with other fabric mods
+- Re-enable mob spawn blocking during chunk generation inside blocking volumes
+- Fix spawn blocking of spawners not working when `blockOnlyNaturalSpawns` is set to `false`
+- Fix Feral Flare Lantern not rendering its stand
+
 ## v21.0.2
 - Downgrade to MC 1.21 for fabric compatibility
 - FIX: Improve blocking logic (fabric, neoforge)

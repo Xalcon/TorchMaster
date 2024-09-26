@@ -5,6 +5,7 @@
     "glass": "minecraft:block/glass"
   },
   "parent": "block/block",
+  "render_type": "minecraft:cutout",
   "elements": [
     {
       "__comment": "Cube9",

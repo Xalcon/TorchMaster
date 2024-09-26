@@ -5,8 +5,8 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BaseSpawnerMixin",
     "NaturalSpawnerMixin",
-    "VillageSiegeInvoker",
     "VillageSiegeMixin",
     "SpawnUtilMixin"
   ],
