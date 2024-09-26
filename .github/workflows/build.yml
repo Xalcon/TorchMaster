@@ -79,7 +79,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: "Torchmaster ${{ steps.gradle_build.outputs.artifact_version }} MC${{ steps.gradle_build.outputs.artifact_full_path_fabric }}"
-          bodyFile: "changelog.md"
+          bodyFile: "CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "${{ steps.gradle_build.outputs.artifact_full_path_fabric }},${{ steps.gradle_build.outputs.artifact_full_path_neoforge }},release-info.json"
           tag: "mc${{ steps.gradle_build.outputs.minecraft_version }}-${{ steps.gradle_build.outputs.artifact_version }}"
