@@ -1,3 +1,6 @@
+## v20.1.7
+- Add experimental volume renderer (Right click torch with empty hand or dye to show its range. Use shift+empty hand to hide)
+
 ## v20.1.6
 - COMPAT: Improve compatibility with CarryOn: Mobs should no longer despawn when dropped inside the working volume of a torch or lamp
 

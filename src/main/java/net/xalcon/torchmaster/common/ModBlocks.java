@@ -19,6 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 import net.xalcon.torchmaster.Torchmaster;
+import net.xalcon.torchmaster.TorchmasterConfig;
 import net.xalcon.torchmaster.common.blocks.EntityBlockingLightBlock;
 import net.xalcon.torchmaster.common.blocks.FeralFlareLanternBlock;
 import net.xalcon.torchmaster.common.items.TMItemBlock;
@@ -39,7 +40,10 @@ public final class ModBlocks
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15),
                     pos -> "MT_" +pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
-                    MegatorchEntityBlockingLight::new, 1.0f, MegatorchEntityBlockingLight.SHAPE));
+                    MegatorchEntityBlockingLight::new, 1.0f, MegatorchEntityBlockingLight.SHAPE,
+                    TorchmasterConfig.GENERAL.megaTorchRadius
+            )
+    );
     public static RegistryObject<TMItemBlock> itemMegaTorch = fromBlock(blockMegaTorch,
             new Item.Properties());
 
@@ -50,7 +54,10 @@ public final class ModBlocks
                     .strength(1.0f, 1.0f)
                     .lightLevel(blockState -> 15),
                     pos -> "DL_" + pos.getX() + "_" + pos.getY() + "_" + pos.getZ(),
-                    DreadLampEntityBlockingLight::new, 0.3f, DreadLampEntityBlockingLight.SHAPE));
+                    DreadLampEntityBlockingLight::new, 0.3f, DreadLampEntityBlockingLight.SHAPE,
+                    TorchmasterConfig.GENERAL.dreadLampRadius
+            )
+    );
     public static RegistryObject<TMItemBlock> itemDreadLamp = fromBlock(blockDreadLamp,
             new Item.Properties());
 
