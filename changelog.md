@@ -1,3 +1,6 @@
+## v20.1.8
+- Show a message to the player when enabling a volume renderer
+
 ## v20.1.7
 - Add experimental volume renderer (Right click torch with empty hand or dye to show its range. Use shift+empty hand to hide)
 

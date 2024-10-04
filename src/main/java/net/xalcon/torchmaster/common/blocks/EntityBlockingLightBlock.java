@@ -2,6 +2,7 @@ package net.xalcon.torchmaster.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -64,6 +65,8 @@ public class EntityBlockingLightBlock extends Block
             {
                 color = item.getDyeColor().getTextColor();
             }
+
+            player.displayClientMessage(Component.translatable(show ? "torchmaster.torch_volume.on_show" : "torchmaster.torch_volume.on_hide"), true);
 
             var msg = VolumeDisplayMessage.create(pos, range.get(), color, show, show);
             ModMessageHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), msg);

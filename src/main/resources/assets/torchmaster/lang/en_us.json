@@ -10,6 +10,9 @@
     "item.torchmaster.frozen_pearl.tooltip": "Clears residual lights from a Feral Flare Lantern",
     "command.torchmaster.torch_list.completed": "Torches have been dumped to the log file",
     "command.torchmaster.entity_dump.completed": "Entities have been dumped to the log file",
-    "itemGroup.torchmaster": "Torchmaster"
+    "itemGroup.torchmaster": "Torchmaster",
+
+    "torchmaster.torch_volume.on_show": "Torchmaster range display enabled - Shift+Right-Click with empty hand to disable",
+    "torchmaster.torch_volume.on_hide": "Torchmaster range display disabled"
 }
 
