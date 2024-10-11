@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TorchmasterNeoforgeConfig
 {
@@ -82,18 +83,20 @@ public class TorchmasterNeoforgeConfig
                             "The + prefix will add the entity to the list, effectivly denying its spawns",
                             "The - prefix will remove the entity from the list (if necessary), effectivly allowing its spawns",
                             "Note: Each entry needs to be put in quotes! Multiple Entries should be separated by comma.",
-                            "Block zombies: \"+minecraft:zombie\"",
-                            "Allow creepers: \"-minecraft:creeper\"")
+                            "      The whole also needs to be enclosed by [ and ] respectively",
+                            "Block zombies: [\"+minecraft:zombie\"]",
+                            "Allow creepers: [\"-minecraft:creeper\"],",
+                            "Multiple Entries: [\"+minecraft:pig\", \"-gaia:dryad\"]")
                     .translation("torchmaster.config.megaTorch.blockListOverrides.description")
-                    .define("megaTorchEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
+                    .defineListAllowEmpty("megaTorchEntityBlockListOverrides", new ArrayList<>(), String::new, EntityFilterList::IsValidFilterString);
 
             dreadLampEntityBlockListOverrides = builder
                     .comment(
                             "Same as the mega torch block list override, just for the dread lamp",
-                            "Block squid: +minecraft:squid",
-                            "Allow pigs: -minecraft:pig")
+                            "Block squid: [\"+minecraft:squid\"]",
+                            "Allow pigs: [\"-minecraft:pig\"]")
                     .translation("torchmaster.config.dreadLamp.blockListOverrides.description")
-                    .define("dreadLampEntityBlockListOverrides", new ArrayList<>(), o -> o instanceof String);
+                    .defineListAllowEmpty("dreadLampEntityBlockListOverrides", new ArrayList<>(), String::new, EntityFilterList::IsValidFilterString);
 
             feralFlareRadius = builder
                     .comment("The radius in which the feral flare should try to place lights")

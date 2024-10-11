@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class EntityFilterList
 {
@@ -25,6 +26,13 @@ public class EntityFilterList
 	public void registerEntity(ResourceLocation entityName)
 	{
 		this.list.add(entityName);
+	}
+
+	private static final Pattern FILTER_PATTERN = Pattern.compile("[+-][a-z0-9_-]+:[a-z0-9_-]+");
+
+	public static boolean IsValidFilterString(Object object)
+	{
+		return object instanceof String filterString && FILTER_PATTERN.matcher(filterString).matches();
 	}
 
 	public void applyListOverrides(List<String> overrides)
