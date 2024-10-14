@@ -1,3 +1,6 @@
+## v21.1.3
+- Fix spam related to config auto fixing on neoforge
+
 ## v21.1.2
 - Fix crash when spawning a warden in an ancient city on fabric mod loader
 

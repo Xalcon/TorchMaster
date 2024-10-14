@@ -1,0 +1,36 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Gradle Build
+run-name: Gradle Build ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_github_release:
+        description: 'Create Github Release'
+        type: boolean
+        default: true
+
+env:
+  JAVA_VERSION: 21
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish to Modrinth
+        id: publish_modrinth
+        if: ${{ !cancelled() && steps.gradle_build.outcome == 'success' && github.event.inputs.deploy_modrinth == 'true' }}
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: "Tl8ESrhX"
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          files: ${{ steps.gradle_build.outputs.artifactfullname }}
+          name: torchmaster-${{ steps.gradle_build.outputs.artifactversion }}
+          version: ${{ steps.gradle_build.outputs.artifactversion }}
+          version-type: ${{ steps.gradle_build.outputs.releasetype }}
+          changelog-file: changelog.md
+          loaders: forge
+          game-versions: ${{ steps.gradle_build.outputs.mcversion }}
+          java: ${{ env.JAVA_VERSION }}
