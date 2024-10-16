@@ -31,7 +31,7 @@ public abstract class VillageSiegeMixin
     )
     private Vec3 torchmaster_tryToSetupSiege_findRandomSpawnPos(VillageSiege siege, ServerLevel level, BlockPos pos, Operation<Vec3> original)
     {
-        var result = original.call(level, pos);
+        var result = original.call(siege, level, pos);
         if(result != null)
         {
             var container = new EventResultContainer(EventResult.DEFAULT);

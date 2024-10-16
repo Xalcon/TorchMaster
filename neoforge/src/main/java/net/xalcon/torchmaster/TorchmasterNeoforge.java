@@ -12,7 +12,9 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.javafmlmod.FMLJavaModLanguageProvider;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.xalcon.torchmaster.commands.CommandTorchmaster;
 
 @Mod(Constants.MOD_ID)
 public class TorchmasterNeoforge
@@ -25,6 +27,7 @@ public class TorchmasterNeoforge
         // project.
         eventBus.addListener(this::doClientStuff);
         NeoForge.EVENT_BUS.addListener(TorchmasterNeoforge::loadComplete);
+        NeoForge.EVENT_BUS.addListener(TorchmasterNeoforge::onRegisterCommands);
 
         container.registerConfig(ModConfig.Type.COMMON, TorchmasterNeoforgeConfig.spec, "torchmaster.toml");
 
@@ -43,5 +46,8 @@ public class TorchmasterNeoforge
         // ItemBlockRenderTypes.setRenderLayer(ModRegistry.blockDreadLamp.get(), RenderType.cutout());
     }
 
-
+    private static void onRegisterCommands(RegisterCommandsEvent event)
+    {
+        CommandTorchmaster.register(event.getDispatcher());
+    }
 }

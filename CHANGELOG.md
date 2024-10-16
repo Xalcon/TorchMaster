@@ -1,3 +1,7 @@
+## v21.1.4
+- Fix crash during setup of a village siege on fabric
+- Add missing torchmaster command from previous versions
+
 ## v21.1.3
 - Fix spam related to config auto fixing on neoforge
 
