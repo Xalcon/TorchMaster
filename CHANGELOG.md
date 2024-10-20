@@ -1,3 +1,11 @@
+## v21.1.5
+- Remove spawn logging in debug log by default to reduce potential wear on storage drives on both fabric and neoforge. \
+  \
+  The default behavior for modded minecraft is to log debug messages to a debug.log.
+  Torchmaster can be quite verbose when it comes to logging on debug.
+  Since these logs are usually useless during normal play, they will be force-disabled be default (only for torchmaster).
+  If debug logging is required, launch the game with `-Dtorchmaster.enableDebugLogging=1`
+
 ## v21.1.4
 - Fix crash during setup of a village siege on fabric
 - Add missing torchmaster command from previous versions
@@ -24,4 +32,4 @@
 - Update to MC 1.21.1
 
 ## v21.0.0
-- First release for Minecraft 1.21 (Fabric, Neoforge)
+- First release for Minecraft 1.21 (Fabric, Neoforge)7

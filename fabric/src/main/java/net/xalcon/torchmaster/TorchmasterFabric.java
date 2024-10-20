@@ -18,7 +18,6 @@ public class TorchmasterFabric implements ModInitializer {
         // project.
 
         // Use Fabric to bootstrap the Common mod.
-        Torchmaster.LOG.info("Hello Fabric world!");
         Torchmaster.init();
 
         ServerWorldEvents.LOAD.register((server, world) ->

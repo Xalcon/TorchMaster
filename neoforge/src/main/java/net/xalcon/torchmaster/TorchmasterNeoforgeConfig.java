@@ -40,8 +40,6 @@ public class TorchmasterNeoforgeConfig
         public final ModConfigSpec.ConfigValue<Integer> frozenPearlDurability;
         public final ModConfigSpec.ConfigValue<Boolean> aggressiveSpawnChecks;
 
-        public final ModConfigSpec.ConfigValue<Boolean> logSpawnChecks;
-
         private General(ModConfigSpec.Builder builder)
         {
             builder.push("General");
@@ -125,11 +123,6 @@ public class TorchmasterNeoforgeConfig
                     .comment("Durability of the frozen pearl. Each removed light will remove one charge from the pearl. Set to 0 to disable durability")
                     .translation("torchmaster.config.frozenPearlDurability.description")
                     .defineInRange("frozenPearlDurability", 1024, 0, Short.MAX_VALUE);
-
-            logSpawnChecks = builder
-                    .comment("Print entity spawn checks to the debug log")
-                    .translation("torchmaster.config.logSpawnChecks.description")
-                    .define("logSpawnChecks", false);
 
             aggressiveSpawnChecks = builder
                     .comment("Configures the spawn check to be more aggressive, effectivly overriding the CheckSpawn results of other mods")

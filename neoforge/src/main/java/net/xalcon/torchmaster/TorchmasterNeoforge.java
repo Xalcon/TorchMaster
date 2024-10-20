@@ -32,7 +32,6 @@ public class TorchmasterNeoforge
         container.registerConfig(ModConfig.Type.COMMON, TorchmasterNeoforgeConfig.spec, "torchmaster.toml");
 
         // Use NeoForge to bootstrap the Common mod.
-        Torchmaster.LOG.info("Hello NeoForge world!");
         Torchmaster.init();
     }
 

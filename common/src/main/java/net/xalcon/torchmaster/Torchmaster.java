@@ -8,6 +8,7 @@ import net.xalcon.torchmaster.config.ITorchmasterConfig;
 import net.xalcon.torchmaster.logic.entityblocking.FilteredLightManager;
 import net.xalcon.torchmaster.logic.entityblocking.IBlockingLightManager;
 import net.xalcon.torchmaster.platform.Services;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,16 +34,19 @@ public class Torchmaster
     // write the majority of your code here and load it from your loader specific projects. This example has some
     // code that gets invoked by the entry point of the loader specific projects.
     public static void init() {
-        ModRegistry.initialize();
-
         if(System.getProperty("torchmaster.enableDebugLogging", "0").equals("1"))
         {
-            LogHax.enableDebugLogging(Torchmaster.LOG);
+            Configurator.setLevel(Constants.MOD_NAME, org.apache.logging.log4j.Level.DEBUG);
         }
         else
         {
-            LogHax.disableDebugLogging(Torchmaster.LOG);
+            Configurator.setLevel(Constants.MOD_NAME, org.apache.logging.log4j.Level.INFO);
         }
+
+        LOG.info("Initializing Torchmaster for platform {}", Services.PLATFORM.getPlatformName());
+        LOG.info("Debug Logging Enabled: {}", LOG.isDebugEnabled());
+        LOG.debug("If you can see this while the system property torchmaster.enableDebugLogging is not set to 1, report this on github!");
+        ModRegistry.initialize();
     }
 
     public static Optional<IBlockingLightManager> getRegistryForLevel(Level level)
