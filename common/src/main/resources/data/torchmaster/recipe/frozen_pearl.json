@@ -10,6 +10,6 @@
         "I": [{ "item": "minecraft:ice" }, { "item": "minecraft:packed_ice" }]
     },
     "result": {
-        "item": "torchmaster:frozen_pearl"
+        "id": "torchmaster:frozen_pearl"
     }
 }
