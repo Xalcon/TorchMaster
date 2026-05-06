@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "torchmaster:block/dreadlamp" }
+    "overlay_visible=false": { "model": "torchmaster:block/dreadlamp" },
+    "overlay_visible=true": { "model": "torchmaster:block/dreadlamp" }
   }
 }

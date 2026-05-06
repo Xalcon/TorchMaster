@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "torchmaster:block/megatorch" }
+    "overlay_visible=false": { "model": "torchmaster:block/megatorch" },
+    "overlay_visible=true": { "model": "torchmaster:block/megatorch" }
   }
 }

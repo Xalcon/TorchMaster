@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.xalcon.torchmaster.config.ITorchmasterConfig;
+import net.xalcon.torchmaster.network.INetworkHelper;
 import net.xalcon.torchmaster.platform.RegistryObject;
 
 import java.util.Collection;
@@ -55,4 +56,6 @@ public interface IPlatformHelper {
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntitySupplier<T> supplier, Block... blocks);
 
     ITorchmasterConfig getConfig();
+
+    INetworkHelper getNetwork();
 }

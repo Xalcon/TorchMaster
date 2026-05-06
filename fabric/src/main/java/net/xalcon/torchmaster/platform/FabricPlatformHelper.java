@@ -11,12 +11,16 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.xalcon.torchmaster.ModRegistry;
 import net.xalcon.torchmaster.TorchmasterOwOConfigWrapper;
 import net.xalcon.torchmaster.config.ITorchmasterConfig;
+import net.xalcon.torchmaster.network.INetworkHelper;
+import net.xalcon.torchmaster.platform.Services;
 import net.xalcon.torchmaster.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.Collection;
 
 public class FabricPlatformHelper implements IPlatformHelper {
+
+    private static volatile INetworkHelper NETWORK;
 
     @Override
     public String getPlatformName() {
@@ -55,5 +59,23 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public ITorchmasterConfig getConfig()
     {
         return TorchmasterOwOConfigWrapper.INSTANCE;
+    }
+
+    @Override
+    public INetworkHelper getNetwork()
+    {
+        INetworkHelper local = NETWORK;
+        if (local == null)
+        {
+            synchronized (FabricPlatformHelper.class)
+            {
+                local = NETWORK;
+                if (local == null)
+                {
+                    NETWORK = local = Services.load(INetworkHelper.class);
+                }
+            }
+        }
+        return local;
     }
 }

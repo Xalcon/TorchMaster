@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.xalcon.torchmaster.ModRegistry;
 import net.xalcon.torchmaster.TorchmasterNeoforgeConfig;
 import net.xalcon.torchmaster.config.ITorchmasterConfig;
+import net.xalcon.torchmaster.network.INetworkHelper;
+import net.xalcon.torchmaster.platform.Services;
 import net.xalcon.torchmaster.platform.services.IPlatformHelper;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
@@ -19,6 +21,8 @@ import java.util.List;
 
 public class NeoForgePlatformHelper implements IPlatformHelper
 {
+
+    private static volatile INetworkHelper NETWORK;
 
     @Override
     public String getPlatformName() {
@@ -58,5 +62,23 @@ public class NeoForgePlatformHelper implements IPlatformHelper
     public ITorchmasterConfig getConfig()
     {
         return TorchmasterNeoforgeConfig.WRAPPED_CONFIG;
+    }
+
+    @Override
+    public INetworkHelper getNetwork()
+    {
+        INetworkHelper local = NETWORK;
+        if (local == null)
+        {
+            synchronized (NeoForgePlatformHelper.class)
+            {
+                local = NETWORK;
+                if (local == null)
+                {
+                    NETWORK = local = Services.load(INetworkHelper.class);
+                }
+            }
+        }
+        return local;
     }
 }

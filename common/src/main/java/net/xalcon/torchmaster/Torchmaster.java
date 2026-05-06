@@ -47,6 +47,7 @@ public class Torchmaster
         LOG.info("Debug Logging Enabled: {}", LOG.isDebugEnabled());
         LOG.debug("If you can see this while the system property torchmaster.enableDebugLogging is not set to 1, report this on github!");
         ModRegistry.initialize();
+        Services.PLATFORM.getNetwork().registerPayloads();
     }
 
     public static Optional<IBlockingLightManager> getRegistryForLevel(Level level)
