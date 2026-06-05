@@ -6,10 +6,31 @@
     "block.torchmaster.feral_flare_lantern": "Большой осветительный фонарь",
     "block.torchmaster.feral_flare_lantern.tooltip": "Размещает невидимые источники света",
     "block.torchmaster.invisible_light": "Невидимый источник света",
-    "item.torchmaster.frozen_pearl": "Замороженная жемчужина",
-    "item.torchmaster.frozen_pearl.tooltip": "Удаляет невидимые источники света от Большого осветительного фонаря",
     "command.torchmaster.torch_list.completed": "Список факелов будет сохранен в файл журнала",
     "command.torchmaster.entity_dump.completed": "Список сущностей будет сохранен в файл журнала",
-    "itemGroup.torchmaster": "Torchmaster"
-}
+    "itemGroup.torchmaster": "Torchmaster",
 
+    "item.torchmaster.frozen_pearl": "Замороженная жемчужина",
+    "item.torchmaster.frozen_pearl.tooltip": "Очищает остаточные невидимые источники света от большого осветительного фонаря",
+
+    "text.config.torchmaster-config.option.feralFlareLanternTickRate": "Скорость работы большого осветительного фонаря",
+    "text.config.torchmaster-config.option.feralFlareLanternTickRate.tooltip": "Как часто фонарь должен пытаться разместить источники света",
+    "text.config.torchmaster-config.option.feralFlareLanternLightHardcap": "Лимит источников света большого осветительного фонаря",
+    "text.config.torchmaster-config.option.feralFlareLanternLightHardcap.tooltip": "Максимальное количество источников света, которое фонарь может разместить в общей сложности. Не устанавливайте слишком высокое значение, это может повредить ваш мир.",
+    "text.config.torchmaster-config.option.feralFlareLanternRadius": "Радиус действия большого осветительного фонаря",
+    "text.config.torchmaster-config.option.feralFlareLanternRadius.tooltip": "Круговой радиус, в котором фонарь будет размещать источники света",
+    "text.config.torchmaster-config.option.feralFlareLanternMinLightLevel": "Минимальный уровень освещения большого осветительного фонаря",
+    "text.config.torchmaster-config.option.feralFlareLanternMinLightLevel.tooltip": "Минимальный уровень освещенности, при котором фонарь попытается разместить источник света",
+    "text.config.torchmaster-config.option.dreadLampRadius": "Радиус лампы ужаса",
+    "text.config.torchmaster-config.option.dreadLampRadius.tooltip": "Радиус действия лампы ужаса",
+    "text.config.torchmaster-config.option.megaTorchRadius": "Радиус мегафакела",
+    "text.config.torchmaster-config.option.megaTorchRadius.tooltip": "Радиус действия Мегафакела",
+    "text.config.torchmaster-config.option.blockOnlyNaturalSpawns": "Блокировать только естественное появление",
+    "text.config.torchmaster-config.option.blockOnlyNaturalSpawns.tooltip": "Если отключено, мегафакел и лампа ужаса будут предотвращать появление мобов даже из ванильных спавнеров.",
+    "text.config.torchmaster-config.option.blockVillageSieges": "Блокировать осады деревень",
+    "text.config.torchmaster-config.option.blockVillageSieges.tooltip": "Если включено, мегафакел будет предотвращать ночные осады зомби на деревени",
+    "text.config.torchmaster-config.option.megaTorchEntityBlockListOverrides": "Игнорирование чёрного списка сущностей для мегафакела",
+    "text.config.torchmaster-config.option.megaTorchEntityBlockListOverrides.tooltip": "Подробности см. в Torchmaster Wiki на GitHub",
+    "text.config.torchmaster-config.option.dreadLampEntityBlockListOverrides": "Игнорирование чёрного списка сущностей для лампы ужаса",
+    "text.config.torchmaster-config.option.dreadLampEntityBlockListOverrides.tooltip": "Подробности см. в Torchmaster Wiki на GitHub"
+}
