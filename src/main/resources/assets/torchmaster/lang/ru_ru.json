@@ -7,9 +7,11 @@
     "block.torchmaster.feral_flare_lantern.tooltip": "Размещает невидимые источники света",
     "block.torchmaster.invisible_light": "Невидимый источник света",
     "item.torchmaster.frozen_pearl": "Замороженная жемчужина",
-    "item.torchmaster.frozen_pearl.tooltip": "Удаляет невидимые источники света от Большого осветительного фонаря",
+    "item.torchmaster.frozen_pearl.tooltip": "Удаляет невидимые источники света от большого осветительного фонаря",
     "command.torchmaster.torch_list.completed": "Список факелов будет сохранен в файл журнала",
     "command.torchmaster.entity_dump.completed": "Список сущностей будет сохранен в файл журнала",
-    "itemGroup.torchmaster": "Torchmaster"
-}
+    "itemGroup.torchmaster": "Torchmaster",
 
+    "torchmaster.torch_volume.on_show": "Отображение радиуса Torchmaster включено — нажмите Shift+ПКМ пустой рукой, чтобы выключить",
+    "torchmaster.torch_volume.on_hide": "Отображение радиуса Torchmaster выключено"
+}
