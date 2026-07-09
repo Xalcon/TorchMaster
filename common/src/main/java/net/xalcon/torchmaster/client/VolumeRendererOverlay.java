@@ -1,6 +1,5 @@
 package net.xalcon.torchmaster.client;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -11,15 +10,29 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class VolumeRendererOverlay {
+    public static final int[] COLORS = {
+            0xFFE53935, // Red-ish
+            0xFFFFA020, // Orange
+            0xFFF4D03F, // Yellow-ish
+            0xFFA0FF20, // Lime
+            0xFF43A047, // Leafy Green
+            0xFF20FFA0, // Cyan
+            0xFF1E88E5, // Sky Blue
+            0xFF3F51B5, // Indigo
+            0xFFA020FF, // Violet
+            0xFFD81B60, // Magenta
+            0xFFF06292, // Pink
+            0xFF9C27B0  // Purple
+    };
+
+
     private static final ResourceLocation FORCEFIELD_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/misc/forcefield.png");
 
     private record LightKey(ResourceLocation dimension, Vec3i pos) {
@@ -28,8 +41,9 @@ public class VolumeRendererOverlay {
         }
     }
 
-    private static final Map<LightKey, Tuple<Integer, Integer>> volumeLights = new HashMap<>();
-    private static final Map<LightKey, Integer> locationLights = new HashMap<>();
+    public record LightInfo(int colorIndex, int range, boolean showVolume, boolean showLocation) {}
+
+    private static final Map<LightKey, LightInfo> lights = new HashMap<>();
 
     private static BoundingBox createVolume(Vec3i pos, int halfRange)
     {
@@ -133,7 +147,7 @@ public class VolumeRendererOverlay {
         RenderSystem.depthMask(true);
     }
 
-    private static void renderLightVolume(Vec3i pos, int torchRange, Camera cam, int color)
+    private static void renderLightVolume(Vec3i pos, int torchRange, int color, Camera cam)
     {
         // Logic is similar to vanillas LevelRenderer.renderWorldBorder()
         var mc = Minecraft.getInstance();
@@ -225,50 +239,6 @@ public class VolumeRendererOverlay {
         RenderSystem.depthMask(true);
     }
 
-    public static void showVolumeAt(ResourceKey<Level> dimension, Vec3i pos, int range, int color)
-    {
-        volumeLights.put(new LightKey(dimension, pos), new Tuple<>(range, color));
-    }
-
-    public static void removeVolumeAt(ResourceKey<Level> dimension, Vec3i pos)
-    {
-        volumeLights.remove(new LightKey(dimension, pos));
-    }
-
-    public static void showLocationAt(ResourceKey<Level> dimension, Vec3i pos, int color)
-    {
-        locationLights.put(new LightKey(dimension, pos), color);
-    }
-
-    public static void removeLocationAt(ResourceKey<Level> dimension, Vec3i pos)
-    {
-        locationLights.remove(new LightKey(dimension, pos));
-    }
-
-    public static void clearAll()
-    {
-        volumeLights.clear();
-        locationLights.clear();
-    }
-
-    public static void onRenderLevel(ResourceKey<Level> dimension, Camera camera) {
-        for (var light : volumeLights.entrySet())
-        {
-            var key = light.getKey();
-            if(!dimension.location().equals(key.dimension)) continue; // Dont render stuff from different dimensions
-            renderLightVolume(key.pos, light.getValue().getA(), camera, light.getValue().getB());
-            renderWireframeCube(key.pos, light.getValue().getA(), light.getValue().getB(), camera);
-        }
-
-        for (var light : locationLights.entrySet())
-        {
-            var key = light.getKey();
-            if(!dimension.location().equals(key.dimension)) continue; // Dont render stuff from different dimensions
-            renderTorchLocation(key.pos, light.getValue(), camera);
-            renderWireframeCube(key.pos, 0, light.getValue(), camera);
-        }
-    }
-
     private static void renderTorchLocation(Vec3i pos, int color, Camera cam)
     {
         var camX = cam.getPosition().x;
@@ -355,5 +325,44 @@ public class VolumeRendererOverlay {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.depthMask(true);
+    }
+
+    public static LightInfo getLightOverlay(ResourceKey<Level> dimension, Vec3i pos)
+    {
+        return lights.get(new LightKey(dimension, pos));
+    }
+
+    public static void setLightOverlay(ResourceKey<Level> dimension, Vec3i pos, int colorIndex, int range, boolean showVolume, boolean showLocation) {
+        lights.put(new LightKey(dimension, pos), new LightInfo(colorIndex % COLORS.length, range, showVolume, showLocation));
+    }
+
+    public static void removeLightOverlay(ResourceKey<Level> dimension, Vec3i pos) {
+        lights.remove(new LightKey(dimension, pos));
+    }
+
+    public static void clearAll()
+    {
+        lights.clear();
+    }
+
+    public static void onRenderLevel(ResourceKey<Level> dimension, Camera camera) {
+        for(var light : lights.entrySet())
+        {
+            var key = light.getKey();
+            var info = light.getValue();
+            if(info.showVolume)
+            {
+                int color = COLORS[info.colorIndex];
+                renderLightVolume(key.pos, info.range, color, camera);
+                renderWireframeCube(key.pos, info.range, color, camera);
+            }
+
+            if(info.showLocation)
+            {
+                int color = COLORS[info.colorIndex];
+                renderTorchLocation(key.pos, color, camera);
+                renderWireframeCube(key.pos, 0, color, camera);
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -22,6 +23,10 @@ public class TorchmasterFabricClient implements ClientModInitializer {
             ClientLevel level = Minecraft.getInstance().level;
             if (level == null) return;
             VolumeRendererOverlay.onRenderLevel(level.dimension(), ctx.camera());
+        });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((phase, listener) -> {
+            VolumeRendererOverlay.clearAll();
         });
     }
 }

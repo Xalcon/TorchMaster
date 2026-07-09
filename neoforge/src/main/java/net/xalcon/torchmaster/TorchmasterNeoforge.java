@@ -38,6 +38,10 @@ public class TorchmasterNeoforge
     private static void loadComplete(LevelEvent.Load event)
     {
         Torchmaster.onWorldLoaded();
+        if(event.getLevel().isClientSide())
+        {
+
+        }
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

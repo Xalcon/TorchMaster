@@ -32,6 +32,11 @@
     "text.config.torchmaster-config.option.megaTorchEntityBlockListOverrides": "Megatorch Entity Blocklist Overrides",
     "text.config.torchmaster-config.option.megaTorchEntityBlockListOverrides.tooltip": "See Torchmaster Wiki on Github for details",
     "text.config.torchmaster-config.option.dreadLampEntityBlockListOverrides": "Dreadlamp Entity Blocklist Overrides",
-    "text.config.torchmaster-config.option.dreadLampEntityBlockListOverrides.tooltip": "See Torchmaster Wiki on Github for details"
+    "text.config.torchmaster-config.option.dreadLampEntityBlockListOverrides.tooltip": "See Torchmaster Wiki on Github for details",
+
+    "screen.torchmaster.volume_gui.title": "Torchmaster Volume Range Display",
+    "screen.torchmaster.volume_gui.toggle_on": "Turn range display off",
+    "screen.torchmaster.volume_gui.toggle_off": "Turn range display on",
+    "screen.torchmaster.volume_gui.range": "Effective Range in each direction: §a%s§r Blocks"
 }
 
