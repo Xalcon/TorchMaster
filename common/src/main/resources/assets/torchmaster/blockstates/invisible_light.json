@@ -1,1 +1,7 @@
-{}
+{
+  "variants": {
+    "": {
+      "model": "torchmaster:block/invisible_light"
+    }
+  }
+}
