@@ -1,0 +1,17 @@
+{
+    "block.torchmaster.megatorch": "Mega Antorcha",
+    "block.torchmaster.megatorch.tooltip": "Previene el spwneo de mobs hostiles en un radio grande",
+    "block.torchmaster.dreadlamp": "Lampra Aterradora",
+    "block.torchmaster.dreadlamp.tooltip": "Evita la reproducción natural de animales pasivos como calamares, murciélagos u ocelotes en un gran radio alrededor de la lámpara.",
+    "block.torchmaster.feral_flare_lantern": "Linterna de Llamas Flameante",
+    "block.torchmaster.feral_flare_lantern.tooltip": "Coloca luces invisibles",
+    "block.torchmaster.invisible_light": "Luz invisible",
+    "item.torchmaster.frozen_pearl": "Perla de hielo",
+    "item.torchmaster.frozen_pearl.tooltip": "Elimina las luces residuales de la Linterna de Llamas Flameante",
+    "command.torchmaster.torch_list.completed": "Las antorchas se han volcado al archivo de registro.",
+    "command.torchmaster.entity_dump.completed": "Las entidades se han volcado al archivo de registro.",
+    "itemGroup.torchmaster": "Torchmaster",
+
+    "torchmaster.torch_volume.on_show": "Visualización del alcance de Torchmaster habilitada: presione Mayús + clic derecho con la mano vacía para deshabilitarla",
+    "torchmaster.torch_volume.on_hide": "Visualización del alcance de Torchmaster deshabilitada"
+}
