@@ -25,14 +25,14 @@ public class ClientTorchRegistry
     {
         if(!torches.contains(pos))
         {
-            TorchMasterMod.Log.info("Cached torch at position {}", pos);
+            //TorchMasterMod.Log.info("Cached torch at position {}", pos);
             torches.add(pos);
         }
     }
 
     public void removeTorch(BlockPos pos)
     {
-        TorchMasterMod.Log.info("Removed torch at position {}", pos);
+        //TorchMasterMod.Log.info("Removed torch at position {}", pos);
         torches.remove(pos);
     }
 
