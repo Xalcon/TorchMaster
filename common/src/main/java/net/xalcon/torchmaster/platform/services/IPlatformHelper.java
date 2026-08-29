@@ -1,12 +1,18 @@
 package net.xalcon.torchmaster.platform.services;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.xalcon.torchmaster.config.ITorchmasterConfig;
 import net.xalcon.torchmaster.platform.RegistryObject;
 
@@ -53,6 +59,15 @@ public interface IPlatformHelper {
         T create(BlockPos pos, BlockState state);
     }
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntitySupplier<T> supplier, Block... blocks);
+
+    @FunctionalInterface
+    interface MenuSupplier<T extends AbstractContainerMenu> {
+        T create(int containerId, Inventory playerInventory);
+    }
+
+    <T extends AbstractContainerMenu> MenuType<T> createMenuType(MenuSupplier<T> supplier);
+
+    void openMenu(ServerPlayer player, MenuProvider provider);
 
     ITorchmasterConfig getConfig();
 }

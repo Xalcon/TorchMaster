@@ -26,8 +26,10 @@ import java.util.List;
 public class FeralFlareLanternBlockEntity extends BlockEntity
 {
     private int ticks;
+    private int placementCooldown = 0;
     private boolean useLineOfSight;
     private List<BlockPos> childLights = new ArrayList<>();
+    private int childLightCheckIndex;
 
     private int checkIndex;
 
@@ -36,13 +38,44 @@ public class FeralFlareLanternBlockEntity extends BlockEntity
         super(ModRegistry.tileFeralFlareLantern.get(), pos, state);
     }
 
+    // Monitor child lights gradually and untrack them if they were removed somehow
+    private void checkNextChildLight()
+    {
+        if(this.childLights.isEmpty())
+        {
+            this.childLightCheckIndex = 0; // probably not needed but just to be safe.
+            return;
+        }
+
+        var maybeLightPos = this.childLights.get(this.childLightCheckIndex);
+        var blockState = level.getBlockState(maybeLightPos);
+        if(!blockState.is(ModRegistry.blockInvisibleLight.get()))
+        {
+            // something replaced our light, remove from list
+            this.childLights.remove(this.childLightCheckIndex);
+        }
+
+        // check for size to prevent Divide By Zero
+        if(!this.childLights.isEmpty())
+        {
+            this.childLightCheckIndex = (this.childLightCheckIndex + 1) % this.childLights.size();
+            return;
+        }
+    }
+
     // @Override
     public void tick()
     {
+        if(this.level == null || this.level.isClientSide) return;
+
+        this.checkNextChildLight();
+
         var config = Services.PLATFORM.getConfig();
-        if(this.level.isClientSide || ++this.ticks % config.getFeralFlareTickRate() != 0) return;
+        if(--this.placementCooldown > 0) return;
+        if(++this.ticks % config.getFeralFlareTickRate() != 0) return;
         if(this.childLights.size() > config.getFeralFlareLanternLightCountHardcap()) return;
         ticks = 0;
+        placementCooldown = 0;
 
         int radius = config.getFeralFlareRadius();
         int diameter = radius * 2;
@@ -57,10 +90,13 @@ public class FeralFlareLanternBlockEntity extends BlockEntity
         if (targetPos.getY() > surfaceHeight + 4)
             targetPos = targetPos.atY(surfaceHeight).above(4);
 
-        // dont try to place blocks outside of the world height
-        int worldHeightCap = level.getHeight();
-        if(targetPos.getY() > worldHeightCap)
-            targetPos = new BlockPos(targetPos.getX(), worldHeightCap - 1, targetPos.getZ());
+        // don't try to place blocks outside the world height
+        var minHeight = level.getMinBuildHeight();
+        var maxHeight = level.getMaxBuildHeight();
+        if(targetPos.getY() > maxHeight)
+            targetPos = new BlockPos(targetPos.getX(), maxHeight, targetPos.getZ());
+        else if(targetPos.getY() < minHeight)
+            targetPos = new BlockPos(targetPos.getX(), minHeight, targetPos.getZ());
 
         if(!this.level.isLoaded(targetPos)) return;
 
@@ -108,29 +144,6 @@ public class FeralFlareLanternBlockEntity extends BlockEntity
             ((FeralFlareLanternBlockEntity)blockEntity).tick();
     }
 
-    //@Nullable
-    //@Override
-    //public Packet<ClientGamePacketListener> getUpdatePacket() {
-    //    return ClientboundBlockEntityDataPacket.create(this);
-    //}
-
-    //@Override
-    //public CompoundTag getUpdateTag() {
-    //    var tag = super.getUpdateTag();
-    //    tag.putBoolean("useLoS", useLineOfSight);
-    //    return tag;
-    //}
-
-    //@Override
-    //public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-    //    super.onDataPacket(net, pkt);
-    //}
-
-    //@Override
-    //public void handleUpdateTag(CompoundTag tag) {
-    //    super.handleUpdateTag(tag);
-    //}
-
     @Override
     protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
     {
@@ -160,25 +173,15 @@ public class FeralFlareLanternBlockEntity extends BlockEntity
         super.loadAdditional(nbt, pRegistries);
     }
 
-    // @Override
-    // public CompoundTag save(CompoundTag nbt)
-    // {
-    //     List<Integer> childLightsEncoded = new ArrayList<>(this.childLights.size());
-    //     for(BlockPos child : this.childLights)
-    //         childLightsEncoded.add(encodePosition(this.worldPosition, child));
-    //     nbt.put("lights", new IntArrayTag(childLightsEncoded));
-    //     nbt.putInt("ticks", this.ticks);
-    //     nbt.putBoolean("useLoS", this.useLineOfSight);
-    //     return super.save(nbt);
-    // }
-
     public void setUseLineOfSight(boolean state)
     {
-        Torchmaster.LOG.info("Current: {}, New: {}", useLineOfSight, state);
+        // Torchmaster.LOG.info("Current: {}, New: {}", useLineOfSight, state);
         this.useLineOfSight = state;
         this.setChanged();
         BlockState blockState = this.level.getBlockState(this.worldPosition);
         this.level.sendBlockUpdated(this.worldPosition, blockState, blockState, 3);
+        this.placementCooldown = 100;
+        this.removeChildLights();
     }
 
     public boolean shouldUseLineOfSight()

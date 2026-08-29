@@ -1,6 +1,10 @@
 package net.xalcon.torchmaster.platform;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +17,7 @@ import net.xalcon.torchmaster.config.ITorchmasterConfig;
 import net.xalcon.torchmaster.platform.services.IPlatformHelper;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 
 import java.util.Collection;
 import java.util.List;
@@ -52,6 +57,18 @@ public class NeoForgePlatformHelper implements IPlatformHelper
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntitySupplier<T> supplier, Block... blocks)
     {
         return BlockEntityType.Builder.of(supplier::create, blocks).build(null);
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu> MenuType<T> createMenuType(MenuSupplier<T> supplier)
+    {
+        return IMenuTypeExtension.create((containerId, inventory, ignored) -> supplier.create(containerId, inventory));
+    }
+
+    @Override
+    public void openMenu(ServerPlayer player, MenuProvider provider)
+    {
+        player.openMenu(provider);
     }
 
     @Override

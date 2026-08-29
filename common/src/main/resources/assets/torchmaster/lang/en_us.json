@@ -37,6 +37,11 @@
     "screen.torchmaster.volume_gui.title": "Torchmaster Volume Range Display",
     "screen.torchmaster.volume_gui.toggle_on": "Turn range display off",
     "screen.torchmaster.volume_gui.toggle_off": "Turn range display on",
-    "screen.torchmaster.volume_gui.range": "Effective Range in each direction: §a%s§r Blocks"
+    "screen.torchmaster.volume_gui.range": "Effective Range in each direction: §a%s§r Blocks",
+    "screen.torchmaster.feral_flare_lantern.title": "Feral Flare Lantern",
+    "screen.torchmaster.feral_flare_lantern.description": "Light placement",
+    "screen.torchmaster.feral_flare_lantern.line_of_sight.enabled": "Only light spaces the lantern can see.",
+    "screen.torchmaster.feral_flare_lantern.line_of_sight.enabled.description": "Lights will not be placed behind walls.",
+    "screen.torchmaster.feral_flare_lantern.line_of_sight.disabled": "Light spaces even behind walls.",
+    "screen.torchmaster.feral_flare_lantern.line_of_sight.disabled.description": "The lantern does not need a clear view."
 }
-

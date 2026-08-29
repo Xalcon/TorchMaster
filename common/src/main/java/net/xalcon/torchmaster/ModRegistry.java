@@ -1,10 +1,9 @@
 package net.xalcon.torchmaster;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -13,6 +12,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.xalcon.torchmaster.blocks.*;
 import net.xalcon.torchmaster.items.FrozenPearlItem;
 import net.xalcon.torchmaster.items.TMItemBlock;
+import net.xalcon.torchmaster.menu.FeralFlareLanternMenu;
 import net.xalcon.torchmaster.platform.RegistrationProvider;
 import net.xalcon.torchmaster.platform.RegistryObject;
 import net.xalcon.torchmaster.platform.Services;
@@ -28,6 +28,7 @@ public class ModRegistry
     private static final RegistrationProvider<Item> ITEMS = RegistrationProvider.create(Registries.ITEM, Constants.MOD_ID);
     private static final RegistrationProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistrationProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID);
     private static final RegistrationProvider<CreativeModeTab> CREATIVE_MODE_TABS = RegistrationProvider.create(Registries.CREATIVE_MODE_TAB, Constants.MOD_ID);
+    private static final RegistrationProvider<MenuType<?>> MENUS = RegistrationProvider.create(Registries.MENU, Constants.MOD_ID);
 
     public static RegistryObject<EntityBlockingLightBlock> blockMegaTorch;
     public static RegistryObject<EntityBlockingLightBlock> blockDreadLamp;
@@ -35,6 +36,7 @@ public class ModRegistry
     public static RegistryObject<FeralFlareLanternBlock> blockFeralFlareLantern;
     public static RegistryObject<BlockEntityType<FeralFlareLanternBlockEntity>> tileFeralFlareLantern;
     public static RegistryObject<InvisibleLightBlock> blockInvisibleLight;
+    public static RegistryObject<MenuType<FeralFlareLanternMenu>> menuFeralFlareLantern;
 
     public static RegistryObject<Item> itemMegaTorch;
     public static RegistryObject<Item> itemDreadLamp;
@@ -87,6 +89,8 @@ public class ModRegistry
         );
         tileFeralFlareLantern = BLOCK_ENTITIES.register(blockFeralFlareLantern.getId().getPath(),
                 () -> Services.PLATFORM.createBlockEntityType(FeralFlareLanternBlockEntity::new, blockFeralFlareLantern.get()));
+        menuFeralFlareLantern = MENUS.register("feral_flare_lantern",
+                () -> Services.PLATFORM.createMenuType(FeralFlareLanternMenu::new));
         itemFeralFlareLantern = fromBlock(blockFeralFlareLantern);
         creativeTabItems.add(itemFeralFlareLantern);
 

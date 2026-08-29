@@ -46,10 +46,8 @@ public class EntityBlockingLightBlock extends Block
                     : lightType == LightType.MegaTorch ? Services.PLATFORM.getConfig().getMegaTorchRadius()
                     : 0;
             Minecraft.getInstance().setScreen(new EntityBlockingLightSettingsScreen(pPos, range));
-            return InteractionResult.SUCCESS;
         }
-
-        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult);
+        return InteractionResult.SUCCESS_NO_ITEM_USED;
     }
 
     @Override

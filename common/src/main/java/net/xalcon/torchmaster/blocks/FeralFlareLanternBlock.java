@@ -3,6 +3,11 @@ package net.xalcon.torchmaster.blocks;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -13,9 +18,12 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.xalcon.torchmaster.ModRegistry;
+import net.xalcon.torchmaster.menu.FeralFlareLanternMenu;
+import net.xalcon.torchmaster.platform.Services;
 
 import javax.annotation.Nullable;
 
@@ -40,6 +48,24 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         return SHAPE;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
+    {
+        if(level.isClientSide)
+            return InteractionResult.SUCCESS_NO_ITEM_USED;
+
+        if(player instanceof ServerPlayer serverPlayer
+                && level.getBlockEntity(pos) instanceof FeralFlareLanternBlockEntity lantern)
+        {
+            Services.PLATFORM.openMenu(serverPlayer, new SimpleMenuProvider(
+                    (containerId, inventory, menuPlayer) -> new FeralFlareLanternMenu(containerId, inventory, lantern),
+                    Component.translatable("screen.torchmaster.feral_flare_lantern.title")));
+            return InteractionResult.SUCCESS_NO_ITEM_USED;
+        }
+
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -82,18 +108,4 @@ public class FeralFlareLanternBlock extends DirectionalBlock implements EntityBl
         return type == ModRegistry.tileFeralFlareLantern.get() ? FeralFlareLanternBlockEntity::dispatchTickBlockEntity : null;
     }
 
-    //@Override
-    //public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-    //    if(world.isClientSide) return InteractionResult.SUCCESS;
-    //    var tile = world.getBlockEntity(pos);
-    //    if(tile instanceof FeralFlareLanternTileEntity lantern)
-    //    {
-    //        lantern.setUseLineOfSight(!lantern.shouldUseLineOfSight());
-    //        if(lantern.shouldUseLineOfSight())
-    //            player.displayClientMessage(new TranslatableComponent("tile.feral_flare_lantern.line_of_sight.enabled"), true);
-    //        else
-    //            player.displayClientMessage(new TranslatableComponent("tile.feral_flare_lantern.line_of_sight.disabled"), true);
-    //    }
-    //    return InteractionResult.SUCCESS;
-    //}
 }
