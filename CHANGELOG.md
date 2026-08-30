@@ -1,4 +1,19 @@
+## v21.1.10
+- Allow dread lamps and mega torches to be waterlogged
+  - Dread Lamps are excluded since invisible lights cannot be placed underwater for now.
+- Add line of sight support for feral flare lantern
+  - Right click a lantern in the world like any other block to configure it.
+  - Line of Sight off (default): Lantern will place lights anywhere in its working range
+  - Line of Sight on: Lantern will not attempt to place lights behind walls
+- Add volume renderer overlay with color cycler for Dread Lamp and Megatorch
+  - Right click in the world to show the simple config menu.
+  - Visualization is per-client
+  - Allows configuring different colors for easier differentiation depending on surroundings
+  - Renders the big box volume and a small 1-block sized box around the torch. The 1-block light allows seeing the torch through blocks.
+- Fix invisible light blockstate warnings in log during startup
+
 ## v21.1.9
+
 - Fix crash on fabric when joining a world
 
 ## v21.1.8
