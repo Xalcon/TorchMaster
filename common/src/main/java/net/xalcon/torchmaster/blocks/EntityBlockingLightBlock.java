@@ -1,15 +1,10 @@
 package net.xalcon.torchmaster.blocks;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -18,17 +13,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.xalcon.torchmaster.ModRegistry;
 import net.xalcon.torchmaster.Torchmaster;
-import net.xalcon.torchmaster.client.VolumeRendererOverlay;
-import net.xalcon.torchmaster.client.gui.EntityBlockingLightSettingsScreen;
-import net.xalcon.torchmaster.platform.Services;
+import net.xalcon.torchmaster.platform.ClientProxy;
+import net.xalcon.torchmaster.platform.ModClientSideOnlyScreen;
 
 import javax.annotation.Nullable;
 
@@ -70,10 +62,7 @@ public class EntityBlockingLightBlock extends Block
     protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult) {
         if(pLevel.isClientSide)
         {
-            int range = lightType == LightType.DreadLamp ? Services.PLATFORM.getConfig().getDreadLampRadius()
-                    : lightType == LightType.MegaTorch ? Services.PLATFORM.getConfig().getMegaTorchRadius()
-                    : 0;
-            Minecraft.getInstance().setScreen(new EntityBlockingLightSettingsScreen(pPos, range));
+            ClientProxy.openClientSideOnlyScreen(ModClientSideOnlyScreen.EntityBlockingLightScreen, pLevel, pPos, pState);
         }
         return InteractionResult.SUCCESS_NO_ITEM_USED;
     }
@@ -108,4 +97,6 @@ public class EntityBlockingLightBlock extends Block
                     reg.unregisterLight(lightType.KeyFactory.apply(pos)));
         super.onRemove(state, level, pos, oldState, moving);
     }
+
+    public LightType getLightType() { return this.lightType; }
 }
