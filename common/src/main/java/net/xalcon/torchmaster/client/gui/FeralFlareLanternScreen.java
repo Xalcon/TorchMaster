@@ -100,7 +100,7 @@ public class FeralFlareLanternScreen extends AbstractContainerScreen<FeralFlareL
 
         private EyeOfEnderButton(int x, int y, OnPress onPress)
         {
-            super(x, y, EYE_BUTTON_SIZE, EYE_BUTTON_SIZE, Component.empty(), onPress, null);
+            super(x, y, EYE_BUTTON_SIZE, EYE_BUTTON_SIZE, Component.empty(), onPress, Button.DEFAULT_NARRATION);
         }
 
         private void setLineOfSightEnabled(boolean lineOfSightEnabled)

@@ -1,3 +1,6 @@
+## v21.1.11
+- Fix a NullPointerException crash on Fabric and NeoForge when hovering a button on the Feral Flare Lantern or Megatorch/Dreadlamp [Fabric + Neoforge] 
+
 ## v21.1.10
 - Allow dread lamps and mega torches to be waterlogged
   - Dread Lamps are excluded since invisible lights cannot be placed underwater for now.

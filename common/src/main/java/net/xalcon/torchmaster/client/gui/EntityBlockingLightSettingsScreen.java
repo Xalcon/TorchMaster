@@ -22,8 +22,8 @@ public class EntityBlockingLightSettingsScreen extends net.minecraft.client.gui.
 
         private int color;
 
-        protected ColorIconButton(int x, int y, int width, int height, Button.OnPress onPress, @Nullable Button.CreateNarration createNarration) {
-            super(x, y, width, height, Component.empty(), onPress, createNarration);
+        protected ColorIconButton(int x, int y, int width, int height, Button.OnPress onPress) {
+            super(x, y, width, height, Component.empty(), onPress, Button.DEFAULT_NARRATION);
             colorRectWidth = width - 4;
             colorRectHeight = height - 4;
         }
@@ -79,7 +79,7 @@ public class EntityBlockingLightSettingsScreen extends net.minecraft.client.gui.
         this.addRenderableWidget(this.toggleButton);
 
         //noinspection SuspiciousNameCombination
-        colorCycleButton = new ColorIconButton(centerX + BUTTON_WIDTH / 2, panelTop + 60, BUTTON_HEIGHT, BUTTON_HEIGHT, b -> onColorCycle(), null);
+        colorCycleButton = new ColorIconButton(centerX + BUTTON_WIDTH / 2, panelTop + 60, BUTTON_HEIGHT, BUTTON_HEIGHT, b -> onColorCycle());
         colorCycleButton.visible = this.overlayOn;
         this.addRenderableWidget(colorCycleButton);
 
