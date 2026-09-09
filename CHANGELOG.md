@@ -1,3 +1,6 @@
+## v21.1.12
+- Fix out of bounds exception with Feral Flare Lantern
+
 ## v21.1.11
 - Fix a NullPointerException crash on Fabric and NeoForge when hovering a button on the Feral Flare Lantern or Megatorch/Dreadlamp [Fabric + Neoforge] 
 
