@@ -7,12 +7,16 @@ import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.xalcon.torchmaster.ModRegistry;
+import net.xalcon.torchmaster.blocks.EntityBlockingLightBlock;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -346,10 +350,36 @@ public class VolumeRendererOverlay {
     }
 
     public static void onRenderLevel(ResourceKey<Level> dimension, Camera camera) {
+        var mc = Minecraft.getInstance();
+        var level = mc.level;
+        if(level == null) return;
+
+        var toRemove = new ArrayList<LightKey>();
+
         for(var light : lights.entrySet())
         {
             var key = light.getKey();
             var info = light.getValue();
+
+            // dont render things from other dimensions
+            if(!key.dimension().equals(level.dimension().location())) continue;
+
+            var pos = new BlockPos(key.pos);
+            if(level.isLoaded(pos)) {
+                var state = level.getBlockState(pos);
+                if(!(state.getBlock() instanceof EntityBlockingLightBlock))
+                {
+                    // block was removed before disabling the renderer for this block pos
+                    // Removing the renderer during destroy actions on the block itself
+                    // is theoretically possible but unreliable.
+                    // The client may not receive these events when out of range or in a different dimension
+                    // So we just check if the block is there when nearby
+                    // and if its missing, we remove it from the renderer
+                    toRemove.add(key);
+                    continue;
+                }
+            }
+
             if(info.showVolume)
             {
                 int color = COLORS[info.colorIndex];
@@ -363,6 +393,11 @@ public class VolumeRendererOverlay {
                 renderTorchLocation(key.pos, color, camera);
                 renderWireframeCube(key.pos, 0, color, camera);
             }
+        }
+
+        for(var lightKey : toRemove)
+        {
+            lights.remove(lightKey);
         }
     }
 }

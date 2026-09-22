@@ -1,3 +1,7 @@
+## v21.1.13
+- Remove volume renderer if the mega torch or dread lamp are being removed for any reason
+- Fix ghost render of volumes in other dimensions
+
 ## v21.1.12
 - Fix out of bounds exception with Feral Flare Lantern
 
