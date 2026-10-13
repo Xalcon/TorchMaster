@@ -9,6 +9,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -24,7 +25,7 @@ import net.xalcon.torchmaster.platform.ModClientSideOnlyScreen;
 
 import javax.annotation.Nullable;
 
-public class EntityBlockingLightBlock extends Block
+public class EntityBlockingLightBlock extends Block implements SimpleWaterloggedBlock
 {
     private final LightType lightType;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -33,6 +34,10 @@ public class EntityBlockingLightBlock extends Block
     {
         super(properties);
         this.lightType = lightType;
+        // BooleanProperty's possible values are ordered [true, false], so the implicit default from
+        // stateDefinition.any() would be waterlogged=true. Old saved chunks that lack the property
+        // fall back to this default state, which made existing torches appear waterlogged after upgrade.
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
     }
 
     @Override
