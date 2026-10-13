@@ -1,3 +1,8 @@
+## v21.1.14
+- Improve waterlogging behavior of mega torches and dreadlamps
+  - Buckets can now add and remove water
+  - Updating torchmaster for an existing world should no longer cause megatorches to become waterlogged
+
 ## v21.1.13
 - Remove volume renderer if the mega torch or dread lamp are being removed for any reason
 - Fix ghost render of volumes in other dimensions
