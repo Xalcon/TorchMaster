@@ -55,9 +55,9 @@ public class FeralFlareLanternBlockEntity extends BlockEntity
         int radius = config.getFeralFlareRadius();
         int diameter = radius * 2;
 
-        int x = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getX();
-        int y = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getY();
-        int z = (radius - this.level.random.nextInt(diameter)) + this.worldPosition.getZ();
+        int x = (radius - this.level.getRandom().nextInt(diameter)) + this.worldPosition.getX();
+        int y = (radius - this.level.getRandom().nextInt(diameter)) + this.worldPosition.getY();
+        int z = (radius - this.level.getRandom().nextInt(diameter)) + this.worldPosition.getZ();
 
         // limit height - upper bounds
         BlockPos targetPos = new BlockPos(x, y, z);

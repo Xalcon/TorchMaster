@@ -1,7 +1,8 @@
 package net.xalcon.torchmaster.platform;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -13,7 +14,6 @@ import net.xalcon.torchmaster.ModRegistry;
 import net.xalcon.torchmaster.TorchmasterOwOConfigWrapper;
 import net.xalcon.torchmaster.config.ITorchmasterConfig;
 import net.xalcon.torchmaster.platform.services.IPlatformHelper;
-import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.Collection;
 
@@ -39,7 +39,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public CreativeModeTab createCreativeModeTab(String name, Collection<RegistryObject<Item>> itemsToShow)
     {
-        return FabricItemGroup.builder()
+        return FabricCreativeModeTab.builder()
                 .title(Component.translatable("itemGroup." + name))
                 .icon(() -> new ItemStack(ModRegistry.itemMegaTorch.get()))
                 .displayItems((parameters, output) -> itemsToShow.forEach(itemRef -> output.accept(new ItemStack(itemRef.get()))))
