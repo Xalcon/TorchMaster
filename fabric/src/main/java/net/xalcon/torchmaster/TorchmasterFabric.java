@@ -1,10 +1,8 @@
 package net.xalcon.torchmaster;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
 import net.xalcon.torchmaster.commands.CommandTorchmaster;
 
 public class TorchmasterFabric implements ModInitializer {
@@ -20,7 +18,7 @@ public class TorchmasterFabric implements ModInitializer {
         // Use Fabric to bootstrap the Common mod.
         Torchmaster.init();
 
-        ServerWorldEvents.LOAD.register((server, world) ->
+        ServerLevelEvents.LOAD.register((server, world) ->
         {
             Torchmaster.onWorldLoaded();
         });

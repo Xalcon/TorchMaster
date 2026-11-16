@@ -1,6 +1,6 @@
 plugins {
     id 'multiloader-loader'
-    id 'fabric-loom'
+    id 'net.fabricmc.fabric-loom'
 }
 
 repositories {
@@ -9,21 +9,27 @@ repositories {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
     }
+    exclusiveContent{
+        forRepositories(maven { url 'https://jitpack.io' })
+        filter {
+            includeModule("com.github.kdl-org", "kdl4j")
+        }
+    }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
-    }
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+//    mappings loom.layered {
+//        officialMojangMappings()
+//        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+//    }
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.0'
 
     // owo config
-    modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+    implementation "io.wispforest:owo-lib:${project.owo_version}"
     // only if you plan to use owo-config
     annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"
 
@@ -31,7 +37,7 @@ dependencies {
     // sentinel will warn them and give the option to download it automatically
     include "io.wispforest:owo-sentinel:${project.owo_version}"
 
-    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+    implementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 loom {
